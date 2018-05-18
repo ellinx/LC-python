@@ -6,6 +6,7 @@ class Interval:
     def __str__(self):
         return "[" + str(self.start) + "," + str(self.end) + "]"
 
-    # used for print
-    def __repr__(self):
-        return self.__str__()
+
+if __name__=="__main__":
+    tmp = Interval(3,7)
+    print(tmp)
