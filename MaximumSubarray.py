@@ -11,6 +11,13 @@ Follow up:
 If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.
 """
 class MaximumSubarray:
+    # dp[i] stands for max sum ends at i
+
+    # if dp[i-1]<0:
+    #   dp[i] = nums[i]
+    # else:
+    #   dp[i] = dp[i-1]+nums[i]
+
     def maxSubArray(self, nums):
         """
         :type nums: List[int]

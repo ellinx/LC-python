@@ -1,5 +1,8 @@
 class ListNode:
     def __init__(self, x):
+        """
+        :type x: int or str
+        """
         self.val = x
         self.next = None
 

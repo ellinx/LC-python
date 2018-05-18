@@ -1,4 +1,5 @@
 from Interval import Interval
+
 """
 Given a collection of intervals, merge all overlapping intervals.
 
@@ -14,6 +15,10 @@ Output: [[1,5]]
 Explanation: Intervals [1,4] and [4,5] are considerred overlapping.
 """
 class MergeIntervals:
+    #1 push all intervals to a min heap
+    #2 get the interval of smallest start and merge with current
+    #3 if has overlap, merge with current interval; otherwise push current to list and update current
+    #4 repeat step 2 until min heap is empty
     def merge(self, intervals):
         """
         :type intervals: List[Interval]
@@ -25,14 +30,17 @@ class MergeIntervals:
         cur = None
         while len(minHeap):
             temp = heapq.heappop(minHeap)[2]
+            #very first one
             if not cur:
                 cur = temp
                 continue
-            if temp.start<=cur.end:
+
+            if temp.start<=cur.end:                 # has overlap, need to merge
                 cur.end = max(cur.end, temp.end)
-            else:
+            else:                                   # no overlap, add current and update it
                 ret.append(cur)
                 cur = temp
+        # final one
         if cur:
             ret.append(cur)
         return ret

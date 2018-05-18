@@ -11,6 +11,8 @@ class RandomListNode(object):
         self.random = None
 
 class CopyListWithRandomPointer(object):
+    #1 first loop: copy list without random pointer, memorize copied node
+    #2 second loop: assign correct random pointer for each copied node
     def copyRandomList(self, head):
         """
         :type head: RandomListNode

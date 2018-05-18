@@ -10,6 +10,10 @@ The range of numbers in the array is [-1000, 1000] and the range of the integer 
 """
 
 class SubarraySumEqualsK:
+    #1 construct sum[i] which stands for the total sum from nums[0] to nums[i]
+    #2 check if sum[i]-k exists in sum; if yes then we get an answer
+    #3 step 1 and step 2 can be done in one loop
+    # note: sum of nums[i] to nums[j] is sum[j]-sum[i-1]
     def subarraySum(self, nums, k):
         """
         :type nums: List[int]

@@ -15,6 +15,11 @@ You may assume the sum of all the numbers is in the range of a signed 32-bit int
 """
 
 class ContinuousSubarraySum:
+    #1 construct sum[i] which stands for the (total sum modular k) from nums[0] to nums[i]
+    #2 check if sum[i] exists in sum; if yes then we get an answer
+    #3 step 1 and step 2 can be done in one loop
+    # note1: sum of nums[i] to nums[j] is sum[j]-sum[i-1]
+    # note2: similar to solution of Subarray Sum Equals K
     def checkSubarraySum(self, nums, k):
         """
         :type nums: List[int]

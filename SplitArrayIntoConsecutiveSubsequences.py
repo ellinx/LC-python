@@ -22,6 +22,8 @@ Note:
 The length of the input is in range of [1, 10000]
 """
 class SplitArrayIntoConsecutiveSubsequences:
+    # when get a number, either append to a sequence ends at number-1, or construct a new sequence starting from number
+    # otherwise return False
     def isPossible(self, nums):
         """
         :type nums: List[int]
@@ -33,11 +35,11 @@ class SplitArrayIntoConsecutiveSubsequences:
             if count[num]:
                 count[num] -= 1
                 if end[num-1]:
-                    #attach to previous sequence
+                    #append to a sequence ends at num-1
                     end[num-1] -= 1
                     end[num] += 1
                 else:
-                    #construct new sequence
+                    #construct a new sequence
                     if count[num+1] and count[num+2]:
                         count[num+1] -= 1
                         count[num+2] -= 1

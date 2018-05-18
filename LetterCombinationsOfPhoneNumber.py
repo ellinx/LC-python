@@ -10,6 +10,7 @@ Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
 """
 
 class LetterCombinationsOfPhoneNumber:
+    # use dfs
     def letterCombinations(self, digits):
         """
         :type digits: str

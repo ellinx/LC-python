@@ -1,3 +1,4 @@
+from TreeNode import TreeNode
 """
 Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a BST.
 
@@ -7,6 +8,7 @@ Note: next() and hasNext() should run in average O(1) time and uses O(h) memory,
 """
 
 class BSTIterator(object):
+    # use iterative way of inorder traverse a BST
     def __init__(self, root):
         """
         :type root: TreeNode

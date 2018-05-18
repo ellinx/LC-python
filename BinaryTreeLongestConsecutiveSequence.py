@@ -1,3 +1,5 @@
+from TreeNode import TreeNode
+
 """
 Given a binary tree, find the length of the longest consecutive sequence path.
 
@@ -37,6 +39,9 @@ class BinaryTreeLongestConsecutiveSequence:
     def __init__(self):
         self.ret = 0
 
+    # use a recursive helper function that takes a TreeNode root as input
+    # update longest consecutive sequence ends at left child or right child
+    # return longest consecutive sequence ends at root
     def longestConsecutive(self, root):
         """
         :type root: TreeNode

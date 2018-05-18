@@ -27,6 +27,7 @@ class MedianFinder:
         self.maxHeap = []
         self.minHeap = []
 
+    # (small half) in max heap and (large half) in min heap
     def addNum(self, num):
         """
         :type num: int
