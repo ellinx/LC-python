@@ -19,31 +19,34 @@ Explanation: The array cannot be partitioned into equal sum subsets.
 """
 
 
-class PartitionEqualSubsetSum(object):
+class PartitionEqualSubsetSum:
     def canPartition(self, nums):
         """
         :type nums: List[int]
         :rtype: bool
         """
-
-        n = len(nums)
-        s = sum(nums)
-        if s%2==1:
+        # 0/1 knapsack
+        total = sum(nums)
+        if total%2:
             return False
-
-        s = s>>1
-        dp = [[False]*(s+1) for i in range(n+1)]
-
-        for i in range(n+1):
-            dp[i][0] = True
-
-        for i in range(1,n+1):
-            for j in range(1,s+1):
-                dp[i][j] = dp[i-1][j]
-                if nums[i-1]<=j:
-                    dp[i][j] = dp[i][j] or dp[i-1][j-nums[i-1]]
-
-        return dp[n][s]
+        total //= 2
+        cur = [False]*(total+1)
+        cur[0] = True
+        if nums[0]<=total:
+            cur[nums[0]] = True
+        for i in range(1,len(nums)):
+            nxt = [False]*(total+1)
+            nxt[0] = True
+            for j in range(1,total+1):
+                # dont take ith
+                nxt[j] = cur[j]
+                # take ith
+                if j>=nums[i]:
+                    nxt[j] = nxt[j] or cur[j-nums[i]]
+            if nxt[-1]:
+                return True
+            cur = nxt
+        return False
 
 
 if __name__=="__main__":
