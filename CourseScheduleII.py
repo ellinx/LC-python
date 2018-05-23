@@ -22,14 +22,14 @@ Explanation: There are a total of 4 courses to take. To take course 3 you should
 
 Note:
 The input prerequisites is a graph represented by a list of edges, not adjacency matrices.
-Read more about how a graph is represented.
+Read more about how a graph is represented. https://www.khanacademy.org/computing/computer-science/algorithms/graph-representation/a/representing-graphs
 You may assume that there are no duplicate edges in the input prerequisites.
 
 Hints:
 This problem is equivalent to finding the topological order in a directed graph.
 If a cycle exists, no topological ordering exists and therefore it will be impossible to take all courses.
 Topological Sort via DFS - A great video tutorial (21 minutes) on Coursera explaining the basic concepts of Topological Sort.
-Topological sort could also be done via BFS.
+Topological sort could also be done via BFS. https://en.wikipedia.org/wiki/Topological_sorting#Algorithms
 """
 class CourseScheduleII:
     def findOrder(self, numCourses, prerequisites):
