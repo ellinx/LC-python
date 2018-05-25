@@ -1,3 +1,4 @@
+import collections
 """
 Given a string, sort it in decreasing order based on the frequency of characters.
 
@@ -43,21 +44,11 @@ class SortCharactersByFrequency:
         :type s: str
         :rtype: str
         """
-        map = dict()
-        res = ""
-        for i in range(len(s)):
-
-            if s[i] in map:
-                map[s[i]] += 1
-            else:
-                map[s[i]] = 1
-
-        maxHeap = sorted(list(map.items()),key=lambda x: -x[1])
-
-        for each in maxHeap:
-            res += each[0]*each[1]
-
-        return res
+        counter = collections.Counter(s)
+        ret = ''
+        for k,num in counter.most_common():
+            ret += k*num
+        return ret
 
 
 # test
