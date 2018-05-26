@@ -1,3 +1,4 @@
+import collections
 """
 Given a string s and a non-empty string p, find all the start indices of p's anagrams in s.
 
@@ -38,44 +39,31 @@ class FindAllAnagramsInString:
         :type p: str
         :rtype: List[int]
         """
-        res = []
-        if len(s) < len(p):
-            return res
-        letters = [0]*26
-        count = 0
-        for a in p:
-            index = ord(a)-ord('a')
-            if letters[index] == 0:
-                count += 1
-            letters[index] += 1
-
+        ret = []
+        if len(s)<len(p):
+            return ret
+        count = collections.Counter(p)
+        total = len(p)
         start, end = 0, 0
-        while end < len(p):
-            index = ord(s[end])-ord('a')
-            if letters[index] == 1:
-                count -= 1
-            letters[index] -= 1
-            end += 1
-
-        end -= 1
-        while end < len(s):
-            if count == 0:
-                res.append(start)
-
-            index = ord(s[start])-ord('a')
-            if letters[index] == 0:
-                count += 1
-            letters[index] += 1
-            start += 1
-            end += 1
-            if (end == len(s)):
+        while end<len(s):
+            while end<len(s) and end-start<len(p):
+                if s[end] in count:
+                    count[s[end]] -= 1
+                    if count[s[end]]>=0:
+                        total -= 1
+                end += 1
+            #print(start,end,total,count)
+            if end-start==len(p):
+                if total==0:
+                    ret.append(start)
+                if s[start] in count:
+                    count[s[start]] += 1
+                    if count[s[start]]>0:
+                        total += 1
+                start += 1
+            else:
                 break
-            index = ord(s[end])-ord('a')
-            if letters[index] == 1:
-                count -= 1
-            letters[index] -= 1
-
-        return res
+        return ret
 
 
 # test
