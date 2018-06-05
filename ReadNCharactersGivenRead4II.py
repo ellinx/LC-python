@@ -14,6 +14,7 @@ Given buf = "abc"
 read("abc", 1) // returns "a"
 read("abc", 2); // returns "bc"
 read("abc", 1); // returns ""
+
 Example 2:
 
 Given buf = "abc"

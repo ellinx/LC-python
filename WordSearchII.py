@@ -16,6 +16,7 @@ words = ["oath","pea","eat","rain"] and board =
 ]
 
 Output: ["eat","oath"]
+
 Note:
 You may assume that all inputs are consist of lowercase letters a-z.
 """

@@ -6,14 +6,14 @@ The return value is the actual number of characters read. For example, it return
 By using the read4 API, implement the function int read(char *buf, int n) that reads n characters from the file.
 
 Example 1:
-
 Input: buf = "abc", n = 4
 Output: "abc"
 Explanation: The actual number of characters read is 3, which is "abc".
-Example 2:
 
+Example 2:
 Input: buf = "abcde", n = 5
 Output: "abcde"
+
 Note:
 The read function will only be called once for each test case.
 """
