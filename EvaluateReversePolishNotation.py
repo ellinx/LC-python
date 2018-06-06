@@ -1,3 +1,4 @@
+import collections
 """
 Evaluate the value of an arithmetic expression in Reverse Polish Notation.
 
@@ -8,40 +9,40 @@ Some examples:
   ["4", "13", "5", "/", "+"] -> (4 + (13 / 5)) -> 6
 """
 
-class EvaluateReversePolishNotation:
+class Solution:
     def evalRPN(self, tokens):
         """
         :type tokens: List[str]
         :rtype: int
         """
-        stack = []
-        for s in tokens:
-            print(stack)
-            if s == "+":
-                num2 = stack.pop()
-                num1 = stack.pop()
-                stack.append(num1 + num2)
-            elif s == "-":
-                num2 = stack.pop()
-                num1 = stack.pop()
-                stack.append(num1 - num2)
-            elif s == "*":
-                num2 = stack.pop()
-                num1 = stack.pop()
-                stack.append(num1 * num2)
-            elif s == "/":
-                num2 = stack.pop()
-                num1 = stack.pop()
-                stack.append(int(num1 / num2))
+        stk = collections.deque()
+        for each in tokens:
+            if each in "+-*/":
+                num2 = stk.pop()
+                num1 = stk.pop()
+                if each=="+":
+                    stk.append(num1+num2)
+                elif each=="-":
+                    stk.append(num1-num2)
+                elif each=="*":
+                    stk.append(num1*num2)
+                else:
+                    result = num1/num2
+                    if result>=0:
+                        result = math.floor(result)
+                    else:
+                        result = math.ceil(result)
+                    stk.append(result)
             else:
-                stack.append(int(s))
-        
-        return stack.pop()
+                stk.append(int(each))
+            #print(stk)
+        #print(stk)
+        return stk[0]
 
 
 # test
 if __name__ == "__main__":
-    tmp = EvaluateReversePolishNotation()
+    tmp = Solution()
     tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
     result = tmp.evalRPN(tokens)
     print(result)
