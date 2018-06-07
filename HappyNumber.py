@@ -11,32 +11,26 @@ Example: 19 is a happy number
 1^2 + 0^2 + 0^2 = 1
 """
 
-class HappyNumber:
+class Solution:
     def isHappy(self, n):
         """
         :type n: int
         :rtype: bool
         """
-        numSet = set()
-        while n != 1:
-            if n in numSet:
-                return False
-
-            numSet.add(n)
-            next = 0
-            while n > 9:
-                digit = n%10
-                next += digit*digit
-                n //= 10
-
-            next += n*n
-            n = next
-        
-        return True
+        visited = set()
+        while n not in visited:
+            visited.add(n)
+            nxt = 0
+            for c in str(n):
+                nxt += int(c)**2
+            if nxt==1:
+                return True
+            n = nxt
+        return False
 
 
 # test
 if __name__ == "__main__":
-    tmp = HappyNumber()
+    tmp = Solution()
     result = tmp.isHappy(19)
     print(result)
