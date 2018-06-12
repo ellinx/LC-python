@@ -52,6 +52,34 @@ class Solution:
         :type root: TreeNode
         :rtype: void Do not return anything, modify root in-place instead.
         """
+        def dfs(cur, swap):
+            if not cur:
+                return
+            dfs(cur.left, swap)
+            nonlocal pre
+            if not swap[0]:
+                # find swap1
+                if pre and pre.val>cur.val:
+                    swap[0] = pre
+                    swap[1] = cur
+            else:
+                # find largest value that's smaller than swap[0].val and store in swap[1]
+                if cur.val<swap[0].val:
+                    swap[1] = cur
+            pre = cur
+            dfs(cur.right, swap)
+
+        swap = [None]*2
+        pre = None
+        dfs(root, swap)
+        swap[0].val, swap[1].val = swap[1].val, swap[0].val
+
+    # O(n) space
+    def recoverTree2(self, root):
+        """
+        :type root: TreeNode
+        :rtype: void Do not return anything, modify root in-place instead.
+        """
         def dfs(root, li):
             if not root:
                 return
