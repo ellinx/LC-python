@@ -14,6 +14,7 @@ Note:
 You may assume k is always valid, 1 ≤ k ≤ array's length.
 """
 class KthLargestElementInAnArray(object):
+    # heap
     def findKthLargest(self, nums, k):
         """
         :type nums: List[int]
@@ -26,6 +27,35 @@ class KthLargestElementInAnArray(object):
             if len(minHeap)>k:
                 heapq.heappop(minHeap)
         return minHeap[0]
+
+    # quick sort
+    def findKthLargest2(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        # similar to quick sort
+        index = 1
+        left, right = 1, len(nums)-1
+        while left<=right:
+            if nums[index]<=nums[0]:
+                nums[index], nums[right] = nums[right], nums[index]
+                right -= 1
+            else:
+                if index==left:
+                    index += 1
+                    left += 1
+                else:
+                    nums[index], nums[left] = nums[left], nums[index]
+                    left += 1
+        #print(nums, left,right,k)
+        if left==k:
+            return nums[0]
+        if left<k:
+            return self.findKthLargest(nums[left:],k-left)
+        else:
+            return self.findKthLargest(nums[1:left],k)
 
 if __name__=='__main__':
     temp = KthLargestElementInAnArray()
