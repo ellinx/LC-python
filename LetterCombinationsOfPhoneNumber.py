@@ -28,3 +28,18 @@ class LetterCombinationsOfPhoneNumber:
         ret = []
         dfs(li, digits, "", ret)
         return ret
+
+    # BFS
+    def letterCombinations2(self, digits):
+        """
+        :type digits: str
+        :rtype: List[str]
+        """
+        strs = ["","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"]
+        ret = []
+        for a in digits:
+            if len(ret)==0:
+                ret = list(strs[int(a)])
+                continue
+            ret = [ sub+c for sub in ret for c in strs[int(a)]]
+        return ret
