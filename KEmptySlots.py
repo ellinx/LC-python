@@ -28,48 +28,46 @@ Output: -1
 Note:
 The given array will be in the range [1, 20000].
 """
-class KEmptySlots:
+class Solution:
     def kEmptySlots(self, flowers, k):
         """
         :type flowers: List[int]
         :type k: int
         :rtype: int
         """
-        # li[0], li[1], li[2], ..., li[k], li[k+1]
-        # min(li[1]...li[k])<li[0] and min(li[1]...li[k])<li[k+1]
-        # sliding window, use a min heap to store li[1]...li[k]
-        if k+2>len(flowers):
+        N = len(flowers)
+        if k+2>N:
             return -1
-        # li[i] stands for li[i]th day, i bloom
-        li = [0]*len(flowers)
-        for i in range(len(flowers)):
-            li[flowers[i]-1] = i+1
-        flowers = li
-        minHeap = flowers[1:k+1]
+        # bloomDay[i] is ith position will bloom on day bloomDay[i]
+        bloomDay = [0]*(N+1)
+        for i in range(N):
+            bloomDay[flowers[i]] = i+1
+        #print(bloomDay)
+        minHeap = [(bloomDay[i],i) for i in range(2,k+2)]
         heapq.heapify(minHeap)
-        removed = collections.defaultdict(int)
-        start, end = 0, k+1
+        start, end = 1, k+2
         ret = -1
-        while end<len(flowers):
-            #print(minHeap, removed)
-            if not len(minHeap):
-                if ret<0:
-                    ret = max(flowers[start],flowers[end])
+        if k==0:
+            while end<N+1:
+                if ret==-1:
+                    ret = max(bloomDay[start],bloomDay[end])
                 else:
-                    ret = min(ret, max(flowers[start],flowers[end]))
+                    ret = min(ret, max(bloomDay[start],bloomDay[end]))
                 start += 1
                 end += 1
-                continue
-            while removed[minHeap[0]]:
-                removed[minHeap[0]] -= 1
+            return ret
+        while True:
+            while minHeap[0][1]<=start:
                 heapq.heappop(minHeap)
-            if flowers[start]<minHeap[0] and flowers[end]<minHeap[0]:
-                if ret<0:
-                    ret = max(flowers[start],flowers[end])
+            #print(start,end,minHeap)
+            if minHeap[0][0]>bloomDay[start] and minHeap[0][0]>bloomDay[end]:
+                if ret==-1:
+                    ret = max(bloomDay[start],bloomDay[end])
                 else:
-                    ret = min(ret, max(flowers[start],flowers[end]))
+                    ret = min(ret, max(bloomDay[start],bloomDay[end]))
+            if end+1==N+1:
+                break
+            heapq.heappush(minHeap,(bloomDay[end],end))
             start += 1
-            removed[flowers[start]] += 1
-            heapq.heappush(minHeap, flowers[end])
             end += 1
         return ret
