@@ -14,39 +14,39 @@ Output: "22:22"
 Explanation: The next closest time choosing from digits 2, 3, 5, 9, is 22:22. It may be assumed that the returned time is next day's time since it is smaller than the input time numerically.
 """
 
-class NextClosestTime:
+class Solution:
     def nextClosestTime(self, time):
         """
         :type time: str
         :rtype: str
         """
-        def isValidTime(time):
-            return int(time[:2])<24 and int(time[2:])<60
+        def dfs(nums, cur, allTimes):
+            if len(cur)==4:
+                if int(cur[-2:])<60:
+                    allTimes.append(cur)
+                return
+            if len(cur)==2 and int(cur)>23:
+                return
+            for i in range(len(nums)):
+                dfs(nums, cur+nums[i], allTimes)
 
-        def dist(val, time):
-            temp = int(time[:2])*60+int(time[2:])-val
-            if temp>0:
-                return temp
-            return temp+23*60+59
-
+        nums = []
+        for c in time:
+            if c.isdigit() and c not in nums:
+                nums.append(c)
+        allTimes = []
+        dfs(nums, "", allTimes)
+        #print(allTimes)
+        minDiff = 24*60
         ret = None
-        base = set(time[:2]+time[3:])
-        baseVal = int(time[:2])*60+int(time[3:])
-        li = [ c for c in base ]
-        for i in range(3):
-            nxt = []
-            for each in li:
-                for c in base:
-                    nxt.append(each+c)
-            li = nxt
-        #print(li)
-        li = filter(isValidTime, li)
-        for each in li:
-            if not ret:
-                ret = (each, dist(baseVal, each))
+        cur = int(time[:2])*60+int(time[3:])
+        for each in allTimes:
+            if each==time[:2]+time[3:]:
                 continue
-            distVal = dist(baseVal, each)
-            if ret[1]>distVal:
-                ret = (each, distVal)
-            #print(ret)
-        return ret[0][:2]+':'+ret[0][2:]
+            diff = int(each[:2])*60+int(each[2:])-cur
+            if diff<0:
+                diff = 24*60+diff
+            if minDiff>diff:
+                minDiff = diff
+                ret = each
+        return ret[:2]+":"+ret[2:] if ret else time
