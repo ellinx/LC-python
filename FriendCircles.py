@@ -31,29 +31,35 @@ N is in range [1,200].
 M[i][i] = 1 for all students.
 If M[i][j] = 1, then M[j][i] = 1.
 """
-class FriendCircles:
+class Solution:
+    """
+    Thoughts:
+    1. union find
+
+    Time: O(N^2*logN)
+    Space: O(N)
+    """
     def findCircleNum(self, M):
         """
         :type M: List[List[int]]
         :rtype: int
         """
-        def findRoot(roots, node):
-            while node!=roots[node]:
+        def findRoot(node):
+            nonlocal roots
+            while roots[node]!=node:
                 node = roots[node]
             return node
 
-        count = len(M)
-        roots = dict()
-        for i in range(len(M)):
-            if i not in roots:
-                roots[i] = i
-            rooti = findRoot(roots, i)
-            for j in range(len(M)):
-                if i!=j and M[i][j]==1:
-                    if j not in roots:
-                        roots[j] = j
-                    rootj = findRoot(roots, j)
+        # union find
+        N = len(M)
+        ret = N
+        roots = [i for i in range(N)]
+        for i in range(N-1):
+            for j in range(i+1,N):
+                if M[i][j]==1:
+                    rooti = findRoot(i)
+                    rootj = findRoot(j)
                     if rooti!=rootj:
-                        count -= 1
-                        roots[rootj] = rooti
-        return count
+                        roots[rooti] = rootj
+                        ret -= 1
+        return ret
