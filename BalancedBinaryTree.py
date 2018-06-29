@@ -31,6 +31,13 @@ Given the following tree [1,2,2,3,3,null,null,4,4]:
 
 """
 class Solution:
+    """
+    Thoughts:
+    1. helper function will return if this node's all subtrees are balanced and its depth
+
+    Time: O(n) where n is total number of nodes in the tree
+    Space: O(1)
+    """
     def isBalanced(self, root):
         """
         :type root: TreeNode
