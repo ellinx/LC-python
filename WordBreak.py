@@ -22,7 +22,14 @@ Example 3:
 Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
 Output: false
 """
-class Solution(object):
+class Solution:
+    """
+    Thoughts:
+    1. dp[i] stands for s[0:i] is breakable or not
+
+    Time: O(n*m) where n is length of s and m is length of wordDict
+    Space: O(n)
+    """
     def wordBreak(self, s, wordDict):
         """
         :type s: str
@@ -31,11 +38,9 @@ class Solution(object):
         """
         dp = [False]*(len(s)+1)
         dp[0] = True
-        for i in range(1,len(dp)):
-            for word in wordDict:
-                if i-len(word)>=0:
-                    dp[i] = dp[i] or (dp[i-len(word)] and s[i-len(word):i]==word)
-                if dp[i]:
+        for i in range(len(s)+1):
+            for each in wordDict:
+                if i-len(each)>=0 and dp[i-len(each)] and each==s[i-len(each):i]:
+                    dp[i] = True
                     break
-        print(dp)
         return dp[-1]
