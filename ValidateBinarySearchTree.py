@@ -28,7 +28,13 @@ is 5 but its right child's value is 4.
 """
 
 class ValidateBinarySearchTree:
-    # inorder traverse a BST, it should be in ascending order
+    """
+    Thoughts:
+    1. inorder traverse a BST, it should be in ascending order
+
+    Time: O(n) where n is total number of nodes in the tree
+    Space: O(1)
+    """
     def isValidBST(self, root):
         """
         :type root: TreeNode
