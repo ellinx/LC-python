@@ -16,6 +16,13 @@ return its level order traversal as:
 ]
 """
 class Solution:
+    """
+    Thoughts:
+    1. BFS
+
+    Time: O(n) where n is total number of nodes in the tree
+    Space: O(n)
+    """
     def levelOrder(self, root):
         """
         :type root: TreeNode
