@@ -17,6 +17,15 @@ A solution set is:
 ]
 """
 class ThreeSum:
+    """
+    Thoughts:
+    1. sort nums
+    2. check each triblet start from i(0,len-3)
+    3. for rest of triblet use left pointer and right pointer to scan
+
+    Time: O(n^2) where n is length of nums
+    Space: O(n)
+    """
     def threeSum(self, nums):
         """
         :type nums: List[int]
