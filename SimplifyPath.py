@@ -12,23 +12,29 @@ In this case, you should return "/".
 Another corner case is the path might contain multiple slashes '/' together, such as "/home//foo/".
 In this case, you should ignore redundant slashes and return "/home/foo".
 """
-class SimplifyPath:
+class Solution:
+    """
+    Thoughts:
+    1. use stack
+
+    Time: O(n) where n is length of path
+    Space: O(n)
+    """
     def simplifyPath(self, path):
         """
         :type path: str
         :rtype: str
         """
+        if not len(path):
+            return ""
+        names = path.split("/")
         stk = collections.deque()
-        li = path.split('/')
-        for each in li:
-            if each=='' or each=='.':
+        for each in names:
+            if each=="" or each==".":
                 continue
-            if each=='..':
+            if each=="..":
                 if len(stk):
                     stk.pop()
-                continue
-            stk.append(each)
-        ret = ''
-        for each in stk:
-            ret += '/'+each
-        return ret if len(ret) else '/'
+            else:
+                stk.append(each)
+        return "/"+"/".join(stk)
