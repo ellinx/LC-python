@@ -31,16 +31,16 @@ class SerializeAndDeserializeBST:
         :type root: TreeNode
         :rtype: str
         """
-        if root is None:
+        if not root:
             return ""
-
-        res = str(root.val)
-        if root.left is not None:
-            res += "," + self.serialize(root.left)
-        if root.right is not None:
-            res += "," + self.serialize(root.right)
-
-        return res
+        ret = str(root.val)
+        left = self.serialize(root.left)
+        if left!="":
+            ret += ","+left
+        right = self.serialize(root.right)
+        if right!="":
+            ret += ","+right
+        return ret
 
     def deserialize(self, data):
         """Decodes your encoded data to tree.
@@ -48,49 +48,22 @@ class SerializeAndDeserializeBST:
         :type data: str
         :rtype: TreeNode
         """
-        if len(data) == 0:
+        #print(data)
+        if data=="":
             return None
-
-        nodes = data.split(",")
-        root = TreeNode(int(nodes[0]))
-        leftStart, rightStart = 0, 0
-        if len(nodes)==1:
-            return root
-
-        for i in range(1,len(nodes)):
-            if int(nodes[i]) < root.val:
-                if leftStart == 0:
-                    leftStart = i
+        vals = data.split(",")
+        ret = TreeNode(int(vals[0]))
+        index = 1
+        while index<len(vals):
+            if int(vals[index])<int(vals[0]):
+                index += 1
             else:
-                rightStart = i
                 break
-
-        if leftStart!=0:
-            leftStr = ""
-            if rightStart!=0:
-                for i in range(leftStart,rightStart):
-                    if i==leftStart:
-                        leftStr = nodes[i]
-                    else:
-                        leftStr += ","+nodes[i]
-                root.left = self.deserialize(leftStr)
-            else:
-                for i in range(leftStart,len(nodes)):
-                    if i==leftStart:
-                        leftStr = nodes[i]
-                    else:
-                        leftStr += ","+nodes[i]
-                root.left = self.deserialize(leftStr)
-        if rightStart!=0:
-            rightStr = ""
-            for i in range(rightStart,len(nodes)):
-                if i==rightStart:
-                    rightStr = nodes[i]
-                else:
-                    rightStr += ","+nodes[i]
-            root.right = self.deserialize(rightStr)
-
-        return root
+        if index>1:
+            ret.left = self.deserialize(",".join(vals[1:index]))
+        if index<len(vals):
+            ret.right = self.deserialize(",".join(vals[index:]))
+        return ret
 
 # Your Codec object will be instantiated and called as such:
 # codec = SerializeAndDeserializeBST()
