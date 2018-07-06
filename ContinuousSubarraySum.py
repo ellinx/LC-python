@@ -14,27 +14,35 @@ The length of the array won't exceed 10,000.
 You may assume the sum of all the numbers is in the range of a signed 32-bit integer.
 """
 
-class ContinuousSubarraySum:
-    #1 construct sum[i] which stands for the (total sum modular k) from nums[0] to nums[i]
-    #2 check if sum[i] exists in sum; if yes then we get an answer
-    #3 step 1 and step 2 can be done in one loop
-    # note1: sum of nums[i] to nums[j] is sum[j]-sum[i-1]
-    # note2: similar to solution of Subarray Sum Equals K
+class Solution:
+    """
+    Thoughts:
+    1. similar to two sum
+    2. store sumToIndex%k instead of sumToIndex
+
+    Time: O(n) where n is length of nums
+    Space: O(n)
+    """
     def checkSubarraySum(self, nums, k):
         """
         :type nums: List[int]
         :type k: int
         :rtype: bool
         """
-        sum_map = collections.defaultdict(list)
-        sum_map[0].append(-1)
-        total = 0
+        if len(nums)<2:
+            return False
+        sumToIndex = dict()
+        dp = [0]*len(nums)
         for i in range(len(nums)):
-            total += nums[i]
-            if k:
-                total %= k
-            li = sum_map[total]
-            if len(li) and i-li[0]>1:
+            if i==0:
+                dp[0] = nums[0]%k if k else nums[0]
+            else:
+                dp[i] = (dp[i-1]+nums[i])%k if k else dp[i-1]+nums[i]
+            if dp[i]==0 and i>0:
                 return True
-            sum_map[total].append(i)
+            if dp[i] not in sumToIndex:
+                sumToIndex[dp[i]] = i
+            else:
+                if i-sumToIndex[dp[i]]>1:
+                    return True
         return False
