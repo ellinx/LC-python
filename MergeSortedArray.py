@@ -14,7 +14,7 @@ nums2 = [2,5,6],       n = 3
 
 Output: [1,2,2,3,5,6]
 """
-class MergeSortedArray:
+class Solution:
     def merge(self, nums1, m, nums2, n):
         """
         :type nums1: List[int]
@@ -23,25 +23,18 @@ class MergeSortedArray:
         :type n: int
         :rtype: void Do not return anything, modify nums1 in-place instead.
         """
-        i1, i2 = m-1, n-1
+        index1,index2 = m-1, n-1
         index = m+n-1
-        while i1>=0 and i2>=0:
-            if nums1[i1]>nums2[i2]:
-                nums1[index] = nums1[i1]
+        while index1>=0 and index2>=0:
+            if nums1[index1]<=nums2[index2]:
+                nums1[index] = nums2[index2]
                 index -= 1
-                i1 -= 1
-            elif nums1[i1]<nums2[i2]:
-                nums1[index] = nums2[i2]
-                index -= 1
-                i2 -= 1
+                index2 -=1
             else:
-                nums1[index] = nums1[i1]
+                nums1[index] = nums1[index1]
                 index -= 1
-                i1 -= 1
-                nums1[index] = nums2[i2]
-                index -= 1
-                i2 -= 1
-        while i2>=0:
-            nums1[index] = nums2[i2]
+                index1 -=1
+        while index2>=0:
+            nums1[index] = nums2[index2]
             index -= 1
-            i2 -= 1
+            index2 -= 1
