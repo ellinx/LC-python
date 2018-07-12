@@ -17,25 +17,23 @@ class Solution:
         :type intervals: List[Interval]
         :rtype: int
         """
-        starts, ends = [], []
-        for interval in intervals:
-            starts.append(interval.start)
-            ends.append(interval.end)
-        starts.sort()
-        ends.sort()
         ret = 0
-        cur = 0
-        index1, index2 = 0,0
-        while index1<len(intervals) and index2<len(intervals):
-            if starts[index1]==ends[index2]:
-                index1 += 1
-                index2 += 1
+        if not len(intervals):
+            return 0
+        starts = sorted([i.start for i in intervals])
+        ends = sorted([i.end for i in intervals])
+        total = 0
+        i1, i2 = 0, 0
+        while i1<len(starts):
+            if starts[i1]==ends[i2]:
+                i1 += 1
+                i2 += 1
                 continue
-            if starts[index1]<ends[index2]:
-                cur += 1
-                ret = max(ret,cur)
-                index1 += 1
+            if starts[i1]<ends[i2]:
+                total += 1
+                ret = max(ret,total)
+                i1 += 1
             else:
-                cur -= 1
-                index2 += 1
+                total -= 1
+                i2 += 1
         return ret
