@@ -38,3 +38,33 @@ class GraphValidTree:
             roots[root0] = root1
             n -= 1
         return n==1
+
+
+    def validTreeBFS(self, n, edges):
+        """
+        :type n: int
+        :type edges: List[List[int]]
+        :rtype: bool
+        """
+        if len(edges)!=n-1:
+            return False
+        g = collections.defaultdict(set)
+        for edge in edges:
+            g[edge[0]].add(edge[1])
+            g[edge[1]].add(edge[0])
+        visited = [False]*n
+        q = collections.deque()
+        q.append(0)
+        visited[0] = True
+        while len(q):
+            cur = q.popleft()
+            for neighbors in g[cur]:
+                if not visited[neighbors]:
+                    visited[neighbors] = True
+                    g[neighbors].remove(cur)
+                    q.append(neighbors)
+            g.pop(cur)
+        for each in visited:
+            if not each:
+                return False
+        return len(g)==0
