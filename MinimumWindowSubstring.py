@@ -13,36 +13,29 @@ Note:
 
 
 """
-class Solution:
+class Solution(object):
     def minWindow(self, s, t):
         """
         :type s: str
         :type t: str
         :rtype: str
         """
-        count = collections.Counter(t)
+        counter = collections.Counter(t)
         total = len(t)
         ret = ""
         start, end = 0, 0
         while end<len(s):
-            if s[end] not in count:
-                end += 1
-                continue
-            if count[s[end]]>0:
-                total -= 1
-            count[s[end]] -= 1
-            #print(count, total)
+            if s[end] in counter:
+                counter[s[end]] -= 1
+                if counter[s[end]]>=0:
+                    total -= 1
             while total==0:
-                if ret=="":
+                if ret=="" or len(ret)>end-start+1:
                     ret = s[start:end+1]
-                else:
-                    ret = s[start:end+1] if end-start+1<len(ret) else ret
-                # remove start
-                #print(start,end)
-                if s[start] in count:
-                    if count[s[start]]>=0:
+                if s[start] in counter:
+                    counter[s[start]] += 1
+                    if counter[s[start]]>0:
                         total += 1
-                    count[s[start]] += 1
                 start += 1
             end += 1
         return ret
