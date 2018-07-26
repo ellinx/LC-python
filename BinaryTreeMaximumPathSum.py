@@ -34,23 +34,15 @@ class Solution:
         :rtype: int
         """
         def helper(root):
-            if not root:
+            if root is None:
                 return 0
+            l = helper(root.left)
+            r = helper(root.right)
+            #print(root.val,l,r)
             nonlocal ret
-            left = helper(root.left)
-            right = helper(root.right)
-            if left>0 and right>0:
-                ret = max(ret, left+right+root.val)
-                return max(left,right)+root.val
-            if left>0:
-                ret = max(ret, left+root.val)
-                return left+root.val
-            if right>0:
-                ret = max(ret, right+root.val)
-                return right+root.val
-            ret = max(ret, root.val)
-            return root.val
+            ret = max(ret, root.val+l+r, root.val+l, root.val+r, root.val)
+            return root.val+max(0, l, r)
 
-        ret = float('-inf')
+        ret = float("-inf")
         helper(root)
         return ret
