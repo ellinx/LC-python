@@ -17,7 +17,54 @@ Input: ")("
 Output: [""]
 """
 class Solution:
+
     def removeInvalidParentheses(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        def isValid(s):
+            left = 0
+            for c in s:
+                if c=="(":
+                    left += 1
+                elif c==")":
+                    if left==0:
+                        return False
+                    left -= 1
+            return left==0
+
+        def dfs(s, start, l, r, ret):
+            if l==0 and r==0:
+                if isValid(s):
+                    ret.append(s)
+                return
+            if r:
+                for i in range(start,len(s)):
+                    if s[i]==")":
+                        if i==0 or s[i-1]!=")":
+                            dfs(s[:i]+s[i+1:], i, l, r-1, ret)
+            if l:
+                for i in range(start,len(s)):
+                    if s[i]=="(":
+                        if i==0 or s[i-1]!="(":
+                            dfs(s[:i]+s[i+1:], i, l-1, r, ret)
+
+        l, r = 0, 0
+        for c in s:
+            if c=="(":
+                l += 1
+            elif c==")":
+                if l==0:
+                    r += 1
+                else:
+                    l -= 1
+        ret = []
+        dfs(s, 0, l, r, ret)
+        return ret
+
+
+    def removeInvalidParenthesesBFS(self, s):
         """
         :type s: str
         :rtype: List[str]
