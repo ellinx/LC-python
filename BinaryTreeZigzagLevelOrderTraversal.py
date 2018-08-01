@@ -26,23 +26,24 @@ class Solution:
         :type root: TreeNode
         :rtype: List[List[int]]
         """
-        if not root:
-            return []
-        # order 0 left->right, 1 right->left
-        order = 0
-        cur = [root]
         ret = []
+        if root is None:
+            return ret
+        cur = [root]
+        flag = 0
         while len(cur):
+            vals = []
             nxt = []
-            if order==0:
-                ret.append([cur[i].val for i in range(len(cur))])
-            else:
-                ret.append([cur[i].val for i in range(len(cur)-1,-1,-1)])
             for each in cur:
+                vals.append(each.val)
                 if each.left:
                     nxt.append(each.left)
                 if each.right:
                     nxt.append(each.right)
-            order = 1-order
+            if flag==0:
+                ret.append(vals)
+            else:
+                ret.append(vals[::-1])
+            flag = 1-flag
             cur = nxt
         return ret
