@@ -69,6 +69,25 @@ class WordDictionary:
             start += 1
         return False
 
+    def searchDFS(self, word):
+        """
+        Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter.
+        :type word: str
+        :rtype: bool
+        """
+        def dfs(root, word, start):
+            if start==len(word):
+                return root.isWord
+            if word[start]==".":
+                for k in root.children:
+                    if dfs(root.children[k], word, start+1):
+                        return True
+                return False
+            if word[start] not in root.children:
+                return False
+            return dfs(root.children[word[start]], word, start+1)
+
+        return dfs(self.root, word, 0)
 
 
 # Your WordDictionary object will be instantiated and called as such:
