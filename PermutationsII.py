@@ -18,22 +18,22 @@ class Solution:
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        def dfs(nums, used, cur, ret):
+        def dfs(nums, cur, used, ret):
             if len(cur)==len(nums):
                 ret.append(cur)
                 return
-            preUsed = set()
+            pre = None
             for i in range(len(nums)):
-                if used[i]:
-                    continue
-                if nums[i] not in preUsed:
-                    used[i] = True
-                    dfs(nums, used, cur+[nums[i]], ret)
-                    used[i] = False
-                    preUsed.add(nums[i])
+                if not used[i]:
+                    if pre is None or pre!=nums[i]:
+                        used[i] = True
+                        dfs(nums, cur+[nums[i]], used, ret)
+                        pre = nums[i]
+                        used[i] = False
 
-        used = [False]*len(nums)
         nums.sort()
         ret = []
-        dfs(nums, used, [], ret)
+        if len(nums)==0:
+            return ret
+        dfs(nums, [], [False]*len(nums), ret)
         return ret
