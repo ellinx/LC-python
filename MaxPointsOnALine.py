@@ -35,35 +35,40 @@ Explanation:
 #         self.x = a
 #         self.y = b
 
-class MaxPointsOnALine:
+class Solution:
     def maxPoints(self, points):
         """
         :type points: List[Point]
         :rtype: int
         """
-        def calGcd(n1, n2):
-            while n2:
-                n1, n2 = n2, n1%n2
-            return n1
+        def getGCD(a, b):
+            while b>0:
+                a, b = b, a%b
+            return a
 
-        ret = 0
-        if len(points)<=1:
+        if len(points)<2:
             return len(points)
+        points.sort(key=lambda p: [p.x,p.y])
+        ret = 2
         for i in range(len(points)):
-            same, v = 1, 0
-            counter = collections.defaultdict(int)
+            if i and points[i-1].x==points[i].x and points[i-1].y==points[i].y:
+                continue
+            same = 1
+            sameX = 0
+            mm = collections.defaultdict(int)
             for j in range(i+1,len(points)):
-                if points[i].x==points[j].x:
-                    if points[i].y==points[j].y:
-                        same += 1
-                    else:
-                        v += 1
-                else:
-                    # use Greatest common divisor to be more precise
-                    #k = (points[i].y-points[j].y)/(points[i].x-points[j].x)
-                    gcd = calGcd(points[i].y-points[j].y, points[i].x-points[j].x)
-                    k = ((points[i].y-points[j].y)/gcd, (points[i].x-points[j].x)/gcd)
-                    counter[k] += 1
-            #print(counter)
-            ret = max(ret,max([counter[k] for k in counter]+[v])+same)
+                if points[j].x==points[i].x and points[j].y==points[i].y:
+                    same += 1
+                    ret = max(ret, same)
+                    continue
+                if points[j].x==points[i].x:
+                    sameX += 1
+                    ret = max(ret, sameX+same)
+                    continue
+                dy = points[j].y-points[i].y
+                dx = points[j].x-points[i].x
+                gcd = getGCD(dy,dx)
+                k = (dy//gcd,dx//gcd)
+                mm[k] += 1
+                ret = max(ret, mm[(k)]+same)
         return ret
