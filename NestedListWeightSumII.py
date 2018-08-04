@@ -3,13 +3,17 @@ Given a nested list of integers, return the sum of all integers in the list weig
 
 Each element is either an integer, or a list -- whose elements may also be integers or other lists.
 
-Different from the previous question where weight is increasing from root to leaf, now the weight is defined from bottom up. i.e., the leaf level integers have weight 1, and the root level integers have the largest weight.
+Different from the previous question where weight is increasing from root to leaf,
+now the weight is defined from bottom up. i.e., the leaf level integers have weight 1,
+and the root level integers have the largest weight.
 
 Example 1:
-Given the list [[1,1],2,[1,1]], return 8. (four 1's at depth 1, one 2 at depth 2)
+Given the list [[1,1],2,[1,1]],
+return 8. (four 1's at depth 1, one 2 at depth 2)
 
 Example 2:
-Given the list [1,[4,[6]]], return 17. (one 1 at depth 3, one 4 at depth 2, and one 6 at depth 1; 1*3 + 4*2 + 6*1 = 17) 
+Given the list [1,[4,[6]]],
+return 17. (one 1 at depth 3, one 4 at depth 2, and one 6 at depth 1; 1*3 + 4*2 + 6*1 = 17)
 """
 # """
 # This is the interface that allows for creating nested lists.
@@ -60,19 +64,20 @@ class Solution:
         :type nestedList: List[NestedInteger]
         :rtype: int
         """
-        def helper(nestedList, depth, depthIndexSum):
-            for each in nestedList:
-                if each.isInteger():
-                    depthIndexSum[depth] += each.getInteger()
-                else:
-                    helper(each.getList(), depth+1, depthIndexSum)
+        def helper(depth, ni, mm):
+            if ni.isInteger():
+                mm[depth] += ni.getInteger()
+                return
+            nonlocal maxDepth
+            maxDepth = max(maxDepth, depth+1)
+            for each in ni.getList():
+                helper(depth+1, each, mm)
 
-        depthIndexSum = collections.defaultdict(int)
-        helper(nestedList, 1, depthIndexSum)
+        mm = collections.defaultdict(int)
+        maxDepth = 1
+        for each in nestedList:
+            helper(1, each, mm)
         ret = 0
-        if not len(depthIndexSum):
-            return ret
-        maxDepth = max(depthIndexSum.keys())
-        for k in depthIndexSum:
-            ret += (maxDepth+1-k)*depthIndexSum[k]
+        for k in mm:
+            ret += (maxDepth+1-k)*mm[k]
         return ret
