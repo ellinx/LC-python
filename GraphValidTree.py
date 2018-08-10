@@ -25,19 +25,17 @@ class GraphValidTree:
                 node = roots[node]
             return node
 
-        roots = dict()
+        if len(edges)!=n-1:
+            return False
+        roots = [i for i in range(n)]
+        total = n
         for edge in edges:
-            if edge[0] not in roots:
-                roots[edge[0]] = edge[0]
-            root0 = findRoot(roots,edge[0])
-            if edge[1] not in roots:
-                roots[edge[1]] = edge[1]
-            root1 = findRoot(roots,edge[1])
-            if root0==root1:
-                return False
-            roots[root0] = root1
-            n -= 1
-        return n==1
+            root0 = findRoot(roots, edge[0])
+            root1 = findRoot(roots, edge[1])
+            if root0!=root1:
+                total -= 1
+                roots[root1] = root0
+        return total==1
 
 
     def validTreeBFS(self, n, edges):
