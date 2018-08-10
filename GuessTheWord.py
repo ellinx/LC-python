@@ -47,26 +47,19 @@ class Solution:
         :type master: Master
         :rtype: None
         """
-        # return exact match number of two words
-        def getMatch(a,b):
+        def getMatched(w1, w2):
             ret = 0
             for i in range(6):
-                if a[i]==b[i]:
+                if w1[i]==w2[i]:
                     ret += 1
             return ret
 
-        def helpGuess(wordlist, master):
-            #print(len(wordlist))
-            guessWord = random.choice(wordlist)
-            matchNumber = master.guess(guessWord)
-            if matchNumber==6:
-                return
-            nextWordList = []
-            for each in wordlist:
-                if getMatch(each, guessWord)==matchNumber:
-                    nextWordList.append(each)
-            helpGuess(nextWordList,master)
-
-        # random pick up a word from wordlist and get match number
-        # keep words with same match number in the wordlist
-        helpGuess(wordlist, master)
+        index = random.randrange(len(wordlist))
+        matched = master.guess(wordlist[index])
+        if matched==6:
+            return
+        nextList = []
+        for each in wordlist:
+            if getMatched(each, wordlist[index])==matched:
+                nextList.append(each)
+        self.findSecretWord(nextList, master)
