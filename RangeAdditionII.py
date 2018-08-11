@@ -44,10 +44,8 @@ class Solution:
         :type ops: List[List[int]]
         :rtype: int
         """
-        arr = [m, n]
+        ret = [m,n]
         for op in ops:
-            if op[0]==0 or op[1]==0:
-                continue
-            arr[0] = min(arr[0], op[0])
-            arr[1] = min(arr[1], op[1])
-        return arr[0]*arr[1]
+            ret[0] = min(ret[0], op[0])
+            ret[1] = min(ret[1], op[1])
+        return ret[0]*ret[1]
