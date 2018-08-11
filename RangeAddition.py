@@ -45,11 +45,10 @@ class Solution:
         # process each operation by adding inc at startIndex and subtracting inc at endIndex+1
         # final list is list[i] = list[0]+...+list[i-1]
         ret = [0]*length
-        for update in updates:
-            ret[update[0]] += update[2]
-            if update[1]+1<length:
-                ret[update[1]+1] -= update[2]
-
+        for each in updates:
+            ret[each[0]] += each[2]
+            if each[1]!=length-1:
+                ret[each[1]+1] -= each[2]
         for i in range(1,length):
-            ret[i] += ret[i-1]
+            ret[i] = ret[i-1]+ret[i]
         return ret
