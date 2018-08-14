@@ -33,7 +33,7 @@ class Solution:
     Time: O((m*n)^2) where m,n is row and col number of grid
     Space: O(1)
     """
-    def numIslands(self, grid):
+    def numIslandsDFS(self, grid):
         """
         :type grid: List[List[str]]
         :rtype: int
@@ -57,3 +57,42 @@ class Solution:
                     dfs(grid, i, j)
         #print(grid)
         return ret
+
+    """
+    Thoughts: Union&Find
+    """
+    def numIslands(self, grid):
+        """
+        :type grid: List[List[str]]
+        :rtype: int
+        """
+        def findRoot(roots, node):
+            if node not in roots:
+                roots[node] = node
+                return node
+            while roots[node]!=node:
+                node = roots[node]
+            return node
+
+        roots = dict()
+        m = len(grid)
+        if m==0:
+            return 0
+        n = len(grid[0])
+        dirs = [[-1,0],[1,0],[0,1],[0,1]]
+        total = 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j]=='1':
+                    total += 1
+                    root0 = findRoot(roots, i*n+j)
+                    for each in dirs:
+                        ni = i+each[0]
+                        nj = j+each[1]
+                        if ni>=0 and ni<m and nj>=0 and nj<n and grid[ni][nj]=='1':
+                            root1 = findRoot(roots, ni*n+nj)
+                            if root0!=root1:
+                                roots[root1] = root0
+                                total -= 1
+                            roots[ni*n+nj] = roots[root1]
+        return total
