@@ -2,7 +2,9 @@ import TreeNode
 """
 Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
 
-According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes v and w as the lowest node in T that has both v and w as descendants (where we allow a node to be a descendant of itself).”
+According to the definition of LCA on Wikipedia:
+“The lowest common ancestor is defined between two nodes v and w as the lowest node in T
+that has both v and w as descendants (where we allow a node to be a descendant of itself).”
 
 Given the following binary search tree:  root = [3,5,1,6,2,0,8,null,null,7,4]
 
