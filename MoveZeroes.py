@@ -10,21 +10,18 @@ Note:
 You must do this in-place without making a copy of the array.
 Minimize the total number of operations.
 """
-class MoveZeroes:
+class Solution:
     def moveZeroes(self, nums):
         """
         :type nums: List[int]
         :rtype: void Do not return anything, modify nums in-place instead.
         """
-        index, nonZero = 0, 0
-        while nonZero<len(nums):
-            while nonZero<len(nums) and nums[nonZero]==0:
-                nonZero += 1
-            if nonZero==len(nums):
-                break
-            nums[index] = nums[nonZero]
-            index += 1
-            nonZero += 1
-        while index<len(nums):
-            nums[index] = 0
-            index += 1
+        i1, i2 = 0, 0
+        while i2<len(nums):
+            if nums[i2]!=0:
+                nums[i1] = nums[i2]
+                i1 += 1
+            i2 += 1
+        while i1<len(nums):
+            nums[i1] = 0
+            i1 += 1
