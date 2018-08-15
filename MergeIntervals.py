@@ -14,33 +14,22 @@ Input: [[1,4],[4,5]]
 Output: [[1,5]]
 Explanation: Intervals [1,4] and [4,5] are considerred overlapping.
 """
-class MergeIntervals:
-    #1 push all intervals to a min heap
-    #2 get the interval of smallest start and merge with current
-    #3 if has overlap, merge with current interval; otherwise push current to list and update current
-    #4 repeat step 2 until min heap is empty
+class Solution:
     def merge(self, intervals):
         """
         :type intervals: List[Interval]
         :rtype: List[Interval]
         """
-        minHeap = [(intervals[i].start, i, intervals[i]) for i in range(len(intervals))]
-        heapq.heapify(minHeap)
+        if len(intervals)==0:
+            return []
+        intervals.sort(key=lambda x:[x.start, x.end])
         ret = []
-        cur = None
-        while len(minHeap):
-            temp = heapq.heappop(minHeap)[2]
-            #very first one
-            if not cur:
-                cur = temp
-                continue
-
-            if temp.start<=cur.end:                 # has overlap, need to merge
-                cur.end = max(cur.end, temp.end)
-            else:                                   # no overlap, add current and update it
+        cur = intervals[0]
+        for i in range(1,len(intervals)):
+            if cur.end<intervals[i].start:
                 ret.append(cur)
-                cur = temp
-        # final one
-        if cur:
-            ret.append(cur)
+                cur = intervals[i]
+                continue
+            cur.end = max(cur.end, intervals[i].end)
+        ret.append(cur)
         return ret
