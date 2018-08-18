@@ -32,15 +32,12 @@ class Solution:
         :type n: int
         :rtype: str
         """
-        def helper(n):
-            numMap = "ZABCDEFGHIJKLMNOPQRSTUVWXY"
-            ret = ""
-            if n==0:
-                return ret
-            while n:
-                if n%26==0:
-                    return helper(n//26-1)+"Z"+ret
-                ret = numMap[(n%26)] + ret
-                n //= 26
-            return ret
-        return helper(n)
+        ret = ""
+        while n>26:
+            remain = n%26
+            n //= 26
+            if remain==0:
+                remain = 26
+                n -=1
+            ret = chr(ord('A')+remain-1)+ret
+        return chr(ord('A')+n-1)+ret
