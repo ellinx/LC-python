@@ -23,12 +23,13 @@ class Solution:
         :type digits: List[int]
         :rtype: List[int]
         """
-        carry = 1
-        ret = []
+        c = 1
         for i in range(len(digits)-1,-1,-1):
-            s = digits[i]+carry
-            ret.append(s%10)
-            carry = s//10
-        if carry:
-            ret.append(carry)
-        return ret[::-1]
+            s = digits[i]+c
+            digits[i] = s%10
+            c = s//10
+            if c==0:
+                break
+        if c==0:
+            return digits
+        return [c]+digits
