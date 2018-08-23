@@ -22,25 +22,18 @@ class Solution:
         :type nums: List[int]
         :rtype: void Do not return anything, modify nums in-place instead.
         """
-        index0 = 0
-        while index0<len(nums) and nums[index0]==0:
-            index0 += 1
-        index2 = len(nums)-1
-        while index2>=0 and nums[index2]==2:
-            index2 -= 1
-        index = index0
+        index0, index2 = 0, len(nums)-1
+        index = 0
         while index<=index2:
-            if nums[index]==0:
-                if index0==index:
-                    index0 += 1
-                    index += 1
-                else:
-                    nums[index] = nums[index0]
-                    nums[index0] = 0
-                    index0 += 1
-            elif nums[index]==1:
+            if nums[index]==1:
                 index += 1
+            elif nums[index]==0:
+                if index==index0:
+                    index += 1
+                    index0 += 1
+                else:
+                    nums[index0], nums[index] = nums[index], nums[index0]
+                    index0 += 1
             else:
-                nums[index] = nums[index2]
-                nums[index2] = 2
+                nums[index], nums[index2] = nums[index2], nums[index]
                 index2 -= 1
