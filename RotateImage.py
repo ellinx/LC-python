@@ -49,10 +49,10 @@ class Solution:
         :type matrix: List[List[int]]
         :rtype: void Do not return anything, modify matrix in-place instead.
         """
-        start, end = 0, len(matrix)-1
-        while end-start>0:
-            #print(start,end)
-            for i in range(0,end-start):
-                matrix[start][start+i], matrix[start+i][end], matrix[end][end-i], matrix[end-i][start] = matrix[end-i][start], matrix[start][start+i], matrix[start+i][end], matrix[end][end-i]
+        N = len(matrix)
+        start, end = 0, N-1
+        while start<end:
+            for i in range(start,end):
+                matrix[start][i], matrix[i][end], matrix[N-1-start][N-1-i], matrix[N-1-i][start] = matrix[N-1-i][start], matrix[start][i], matrix[i][end], matrix[N-1-start][N-1-i]
             start += 1
             end -= 1
