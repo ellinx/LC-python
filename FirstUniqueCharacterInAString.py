@@ -24,11 +24,7 @@ class Solution:
         :type s: str
         :rtype: int
         """
-        if len(s)==0:
-            return -1
         counter = collections.Counter(s)
-        if counter.most_common()[-1][1]>1:
-            return -1
         for i in range(len(s)):
             if counter[s[i]]==1:
                 return i
