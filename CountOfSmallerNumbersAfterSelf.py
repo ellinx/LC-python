@@ -45,3 +45,41 @@ class Solution:
             li.remove(nums[i+1])
         ret.append(0)
         return ret
+
+class Solution2:
+    def countSmaller(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        def mergeSort(nums, counts):
+            if len(nums)==1:
+                return nums
+            mid = (len(nums)-1)//2
+            l = mergeSort(nums[:mid+1], counts)
+            r = mergeSort(nums[mid+1:], counts)
+            ret = [0]*len(nums)
+            i1, i2 = 0, 0
+            while i1<len(l) and i2<len(r):
+                if l[i1][0]<=r[i2][0]:
+                    ret[i1+i2] = l[i1]
+                    counts[l[i1][1]] += i2
+                    i1 += 1
+                else:
+                    ret[i1+i2] = r[i2]
+                    i2 += 1
+            while i1<len(l):
+                ret[i1+i2] = l[i1]
+                counts[l[i1][1]] += i2
+                i1 += 1
+            while i2<len(r):
+                ret[i1+i2] = r[i2]
+                i2 += 1
+            return ret
+
+        counts  = [0]*len(nums)
+        if len(nums)<2:
+            return counts
+        arr = [[nums[i],i] for i in range(len(nums))]
+        mergeSort(arr, counts)
+        return counts
