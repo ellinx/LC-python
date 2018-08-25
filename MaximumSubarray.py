@@ -10,26 +10,18 @@ Follow up:
 
 If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.
 """
-class MaximumSubarray:
-    # dp[i] stands for max sum ends at i
-
-    # if dp[i-1]<0:
-    #   dp[i] = nums[i]
-    # else:
-    #   dp[i] = dp[i-1]+nums[i]
-
+class Solution:
     def maxSubArray(self, nums):
         """
         :type nums: List[int]
         :rtype: int
         """
-        ret = float('-inf')
-        dp = [0]*len(nums)
+        ret = float("-inf")
+        cur = 0
         for i in range(len(nums)):
-            if i==0:
-                dp[i] = nums[i]
-                ret = max(ret, dp[i])
-                continue
-            dp[i] = dp[i-1]+nums[i] if dp[i-1]>0 else nums[i]
-            ret = max(ret, dp[i])
+            if cur>0:
+                cur += nums[i]
+            else:
+                cur = nums[i]
+            ret = max(ret, cur)
         return ret
