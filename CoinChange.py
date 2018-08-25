@@ -23,13 +23,10 @@ class Solution:
         :type amount: int
         :rtype: int
         """
-        dp = [0]*(amount+1)
-        dp[0] = 1
+        dp = [-1]*(amount+1)
+        dp[0] = 0
         for i in range(1,amount+1):
             for coin in coins:
-                if i-coin>=0 and dp[i-coin]:
-                    if dp[i]:
-                        dp[i] = min(dp[i], dp[i-coin]+1)
-                    else:
-                        dp[i] = dp[i-coin]+1
-        return -1 if dp[amount]==0 else dp[amount]-1
+                if i-coin>=0 and dp[i-coin]!=-1:
+                    dp[i] = dp[i-coin]+1 if dp[i]==-1 else min(dp[i], dp[i-coin]+1)
+        return dp[amount]
