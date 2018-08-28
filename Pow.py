@@ -25,25 +25,21 @@ class Solution:
         :type n: int
         :rtype: float
         """
-        if x==0 or x==1:
-            return x
-        if x==-1:
-            return 1 if n%2==0 else -1
         if n==0:
             return 1
         if n<0:
-            return 1/self.myPow(x,-n)
-        bitVal = [0]*32
-        bitVal[0] = x
-        for i in range(1,32):
-            bitVal[i] = bitVal[i-1]*bitVal[i-1]
-        #print(bitVal)
-        bitset = set()
-        for i in range(32):
-            if (n&(1<<i))!=0:
-                bitset.add(i)
-        #print(bitset)
-        ret = 1
-        for bit in bitset:
-            ret *= bitVal[bit]
+            return 1/self.myPow(x, -n)
+        mm = []
+        bits = []
+        val, pos = x, 0
+        while (n>>pos)>0:
+            mm.append(val)
+            if ((n>>pos)&1)==1:
+                bits.append(pos)
+            pos += 1
+            val *= val
+        #print(mm, bits)
+        ret = 1.0
+        for each in bits:
+            ret *= mm[each]
         return ret
