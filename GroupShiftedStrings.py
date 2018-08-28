@@ -24,28 +24,25 @@ class Solution:
         :type strings: List[str]
         :rtype: List[List[str]]
         """
-        def StrStartFromA(s):
-            diff = ord(s[0])-ord('a')
-            if diff==0:
-                return s
-            ret = ""
-            for c in s:
-                temp = ord(c)-diff-ord('a')
-                if temp<0:
-                    temp += 26
-                temp %= 26
-                ret += chr(ord('a')+temp)
+        def helper(s):
+            if len(s)==0:
+                return ""
+            ret = "a"
+            dist = ord(s[0])-ord('a')
+            for i in range(1,len(s)):
+                tmp = ord(s[i])-dist
+                if tmp<ord('a'):
+                    tmp = ord('z')+1-(ord('a')-tmp)
+                elif tmp>ord('z'):
+                    tmp = ord('a')-1+tmp-ord('z')
+                ret += chr(tmp)
             return ret
 
-        patternLengthMap = dict()
+        mm = collections.defaultdict(list)
         for s in strings:
-            key = len(s)
-            if key not in patternLengthMap:
-                patternLengthMap[key] = collections.defaultdict(list)
-            #print(s, StrStartFromA(s))
-            patternLengthMap[key][StrStartFromA(s)].append(s)
+            k = helper(s)
+            mm[k].append(s)
         ret = []
-        for k1 in patternLengthMap:
-            for k2 in patternLengthMap[k1]:
-                ret.append(patternLengthMap[k1][k2])
+        for k in mm:
+            ret.append(mm[k])
         return ret
