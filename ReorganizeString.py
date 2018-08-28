@@ -17,27 +17,24 @@ Note:
 
 S will consist of lowercase letters and have length in range [1, 500].
 """
-class ReorganizeString:
+class Solution:
     def reorganizeString(self, S):
         """
         :type S: str
         :rtype: str
         """
-        # select character with most frequency, maxHeap
-        # after each character is selected, put it in a queue with size 1 (1 position apart)
         counter = collections.Counter(S)
-        maxHeap = [(-counter[k], k) for k in counter]
-        heapq.heapify(maxHeap)
-        q = collections.deque()
-        ret = ''
-        while len(maxHeap):
-            cur = heapq.heappop(maxHeap)
+        pq = [[-counter[k], k] for k in counter]
+        heapq.heapify(pq)
+        rest = None
+        ret = ""
+        while len(pq):
+            cur = heapq.heappop(pq)
             ret += cur[1]
-            if len(q):
-                temp = q.popleft()
-                if temp[0]!=0:
-                    heapq.heappush(maxHeap,temp)
-            q.append((cur[0]+1, cur[1]))
-        if len(q) and q[0][0]!=0:
-            return ''
+            cur[0] += 1
+            if rest is not None and rest[0]!=0:
+                heapq.heappush(pq, rest)
+            rest = cur
+        if rest is not None and rest[0]!=0:
+            return ""
         return ret
