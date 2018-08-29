@@ -20,8 +20,8 @@ Output:
 Note:
 The given dict won't contain duplicates, and its length won't exceed 100.
 All the strings in input have length in range [1, 1000].
-"""
-class AddBoldTagInString:
+"""    
+class Solution:
     def addBoldTag(self, s, dict):
         """
         :type s: str
@@ -29,32 +29,31 @@ class AddBoldTagInString:
         :rtype: str
         """
         # similar like merge intervals
-        li = []
-        for word in dict:
-            start = s.find(word)
-            while start>=0:
-                li.append((start,start+len(word)-1))
-                start = s.find(word, start+1)
-        if not len(li):
+        lengthInDict = set()
+        for each in dict:
+            lengthInDict.add(len(each))
+        bold = []
+        cur = None
+        for i in range(len(s)):
+            for each in lengthInDict:
+                if i+each<=len(s) and s[i:i+each] in dict:
+                    if cur is None:
+                        cur = [i,i+each-1]
+                    else:
+                        if cur[1]<i-1:
+                            bold.append(cur)
+                            cur = [i, i+each-1]
+                        else:
+                            cur[1] = max(cur[1], i+each-1)
+        if cur is not None:
+            bold.append(cur)
+        #print(bold)
+        if len(bold)==0:
             return s
-        heapq.heapify(li)
-        #print(li)
-        merged = []
-        start, end = li[0]
-        heapq.heappop(li)
-        while len(li):
-            if li[0][0]>end+1:
-                merged.append((start,end))
-                start, end = heapq.heappop(li)
-            else:
-                end = max(end, li[0][1])
-                heapq.heappop(li)
-        merged.append((start,end))
-        #print(merged)
-        pre, ret = 0, ''
-        for each in merged:
-            ret += s[pre:each[0]]+'<b>'+s[each[0]:each[1]+1]+'</b>'
-            pre = each[1]+1
-        if pre<len(s):
-            ret += s[pre:]
+        ret = ""
+        start = 0
+        for each in bold:
+            ret += s[start:each[0]]+"<b>"+s[each[0]:each[1]+1]+"</b>"
+            start = each[1]+1
+        ret += s[start:]
         return ret
