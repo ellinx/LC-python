@@ -61,39 +61,41 @@ class Solution:
             if start==destination:
                 return True
             # up
-            i,j = start
-            while i>=0 and maze[i][j]!=1:
+            i, j = start
+            while i>=0 and maze[i][j]==0:
                 i -= 1
-            if (i+1,j) not in visited:
-                visited.add((i+1,j))
-                if dfs(maze, [i+1,j], destination, visited):
+            i +=1
+            if (i,j) not in visited:
+                visited.add((i,j))
+                if dfs(maze, [i,j], destination, visited):
                     return True
-            #down
-            i,j = start
-            while i<len(maze) and maze[i][j]!=1:
+            # down
+            i, j = start
+            while i<len(maze) and maze[i][j]==0:
                 i += 1
-            if (i-1,j) not in visited:
-                visited.add((i-1,j))
-                if dfs(maze, [i-1,j], destination, visited):
+            i -=1
+            if (i,j) not in visited:
+                visited.add((i,j))
+                if dfs(maze, [i,j], destination, visited):
                     return True
-            #left
-            i,j = start
-            while j>=0 and maze[i][j]!=1:
+            # left
+            i, j = start
+            while j>=0 and maze[i][j]==0:
                 j -= 1
-            if (i,j+1) not in visited:
-                visited.add((i,j+1))
-                if dfs(maze, [i,j+1], destination, visited):
+            j +=1
+            if (i,j) not in visited:
+                visited.add((i,j))
+                if dfs(maze, [i,j], destination, visited):
                     return True
-            #right
-            i,j = start
-            while j<len(maze[0]) and maze[i][j]!=1:
+            # right
+            i, j = start
+            while j<len(maze[0]) and maze[i][j]==0:
                 j += 1
-            if (i,j-1) not in visited:
-                visited.add((i,j-1))
-                if dfs(maze, [i,j-1], destination, visited):
+            j -=1
+            if (i,j) not in visited:
+                visited.add((i,j))
+                if dfs(maze, [i,j], destination, visited):
                     return True
             return False
 
-        visited = set()
-        visited.add(tuple(start))
-        return dfs(maze, start, destination, visited)
+        return dfs(maze, start, destination, set())
