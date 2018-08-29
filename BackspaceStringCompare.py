@@ -55,3 +55,34 @@ class Solution:
             return "".join(stk)
 
         return getStr(S)==getStr(T)
+
+class Solution2:
+    def backspaceCompare(self, S, T):
+        """
+        :type S: str
+        :type T: str
+        :rtype: bool
+        """
+        def helper(s, cur):
+            total = 0
+            while cur>=0:
+                if s[cur]=='#':
+                    total += 1
+                    cur -= 1
+                    continue
+                if total>0:
+                    total -= 1
+                    cur -= 1
+                    continue
+                return cur
+            return cur
+
+        i1, i2 = helper(S, len(S)-1), helper(T, len(T)-1)
+        while i1>=0 and i2>=0:
+            if S[i1]!=T[i2]:
+                return False
+            i1 = helper(S, i1-1)
+            i2 = helper(T, i2-1)
+        if i1>=0 or i2>=0:
+            return False
+        return True
