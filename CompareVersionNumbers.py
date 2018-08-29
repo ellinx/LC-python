@@ -33,27 +33,20 @@ class Solution:
         """
         v1 = version1.split(".")
         v2 = version2.split(".")
+        #print(v1,v2)
         index = 0
-        while index<min(len(v1),len(v2)):
-            if int(v1[index])==int(v2[index]):
-                index += 1
-                continue
+        while index<len(v1) and index<len(v2):
             if int(v1[index])<int(v2[index]):
                 return -1
-            else:
+            elif int(v1[index])>int(v2[index]):
                 return 1
+            index += 1
         while index<len(v1):
-            if int(v1[index])==0:
-                index += 1
-            else:
-                break
+            if int(v1[index])!=0:
+                return 1
+            index += 1
         while index<len(v2):
-            if int(v2[index])==0:
-                index += 1
-            else:
-                break
-        if index<len(v1):
-            return 1
-        if index<len(v2):
-            return -1
+            if int(v2[index])!=0:
+                return -1
+            index += 1
         return 0
