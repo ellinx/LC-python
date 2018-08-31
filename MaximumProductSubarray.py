@@ -19,16 +19,11 @@ class Solution:
         :type nums: List[int]
         :rtype: int
         """
-        # dp[i] is min and max product ends at i
-        dp = [[0,0] for _ in nums]
-        dp[0] = [nums[0], nums[0]]
-        ret = nums[0]
-        for i in range(1,len(nums)):
-            if nums[i]==0:
-                dp[i] = [0,0]
-                continue
-            dp[i][0] = min(nums[i], nums[i]*dp[i-1][0], nums[i]*dp[i-1][1])
-            dp[i][1] = max(nums[i], nums[i]*dp[i-1][0], nums[i]*dp[i-1][1])
-            ret = max(ret, dp[i][1])
-        #print(dp)
+        ret = float('-inf')
+        minVal = 1
+        maxVal = 1
+        for num in nums:
+            minVal,maxVal = min(minVal*num, maxVal*num, num), max(minVal*num, maxVal*num, num)
+            ret = max(ret, maxVal)
+            #print(minVal, maxVal, ret)
         return ret
