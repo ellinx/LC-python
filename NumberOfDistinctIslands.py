@@ -43,31 +43,28 @@ class Solution:
         :type grid: List[List[int]]
         :rtype: int
         """
-        # record the dfs path of each island
-        def dfs(grid, row, col, cur, path):
-            grid[row][col] = 0
-            path.append(cur)
+        def dfs(grid, i, j):
+            grid[i][j] = 0
+            ret = ""
             # up
-            if row and grid[row-1][col]==1:
-                dfs(grid, row-1, col, "u" ,path)
+            if i-1>=0 and grid[i-1][j]==1:
+                ret += 'u'+dfs(grid, i-1, j)
             # down
-            if row<len(grid)-1 and grid[row+1][col]==1:
-                dfs(grid, row+1, col, "d", path)
+            if i+1<len(grid) and grid[i+1][j]==1:
+                ret += 'd'+dfs(grid, i+1, j)
             # left
-            if col and grid[row][col-1]==1:
-                dfs(grid, row, col-1, "l", path)
+            if j-1>=0 and grid[i][j-1]==1:
+                ret += 'l'+dfs(grid, i, j-1)
             # right
-            if col<len(grid[0])-1 and grid[row][col+1]==1:
-                dfs(grid, row, col+1, "r", path)
-            path.append("e")
+            if j+1<len(grid[0]) and grid[i][j+1]==1:
+                ret += 'r'+dfs(grid, i, j+1)
+            ret += 'e'
+            return ret
 
-        islands = set()
+        shape = set()
         for i in range(len(grid)):
             for j in range(len(grid[0])):
                 if grid[i][j]==1:
-                    path = []
-                    dfs(grid, i, j, "s", path)
-                    #print(path)
-                    islands.add("".join(path))
-        #print(islands)
-        return len(islands)
+                    shape.add(dfs(grid, i, j))
+        #print(shape)
+        return len(shape)
