@@ -26,11 +26,11 @@ class Solution:
         :type root: TreeNode
         :rtype: List[List[int]]
         """
-        ret = []
         if root is None:
-            return ret
+            return []
         cur = [root]
-        flag = 0
+        lToR = True
+        ret = []
         while len(cur):
             vals = []
             nxt = []
@@ -40,10 +40,11 @@ class Solution:
                     nxt.append(each.left)
                 if each.right:
                     nxt.append(each.right)
-            if flag==0:
+            if lToR:
+                lToR = False
                 ret.append(vals)
             else:
+                lToR = True
                 ret.append(vals[::-1])
-            flag = 1-flag
             cur = nxt
         return ret
