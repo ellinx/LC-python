@@ -15,19 +15,19 @@ class Solution:
         :type nums: List[int]
         :rtype: int
         """
-        numSet = set(nums)
         ret = 0
+        numSet = set(nums)
         while len(numSet):
-            for n in numSet:
+            for num in numSet:
                 break
-            numSet.remove(n)
-            l = n-1
-            while l in numSet:
-                numSet.remove(l)
-                l -= 1
-            r = n+1
-            while r in numSet:
-                numSet.remove(r)
+            numSet.remove(num)
+            l = 1
+            while num-l in numSet:
+                numSet.remove(num-l)
+                l += 1
+            r = 1
+            while num+r in numSet:
+                numSet.remove(num+r)
                 r += 1
-            ret = max(ret,r-l-1)
+            ret = max(ret, l+r-1)
         return ret
