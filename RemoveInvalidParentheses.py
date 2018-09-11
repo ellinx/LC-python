@@ -17,7 +17,7 @@ Input: ")("
 Output: [""]
 """
 class Solution:
-
+    # DFS
     def removeInvalidParentheses(self, s):
         """
         :type s: str
@@ -63,8 +63,9 @@ class Solution:
         dfs(s, 0, l, r, ret)
         return ret
 
-
-    def removeInvalidParenthesesBFS(self, s):
+class Solution2:
+    # BFS
+    def removeInvalidParentheses(self, s):
         """
         :type s: str
         :rtype: List[str]
