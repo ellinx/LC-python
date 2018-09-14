@@ -28,9 +28,9 @@ read("abc", 1); // returns ""
 
 class Solution(object):
     def __init__(self):
-        self.temp = [""]*4
-        self.start = 0
-        self.validNum = 0
+        self.buf = [""]*4
+        self.idx = 0
+        self.size = 0
 
     def read(self, buf, n):
         """
@@ -39,27 +39,15 @@ class Solution(object):
         :rtype: The number of characters read (int)
         """
         index = 0
-        if n<=self.validNum:
-            for i in range(n):
-                buf[index+i] = self.temp[self.start+i]
-            self.start += n
-            self.validNum -= n
-            return n
-        for i in range(self.validNum):
-            buf[index] = self.temp[self.start+i]
-            index += 1
-        self.start = 0
-        self.validNum = 0
-        rlength = 4
-        while index<n and rlength==4:
-            rlength = read4(self.temp)
-            self.validNum = rlength
-            for i in range(rlength):
-                buf[index] = self.temp[self.start]
+        while index<n:
+            while self.idx<self.size:
+                buf[index] = self.buf[self.idx]
                 index += 1
-                self.start += 1
-                self.start %= 4
-                self.validNum -= 1
+                self.idx += 1
                 if index==n:
-                    break
-        return min(index,n)
+                    return n
+            self.size = read4(self.buf)
+            self.idx = 0
+            if self.size==0:
+                return index
+        return n
