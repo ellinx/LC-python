@@ -33,7 +33,7 @@ class Solution:
     Time: O((m*n)^2) where m,n is row and col number of grid
     Space: O(1)
     """
-    def numIslandsDFS(self, grid):
+    def numIslands(self, grid):
         """
         :type grid: List[List[str]]
         :rtype: int
@@ -58,6 +58,7 @@ class Solution:
         #print(grid)
         return ret
 
+class Solution2:
     """
     Thoughts: Union&Find
     """
