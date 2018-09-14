@@ -29,17 +29,14 @@ class Solution:
         :rtype: int
         """
         counter = collections.Counter(tasks)
-        freq, numOfMostFreq = None, 0
+        most_freq = counter.most_common()[0][1]
+        total_most_freq = 0
         for each in counter.most_common():
-            if not freq:
-                freq = each[1]
-                numOfMostFreq += 1
+            if each[1]==most_freq:
+                total_most_freq += 1
                 continue
-            if each[1]==freq:
-                numOfMostFreq += 1
-            else:
-                break
-        total = len(tasks)
-        if n<numOfMostFreq:
-            return total
-        return max((n+1)*(freq-1)+numOfMostFreq,total)
+            break
+        total_unique = len(counter)
+        if total_unique-1<n:
+            return (most_freq-1)*(n+1)+total_most_freq
+        return max(len(tasks), (most_freq-1)*(n+1)+total_most_freq)
