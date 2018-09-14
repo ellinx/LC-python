@@ -35,7 +35,7 @@ Each address will have either 1 or 2 "." characters.
 The input count in any count-paired domain will not exceed 10000.
 The answer output can be returned in any order.
 """
-class SubdomainVisitCount:
+class Solution:
     def subdomainVisits(self, cpdomains):
         """
         :type cpdomains: List[str]
@@ -43,14 +43,9 @@ class SubdomainVisitCount:
         """
         count = collections.defaultdict(int)
         for each in cpdomains:
-            spaceIndex = each.find(' ')
-            visitNum = int(each[:spaceIndex])
-            domains = each[spaceIndex+1:].split('.')
-            k = ''
-            for i in range(len(domains)-1,-1,-1):
-                if k=='':
-                    k = domains[i]
-                else:
-                    k = domains[i]+'.'+k
-                count[k] += visitNum
-        return [str(count[k])+' '+k for k in count]
+            data = each.split(' ')
+            domain = data[1].split('.')
+            for i in range(len(domain)):
+                count[".".join(domain[i:])] += int(data[0])
+        ret = [str(count[k])+" "+k for k in count]
+        return ret
