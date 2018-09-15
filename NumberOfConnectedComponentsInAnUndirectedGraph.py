@@ -38,11 +38,13 @@ class Solution:
             return node
 
         roots = [i for i in range(n)]
-        count = n
+        ret = n
         for edge in edges:
             root0 = findRoot(roots, edge[0])
             root1 = findRoot(roots, edge[1])
+            roots[edge[0]] = root0
+            roots[edge[1]] = root1
             if root0!=root1:
                 roots[root0] = root1
-                count -= 1
-        return count
+                ret -= 1
+        return ret
