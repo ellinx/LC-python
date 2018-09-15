@@ -30,46 +30,53 @@ class MaxStack:
         """
         initialize your data structure here.
         """
-        self.stk = []
-        self.maxHeap = []
+        self.vals = collections.deque()
+        self.max = collections.deque()
 
     def push(self, x):
         """
         :type x: int
         :rtype: void
         """
-        self.stk.append(x)
-        heapq.heappush(self.maxHeap,-x)
+        self.vals.append(x)
+        if len(self.max)==0 or self.max[-1]<=x:
+            self.max.append(x)
 
     def pop(self):
         """
         :rtype: int
         """
-        ret = self.stk.pop()
-        self.maxHeap.remove(-ret)
-        heapq.heapify(self.maxHeap)
+        ret = self.vals.pop()
+        if ret == self.max[-1]:
+            self.max.pop()
         return ret
 
     def top(self):
         """
         :rtype: int
         """
-        return self.stk[-1]
+        return self.vals[-1]
 
     def peekMax(self):
         """
         :rtype: int
         """
-        return -self.maxHeap[0]
+        return self.max[-1]
 
     def popMax(self):
         """
         :rtype: int
         """
-        ret = -heapq.heappop(self.maxHeap)
-        index = -self.stk[::-1].index(ret)-1
-        self.stk.pop(index)
-        #print(self.stk,self.maxHeap)
+        ret = self.max.pop()
+        tmp = collections.deque()
+        while self.vals[-1]!=ret:
+            tmp.append(self.vals.pop())
+        self.vals.pop()
+        while len(tmp):
+            x = tmp.pop()
+            self.vals.append(x)
+            if len(self.max)==0 or self.max[-1]<=x:
+                self.max.append(x)
         return ret
 
 
