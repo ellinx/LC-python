@@ -29,10 +29,5 @@ class Solution:
         :type x: int
         :rtype: bool
         """
-        if x<0:
-            return False
-        strs = []
-        while x>0:
-            strs.append(x%10)
-            x //= 10
-        return strs==strs[::-1]
+        strX = str(x)
+        return strX==strX[::-1]
