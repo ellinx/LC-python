@@ -13,23 +13,23 @@ Output: 4
 Note:
 You may assume k is always valid, 1 ≤ k ≤ array's length.
 """
-class KthLargestElementInAnArray(object):
-    # heap
+class Solution:
     def findKthLargest(self, nums, k):
         """
         :type nums: List[int]
         :type k: int
         :rtype: int
         """
-        minHeap = []
-        for num in nums:
-            heapq.heappush(minHeap,num)
-            if len(minHeap)>k:
-                heapq.heappop(minHeap)
-        return minHeap[0]
+        pq = []
+        for i in range(len(nums)):
+            heapq.heappush(pq, nums[i])
+            if len(pq)>k:
+                heapq.heappop(pq)
+        return pq[0]
 
+class Solution2:
     # quick sort
-    def findKthLargest2(self, nums, k):
+    def findKthLargest(self, nums, k):
         """
         :type nums: List[int]
         :type k: int
