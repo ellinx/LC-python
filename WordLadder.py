@@ -34,7 +34,7 @@ Output: 0
 
 Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
 """
-class WordLadder:
+class Solution:
     def ladderLength(self, beginWord, endWord, wordList):
         """
         :type beginWord: str
@@ -64,4 +64,41 @@ class WordLadder:
                                 q.append(temp)
                                 wordSet.remove(temp)
             level += 1
+        return 0
+
+class Solution2:
+    def ladderLength(self, beginWord, endWord, wordList):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: List[str]
+        :rtype: int
+        """
+        letters = "abcdefghijklmnopqrstuvwxyz"
+        mm = dict()
+        for word in wordList:
+            mm[word] = 0
+        mm[beginWord] = 1
+        if endWord not in mm:
+            return 0
+        mm[endWord] = -1
+        q = collections.deque()
+        q.append(beginWord)
+        q.append(endWord)
+        while len(q):
+            #print(q,mm)
+            cur = q.popleft()
+            for i in range(len(cur)):
+                for c in letters:
+                    if c!=cur[i]:
+                        nxt = cur[:i]+c+cur[i+1:]
+                        if nxt in mm:
+                            if mm[nxt]*mm[cur]<0:
+                                return abs(mm[nxt]-mm[cur])
+                            if mm[nxt]==0:
+                                if mm[cur]>0:
+                                    mm[nxt] = mm[cur]+1
+                                else:
+                                    mm[nxt] = mm[cur]-1
+                                q.append(nxt)
         return 0
