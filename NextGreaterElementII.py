@@ -20,18 +20,13 @@ class Solution:
         :type nums: List[int]
         :rtype: List[int]
         """
-        ret = [-1]*len(nums)
+        N = len(nums)
+        ret = [-1]*N
         stk = collections.deque()
-        for i in range(len(nums)):
-            if not len(stk) or nums[stk[-1]]>=nums[i]:
+        for i in range(2*N):
+            cur = nums[i%N]
+            while len(stk) and nums[stk[-1]]<cur:
+                ret[stk.pop()] = cur
+            if i<N:
                 stk.append(i)
-                continue
-            while len(stk) and nums[stk[-1]]<nums[i]:
-                ret[stk.pop()] = nums[i]
-            stk.append(i)
-        for i in range(len(nums)):
-            if not len(stk) or stk[-1]==i:
-                break
-            while len(stk) and nums[stk[-1]]<nums[i]:
-                ret[stk.pop()] = nums[i]
         return ret
