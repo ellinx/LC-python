@@ -9,28 +9,30 @@ Input: "23"
 Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
 """
 
-class LetterCombinationsOfPhoneNumber:
+class Solution:
     # use dfs
     def letterCombinations(self, digits):
         """
         :type digits: str
         :rtype: List[str]
         """
-        if not len(digits):
-            return []
-        li = ["","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"]
-        def dfs(li, digits, cur, ret):
-            if not len(digits):
+        def dfs(digits, start, cur, ret):
+            if start == len(digits):
                 ret.append(cur)
                 return
-            for c in li[int(digits[0])]:
-                dfs(li, digits[1:], cur+c, ret)
+            mm = ["","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"]
+            for c in mm[int(digits[start])]:
+                dfs(digits, start+1, cur+c, ret)
+
         ret = []
-        dfs(li, digits, "", ret)
+        if len(digits) == 0:
+            return []
+        dfs(digits, 0, "", ret)
         return ret
 
+class Solution2:
     # BFS
-    def letterCombinations2(self, digits):
+    def letterCombinations(self, digits):
         """
         :type digits: str
         :rtype: List[str]
