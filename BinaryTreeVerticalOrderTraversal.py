@@ -79,20 +79,17 @@ class Solution:
         :type root: TreeNode
         :rtype: List[List[int]]
         """
+        mm = collections.defaultdict(list)
         if root is None:
             return []
-        mm = collections.defaultdict(list)
-        q = collections.deque()
-        q.append([root,0])
-        while len(q):
-            cur = q.popleft()
-            mm[cur[1]].append(cur[0].val)
-            if cur[0].left:
-                q.append([cur[0].left, cur[1]-1])
-            if cur[0].right:
-                q.append([cur[0].right, cur[1]+1])
-        keys = list(mm.keys())
-        ret = []
-        for k in sorted(keys):
-            ret.append(mm[k])
-        return ret
+        cur = [[root, 0]]
+        while len(cur):
+            nxt = []
+            for each in cur:
+                mm[each[1]].append(each[0].val)
+                if each[0].left is not None:
+                    nxt.append([each[0].left, each[1]-1])
+                if each[0].right is not None:
+                    nxt.append([each[0].right, each[1]+1])
+            cur = nxt
+        return [mm[i] for i in sorted(mm.keys())]
