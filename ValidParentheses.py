@@ -38,21 +38,18 @@ class Solution:
         """
         stk = collections.deque()
         for c in s:
-            if c=="(" or c=="[" or c=="{":
+            if c in "({[":
                 stk.append(c)
             elif c==")":
-                if not len(stk):
+                if len(stk)==0 or stk[-1]!="(":
                     return False
-                if stk.pop()!="(":
-                    return False
-            elif c=="]":
-                if not len(stk):
-                    return False
-                if stk.pop()!="[":
-                    return False
+                stk.pop()
             elif c=="}":
-                if not len(stk):
+                if len(stk)==0 or stk[-1]!="{":
                     return False
-                if stk.pop()!="{":
+                stk.pop()
+            elif c=="]":
+                if len(stk)==0 or stk[-1]!="[":
                     return False
+                stk.pop()
         return len(stk)==0
