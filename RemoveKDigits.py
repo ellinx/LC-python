@@ -20,31 +20,29 @@ Input: num = "10", k = 2
 Output: "0"
 Explanation: Remove all the digits from the number and it is left with nothing which is 0.
 """
-class RemoveKDigits:
+class Solution:
     def removeKdigits(self, num, k):
         """
         :type num: str
         :type k: int
         :rtype: str
         """
-        # dont's waste delete on zero
-        if k<1:
+        if k==0:
             return num
         if k>=len(num):
             return '0'
-        index0 = num.find('0')
-        if index0>-1:
-            if index0==k:
-                return str(int(num[index0+1:])) if index0+1<len(num) else '0'
-            if index0<k:
-                return self.removeKdigits(num[index0+1:], k-index0)
-            pre = self.removeKdigits(num[:index0], k)
-            if pre=='0':
-                return str(int(num[index0+1:])) if index0+1<len(num) else '0'
-            return pre+num[index0:]
-        # no zero
-        for i in range(len(num)-1):
-            if num[i]>num[i+1]:
-                return self.removeKdigits(num[:i]+num[i+1:], k-1)
-        # ascending order
-        return num[:-k]
+        stk = collections.deque()
+        for i,c in enumerate(num):
+            while len(stk)>0 and int(stk[-1])>int(c):
+                if stk[-1]!='0':
+                    stk.pop()
+                    k -= 1
+                    if k==0:
+                        return str(int("".join(stk)+num[i:]))
+            if c!='0':
+                stk.append(c)
+        #print(stk, k)
+        ret = "".join(stk)[:-k]
+        if ret=="":
+            return '0'
+        return ret
