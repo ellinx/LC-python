@@ -27,31 +27,23 @@ Explanation: The input is: [5,1,4,null,null,3,6]. The root node's value
 is 5 but its right child's value is 4.
 """
 
-class ValidateBinarySearchTree:
-    """
-    Thoughts:
-    1. inorder traverse a BST, it should be in ascending order
-
-    Time: O(n) where n is total number of nodes in the tree
-    Space: O(1)
-    """
+class Solution:
     def isValidBST(self, root):
         """
         :type root: TreeNode
         :rtype: bool
         """
-        pre = float('-inf')
         stk = collections.deque()
-        while root:
-            stk.append(root)
-            root = root.left
-        while len(stk):
-            root = stk.pop()
-            if pre>=root.val:
-                return False
-            pre = root.val
-            root = root.right
-            while root:
-                stk.append(root)
-                root = root.left
+        pre = None
+        cur = root
+        while cur is not None or len(stk)>0:
+            if cur is not None:
+                stk.append(cur)
+                cur = cur.left
+            else:
+                cur = stk.pop()
+                if pre is not None and pre>=cur.val:
+                    return False
+                pre = cur.val
+                cur = cur.right
         return True
