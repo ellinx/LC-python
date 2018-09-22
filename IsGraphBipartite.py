@@ -29,25 +29,28 @@ The graph looks like this:
 3----2
 We cannot find a way to divide the set of nodes into two independent subsets.
 """
-class IsGraphBipartite:
+class Solution:
     def isBipartite(self, graph):
         """
         :type graph: List[List[int]]
         :rtype: bool
         """
-        def dfs(graph, group, cur, groupNum):
-            if group[cur]!=-1:
-                return group[cur]==groupNum
-            group[cur] = groupNum
-            for each in graph[cur]:
-                if not dfs(graph, group, each, 1-groupNum):
+        def helper(graph, i, group):
+            if group[i]==0:
+                group[i] = 1
+            for each in graph[i]:
+                if group[each]==0:
+                    group[each] = 3-group[i]
+                    if not helper(graph, each, group):
+                        return False
+                    continue
+                if group[each] != 3-group[i]:
                     return False
             return True
 
-        if not len(graph):
-            return True
-        group = [-1]*len(graph)
+        N = len(graph)
+        group = [0]*N
         for i in range(len(graph)):
-            if group[i]==-1 and not dfs(graph, group, i, 0):
+            if not helper(graph, i, group):
                 return False
         return True
