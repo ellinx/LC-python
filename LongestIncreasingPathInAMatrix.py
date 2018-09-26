@@ -36,29 +36,24 @@ class Solution:
         def dfs(matrix, i, j, dp):
             if dp[i][j]!=0:
                 return dp[i][j]
+            m, n = len(matrix), len(matrix[0])
+            dirs = [[-1,0],[1,0],[0,-1],[0,1]]
             ret = 1
-            # up
-            if i and matrix[i-1][j]>matrix[i][j]:
-                ret = max(ret, dfs(matrix,i-1,j,dp)+1)
-            # down
-            if i<len(matrix)-1 and matrix[i+1][j]>matrix[i][j]:
-                ret = max(ret, dfs(matrix,i+1,j,dp)+1)
-            # left
-            if j and matrix[i][j-1]>matrix[i][j]:
-                ret = max(ret, dfs(matrix,i,j-1,dp)+1)
-            # right
-            if j<len(matrix[0])-1 and matrix[i][j+1]>matrix[i][j]:
-                ret = max(ret, dfs(matrix,i,j+1,dp)+1)
+            for each in dirs:
+                ni = i+each[0]
+                nj = j+each[1]
+                if ni>=0 and ni<m and nj>=0 and nj<n and matrix[i][j]<matrix[ni][nj]:
+                    ret = max(ret, dfs(matrix, ni, nj, dp)+1)
             dp[i][j] = ret
             return ret
 
-        # dp[i][j] is longest path starting from matrix[i][j]
+        ret = 0
         m = len(matrix)
         if m==0:
             return 0
         n = len(matrix[0])
+        # dp[i][j] is longest path starting from matrix[i][j]
         dp = [[0]*n for _ in range(m)]
-        ret = 0
         for i in range(m):
             for j in range(n):
                 ret = max(ret, dfs(matrix, i, j, dp))
