@@ -18,9 +18,9 @@ class Solution:
         :type target: int
         :rtype: List[int]
         """
-        numToIndex = dict()
+        mm = dict()
         for i in range(len(nums)):
-            if target-nums[i] in numToIndex:
-                return [numToIndex[target-nums[i]], i]
-            numToIndex[nums[i]] = i
-        return [-1,-1]
+            if target-nums[i] in mm:
+                return [mm[target-nums[i]], i]
+            mm[nums[i]] = i
+        return []
