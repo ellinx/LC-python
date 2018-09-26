@@ -68,3 +68,36 @@ class Solution:
                     shape.add(dfs(grid, i, j))
         #print(shape)
         return len(shape)
+
+class Solution2:
+    def numDistinctIslands(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        def dfs(grid, i, j, r0, c0, cur):
+            m, n = len(grid), len(grid[0])
+            if grid[i][j]!=1:
+                return
+            grid[i][j] = 0
+            cur.add((i-r0)*2*n+(j-c0))
+            dirs = [[-1,0],[1,0],[0,-1],[0,1]]
+            for each in dirs:
+                ni = i+each[0]
+                nj = j+each[1]
+                if ni>=0 and ni<m and nj>=0 and nj<n:
+                    dfs(grid, ni, nj, r0, c0, cur)
+
+        # record point from top left
+        m = len(grid)
+        if m==0:
+            return 0
+        n = len(grid[0])
+        shapes = set()
+        for i in range(m):
+            for j in range(n):
+                cur = set()
+                dfs(grid, i, j, i, j, cur)
+                if len(cur)!=0:
+                    shapes.add(tuple(sorted(cur)))
+        return len(shapes)
