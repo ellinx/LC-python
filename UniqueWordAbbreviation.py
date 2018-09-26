@@ -38,30 +38,22 @@ class ValidWordAbbr:
         """
         :type dictionary: List[str]
         """
-        counter = collections.defaultdict(set)
+        self.abbrDict = collections.defaultdict(set)
         for word in dictionary:
             if len(word)<3:
-                counter[word].add(word)
-                continue
-            k = word[0]+str(len(word)-2)+word[-1]
-            counter[k].add(word)
-        self.abbrs = counter
-        #print(self.abbrs)
+                self.abbrDict[word].add(word)
+            else:
+                self.abbrDict[word[0]+str(len(word)-2)+word[-1]].add(word)
 
     def isUnique(self, word):
         """
         :type word: str
         :rtype: bool
         """
-        if len(word)<3:
-            k = word
-        else:
-            k = word[0]+str(len(word)-2)+word[-1]
-        if k not in self.abbrs:
-            return True
-        if len(self.abbrs[k])==1 and word in self.abbrs[k]:
-            return True
-        return False
+        abbr = word
+        if len(word)>2:
+            abbr = word[0]+str(len(word)-2)+word[-1]
+        return len(self.abbrDict[abbr])==0 or (word in self.abbrDict[abbr] and len(self.abbrDict[abbr])==1)
 
 
 # Your ValidWordAbbr object will be instantiated and called as such:
