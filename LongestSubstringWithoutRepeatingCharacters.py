@@ -17,17 +17,14 @@ class Solution:
         :type s: str
         :rtype: int
         """
-        counter = collections.defaultdict(int)
         ret = 0
+        charSet = set()
         start, end = 0, 0
         while end<len(s):
-            counter[s[end]] += 1
-            if counter[s[end]]==1:
-                end += 1
-                ret = max(ret, end-start)
-                continue
-            while counter[s[end]]==2:
-                counter[s[start]] -= 1
+            while s[end] in charSet:
+                charSet.remove(s[start])
                 start += 1
+            charSet.add(s[end])
             end += 1
+            ret = max(ret, end-start)
         return ret
