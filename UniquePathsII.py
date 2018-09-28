@@ -34,25 +34,28 @@ class Solution:
         :rtype: int
         """
         m = len(obstacleGrid)
+        if m==0:
+            return 0
         n = len(obstacleGrid[0])
-        pre = [0]*n
-        for i in range(n):
+        cur = [0]*n
+        if obstacleGrid[0][0]==1:
+            return 0
+        cur[0] = 1
+        for i in range(1,n):
             if obstacleGrid[0][i]==1:
-                pre[i] = 0
-            else:
-                if i==0:
-                    pre[i] = 1
-                else:
-                    pre[i] = pre[i-1]
+                cur[i] = 0
+                continue
+            cur[i] = cur[i-1]
+        #print(cur)
         for i in range(1,m):
-            cur = [0]*n
-            for j in range(n):
+            nxt = [0]*n
+            if obstacleGrid[i][0]==0:
+                nxt[0] = cur[0]
+            for j in range(1,n):
                 if obstacleGrid[i][j]==1:
-                    cur[j] = 0
-                else:
-                    if j==0:
-                        cur[j] = pre[j]
-                    else:
-                        cur[j] = cur[j-1]+pre[j]
-            pre = cur
-        return pre[-1]
+                    nxt[j] = 0
+                    continue
+                nxt[j] = cur[j]+nxt[j-1]
+            cur = nxt
+            #print(cur)
+        return cur[-1]
