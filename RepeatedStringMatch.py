@@ -8,15 +8,15 @@ Return 3, because by repeating A three times (“abcdabcdabcd”), B is a substr
 Note:
 The length of A and B will be between 1 and 10000.
 """
-class RepeatedStringMatch:
+class Solution:
     def repeatedStringMatch(self, A, B):
         """
         :type A: str
         :type B: str
         :rtype: int
         """
-        n = len(B)//len(A)
-        for i in range(n,2*n+3):
-            if (A*i).find(B)>=0:
-                return i
+        n = (len(B)-1)//len(A)+1
+        for i in range(2):
+            if (A*(n+i)).find(B)!=-1:
+                return n+i
         return -1
