@@ -51,3 +51,38 @@ class Solution:
                 return True
             buckets[index] = nums[i]
         return False
+
+class Solution2:
+    def containsNearbyAlmostDuplicate(self, nums, k, t):
+        """
+        :type nums: List[int]
+        :type k: int
+        :type t: int
+        :rtype: bool
+        """
+        def insertIndex(li, num):
+            s, e = 0, len(li)-1
+            while s<=e:
+                m = s+(e-s)//2
+                if li[m]==num:
+                    return m
+                if li[m]<num:
+                    s = m+1
+                else:
+                    e = m-1
+            return s
+
+        li = []
+        for i in range(len(nums)):
+            idx = insertIndex(li, nums[i])
+            diff = float('inf')
+            if idx-1>=0:
+                diff = min(diff, nums[i]-li[idx-1])
+            if idx<len(li):
+                diff = min(diff, li[idx]-nums[i])
+            if diff<=t:
+                return True
+            li.insert(idx, nums[i])
+            if i>=k:
+                li.remove(nums[i-k])
+        return False
