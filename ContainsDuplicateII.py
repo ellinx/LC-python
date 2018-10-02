@@ -25,12 +25,11 @@ class Solution:
         :type k: int
         :rtype: bool
         """
-        # maintain a set of size k
         numSet = set()
-        for i in range(len(nums)):
-            if i>k:
-                numSet.remove(nums[i-k-1])
-            if nums[i] in numSet:
+        for i, num in enumerate(nums):
+            if num in numSet:
                 return True
-            numSet.add(nums[i])
+            numSet.add(num)
+            if i>=k:
+                numSet.remove(nums[i-k])
         return False
