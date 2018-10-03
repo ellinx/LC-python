@@ -18,35 +18,31 @@ class Solution:
         :type k: int
         :rtype: bool
         """
-        def dfs(nums, used, start, cur, total, target):
-            #print(used,total)
-            if total==0:
-                if cur==0:
+        def dfs(nums, used, start, total, target, k):
+            if total==target:
+                if k-1==0:
                     return True
-                return False
+                return dfs(nums, used, 0, 0, target, k-1)
+            while start<len(nums) and used[start]:
+                start += 1
             pre = None
-            for i in range(start, len(nums)):
-                if used[i] or nums[i]==pre:
-                    continue
-                if cur+nums[i]>target:
-                    break
-                used[i] = True
-                if cur+nums[i]==target:
-                    if dfs(nums, used, 0, 0, total-1, target):
+            for i in range(start,len(nums)):
+                if not used[i]:
+                    if pre is not None and pre==nums[i]:
+                        continue
+                    if total+nums[i]>target:
+                        break
+                    used[i] = True
+                    if dfs(nums, used, i+1, total+nums[i], target, k):
                         return True
-                else:
-                    if dfs(nums, used, i+1, cur+nums[i], total-1, target):
-                        return True
-                pre = nums[i]
-                used[i] = False
+                    used[i] = False
+                    pre = nums[i]
             return False
 
-        total = sum(nums)
-        if total%k!=0:
+        if sum(nums)%k != 0:
             return False
-        target = total//k
-        if max(nums)>target:
-            return False
-        used = [False]*len(nums)
+        target = sum(nums)//k
         nums.sort()
-        return dfs(nums, used, 0, 0, len(nums), target)
+        if nums[-1]>target:
+            return False
+        return dfs(nums, [False]*len(nums), 0, 0, target, k)
