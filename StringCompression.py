@@ -47,33 +47,25 @@ Note:
 All characters have an ASCII value in [35, 126].
 1 <= len(chars) <= 1000.
 """
-class StringCompression:
+class Solution:
     def compress(self, chars):
         """
         :type chars: List[str]
         :rtype: int
         """
-        start, end = 0, 0
         index = 0
-        while end < len(chars):
-            while end<len(chars) and chars[start]==chars[end]:
-                end += 1
-            if end-start==1:
-                chars[index] = chars[start]
-                index += 1
-                start = end
-                continue
-            for c in chars[start]+str(end-start):
-                chars[index] = c
-                index += 1
-            start = end
-        if start==end:
-            return index
-        if end-start==1:
-            chars[index] = chars[start]
+        s, e = 0, 0
+        while s<len(chars):
+            while e<len(chars):
+                if chars[s]==chars[e]:
+                    e += 1
+                else:
+                    break
+            chars[index] = chars[s]
             index += 1
-            return index
-        for c in chars[start]+str(end-start):
-            chars[index] = c
-            index += 1
+            if e-s>1:
+                for c in str(e-s):
+                    chars[index] = c
+                    index += 1
+            s = e
         return index
