@@ -31,23 +31,24 @@ class Solution:
         :type color: str
         :rtype: str
         """
+        def helper(s):
+            ret = s[0]*2
+            if s[0]=='0':
+                ls = 'ff'
+            else:
+                ls = hex(int(s[0],16)-1)[2:]*2
+            if abs(int(ls,16)-int(s,16))<abs(int(ret,16)-int(s,16)):
+                ret = ls
+            if s[0]=='f':
+                rs = '00'
+            else:
+                rs = hex(int(s[0],16)+1)[2:]*2
+            if abs(int(rs,16)-int(s,16))<abs(int(ret,16)-int(s,16)):
+                ret = rs
+            return ret
+
+
         ret = "#"
         for i in range(1,6,2):
-            ori = color[i:i+2]
-            cur = color[i]*2
-            if color[i]=='0':
-                pre = "ff"
-            else:
-                pre = hex(int(color[i],16)-1)[2]*2
-            if color[i]=='f':
-                nxt = "00"
-            else:
-                nxt = hex(int(color[i],16)+1)[2]*2
-            #print(pre, cur, nxt)
-            res = pre
-            if abs(int(cur,16)-int(ori,16))<abs(int(res,16)-int(ori,16)):
-                res = cur
-            if abs(int(nxt,16)-int(ori,16))<abs(int(res,16)-int(ori,16)):
-                res = nxt
-            ret += res
+            ret += helper(color[i:i+2])
         return ret
