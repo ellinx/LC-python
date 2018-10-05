@@ -20,16 +20,12 @@ class Solution:
         :type s: str
         :rtype: bool
         """
-        count = collections.Counter(s)
-        if len(s)%2==0:
-            for k in count:
-                if count[k]%2!=0:
-                    return False
-            return True
+        counter = collections.Counter(s)
         odd = 0
-        for k in count:
-            if count[k]%2!=0:
-                odd += 1
-            if odd>1:
-                break
-        return odd==1
+        for k in counter:
+            if counter[k]%2==0:
+                continue
+            if odd>0:
+                return False
+            odd += 1
+        return True
