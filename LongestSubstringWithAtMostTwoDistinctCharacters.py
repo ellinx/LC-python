@@ -21,18 +21,15 @@ class Solution:
         :type s: str
         :rtype: int
         """
-        start, end = 0, 0
-        ret = 0
         counter = dict()
+        ret = 0
+        start, end = 0, 0
         while end<len(s):
-            if s[end] not in counter:
-                counter[s[end]] = 0
-            counter[s[end]] += 1
+            counter[s[end]] = counter.get(s[end], 0)+1
             while len(counter)>2:
-                if counter[s[start]]==1:
+                counter[s[start]] -= 1
+                if counter[s[start]]==0:
                     counter.pop(s[start])
-                else:
-                    counter[s[start]] -= 1
                 start += 1
             ret = max(ret, end-start+1)
             end += 1
