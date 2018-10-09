@@ -13,7 +13,7 @@ Output: false
 Note: you can assume that no duplicate edges will appear in edges.
 Since all edges are undirected, [0,1] is the same as [1,0] and thus will not appear together in edges.
 """
-class GraphValidTree:
+class Solution:
     def validTree(self, n, edges):
         """
         :type n: int
@@ -25,20 +25,21 @@ class GraphValidTree:
                 node = roots[node]
             return node
 
-        if len(edges)!=n-1:
-            return False
         roots = [i for i in range(n)]
         total = n
         for edge in edges:
             root0 = findRoot(roots, edge[0])
             root1 = findRoot(roots, edge[1])
-            if root0!=root1:
-                total -= 1
-                roots[root1] = root0
+            roots[edge[0]] = root0
+            roots[edge[1]] = root1
+            if root0==root1:
+                return False
+            roots[root1] = root0
+            total -= 1
         return total==1
 
-
-    def validTreeBFS(self, n, edges):
+class Solution2:
+    def validTree(self, n, edges):
         """
         :type n: int
         :type edges: List[List[int]]
