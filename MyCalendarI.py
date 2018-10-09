@@ -64,6 +64,29 @@ class MyCalendar:
         return True
 
 
+class MyCalendar2:
+
+    def __init__(self):
+        self.q = []
+
+    def book(self, start, end):
+        """
+        :type start: int
+        :type end: int
+        :rtype: bool
+        """
+        for i in range(len(self.q)):
+            if self.q[i][1]<=start:
+                continue
+            if end<=self.q[i][0]:
+                self.q.insert(i,[start,end])
+                return True
+            else:
+                return False
+        self.q.append([start,end])
+        return True
+
+
 # Your MyCalendar object will be instantiated and called as such:
 # obj = MyCalendar()
 # param_1 = obj.book(start,end)
