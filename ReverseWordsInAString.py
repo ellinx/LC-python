@@ -17,12 +17,22 @@ class Solution(object):
         :type s: str
         :rtype: str
         """
-        words = s.split(" ")
-        ret = ""
-        for word in reversed(words):
-            word = word.strip()
-            if len(word):
-                ret += " "+word
-        if not len(ret):
-            return ret
-        return ret[1:]
+        words = []
+        l, r = 0, 0
+        while r<len(s):
+            while l<len(s):
+                if s[l]==' ':
+                    l += 1
+                    continue
+                break
+            if l==len(s):
+                break
+            r = l
+            while r<len(s):
+                if s[r]!=' ':
+                    r += 1
+                    continue
+                break
+            words.append(s[l:r])
+            l = r+1
+        return ' '.join(words[::-1])
