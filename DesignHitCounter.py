@@ -1,7 +1,10 @@
 """
 Design a hit counter which counts the number of hits received in the past 5 minutes.
 
-Each function accepts a timestamp parameter (in seconds granularity) and you may assume that calls are being made to the system in chronological order (ie, the timestamp is monotonically increasing). You may assume that the earliest timestamp starts at 1.
+Each function accepts a timestamp parameter (in seconds granularity) and
+you may assume that calls are being made to the system in chronological order
+(ie, the timestamp is monotonically increasing).
+You may assume that the earliest timestamp starts at 1.
 
 It is possible that several hits arrive roughly at the same time.
 
@@ -38,7 +41,8 @@ class HitCounter:
         """
         Initialize your data structure here.
         """
-        self.count = []
+        self.q = collections.deque()
+        self.total = 0
 
     def hit(self, timestamp):
         """
@@ -47,12 +51,17 @@ class HitCounter:
         :type timestamp: int
         :rtype: void
         """
-        self.count.append(timestamp)
-        index = self.removeIndex(timestamp-300)
-        if self.count[index]==timestamp-300:
-            self.count = self.count[index+1:]
+        while len(self.q):
+            if self.q[0][0]+300<=timestamp:
+                self.total -= self.q.popleft()[1]
+                continue
+            break
+        if len(self.q) and self.q[-1][0]==timestamp:
+            self.q[-1][1] += 1
         else:
-            self.count = self.count[index:]
+            self.q.append([timestamp, 1])
+        self.total += 1
+
 
     def getHits(self, timestamp):
         """
@@ -61,30 +70,12 @@ class HitCounter:
         :type timestamp: int
         :rtype: int
         """
-        index = self.removeIndex(timestamp-300)
-        if index==len(self.count):
-            self.count = []
-            return 0
-        if self.count[index]==timestamp-300:
-            self.count = self.count[index+1:]
-        else:
-            self.count = self.count[index:]
-        return len(self.count)
-
-    def removeIndex(self, timestamp):
-        start, end = 0, len(self.count)-1
-        while start<=end:
-            mid = start+(end-start)//2
-            if self.count[mid]==timestamp:
-                if mid<len(self.count)-1 and self.count[mid+1]==timestamp:
-                    start = mid+1
-                else:
-                    return mid
-            elif self.count[mid]<timestamp:
-                start = mid+1
-            else:
-                end = mid-1
-        return start
+        while len(self.q):
+            if self.q[0][0]+300<=timestamp:
+                self.total -= self.q.popleft()[1]
+                continue
+            break
+        return self.total
 
 
 # Your HitCounter object will be instantiated and called as such:
