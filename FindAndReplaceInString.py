@@ -3,7 +3,8 @@ To some string S, we will perform some replacement operations that
 replace groups of letters with new ones (not necessarily the same size).
 
 Each replacement operation has 3 parameters: a starting index i, a source word x and a target word y.
-The rule is that if x starts at position i in the original string S, then we will replace that occurrence of x with y.
+The rule is that if x starts at position i in the original string S,
+then we will replace that occurrence of x with y.
 If not, we do nothing.
 
 For example, if we have S = "abcd" and we have some replacement operation i = 2, x = "cd", y = "ffff",
@@ -18,13 +19,12 @@ It's guaranteed that there won't be any overlap in replacement: for example, S =
 sources = ["ab","bc"] is not a valid test case.
 
 Example 1:
-
 Input: S = "abcd", indexes = [0,2], sources = ["a","cd"], targets = ["eee","ffff"]
 Output: "eeebffff"
 Explanation: "a" starts at index 0 in S, so it's replaced by "eee".
 "cd" starts at index 2 in S, so it's replaced by "ffff".
-Example 2:
 
+Example 2:
 Input: S = "abcd", indexes = [0,2], sources = ["ab","ec"], targets = ["eee","ffff"]
 Output: "eeecd"
 Explanation: "ab" starts at index 0 in S, so it's replaced by "eee".
@@ -44,22 +44,21 @@ class Solution:
         :type targets: List[str]
         :rtype: str
         """
-        if len(indexes)==0:
-            return S
-        arr = [[indexes[i], i] for i in range(len(indexes))]
-        arr.sort()
+        ist = []
+        for i in range(len(indexes)):
+            size = len(sources[i])
+            if S[indexes[i]:indexes[i]+size]==sources[i]:
+                ist.append([indexes[i], sources[i], targets[i]])
+        ist.sort()
+        #print(ist)
         ret = ""
-        i = 0
-        index = 0
+        index, i = 0, 0
         while index<len(S):
-            if i<len(arr) and index==arr[i][0]:
-                source = sources[arr[i][1]]
-                if index+len(source)<=len(S) and source==S[index:index+len(source)]:
-                    ret += targets[arr[i][1]]
-                    i += 1
-                    index += len(source)
-                    continue
-                i += 1
-            ret += S[index]
-            index += 1
+            if i==len(ist) or index<ist[i][0]:
+                ret += S[index]
+                index += 1
+                continue
+            ret += ist[i][2]
+            index += len(ist[i][1])
+            i += 1
         return ret
