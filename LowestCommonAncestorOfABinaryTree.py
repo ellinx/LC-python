@@ -27,7 +27,14 @@ Output: 5
 Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of itself
              according to the LCA definition.
 """
-class LowestCommonAncestorOfABinaryTree(object):
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
     def lowestCommonAncestor(self, root, p, q):
         """
         :type root: TreeNode
@@ -35,14 +42,16 @@ class LowestCommonAncestorOfABinaryTree(object):
         :type q: TreeNode
         :rtype: TreeNode
         """
-        if not root:
+        if root is None:
             return None
         if root==p or root==q:
             return root
-        left = self.lowestCommonAncestor(root.left, p, q)
-        right = self.lowestCommonAncestor(root.right, p, q)
-        if not left:
-            return right
-        if not right:
-            return left
-        return root
+        l = self.lowestCommonAncestor(root.left,p,q)
+        r = self.lowestCommonAncestor(root.right,p,q)
+        if l is not None and r is not None:
+            return root
+        if l is not None:
+            return l
+        if r is not None:
+            return r
+        return None
