@@ -50,3 +50,22 @@ class Solution:
                 r, c = r+1, c+1
         #print(dp)
         return dp[0][n-1]>0
+
+class Solution2:
+    def stoneGame(self, piles):
+        """
+        :type piles: List[int]
+        :rtype: bool
+        """
+        def dfs(piles, start, end, mm):
+            if start>end:
+                return 0
+            key = str(start)+","+str(end)
+            if key in mm:
+                return mm[key]
+            l = piles[start]-dfs(piles, start+1, end, mm)
+            r = piles[end]-dfs(piles, start, end-1, mm)
+            mm[key] = max(l,r)
+            return mm[key]
+
+        return dfs(piles, 0, len(piles)-1, dict())>0
