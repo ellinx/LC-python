@@ -48,3 +48,23 @@ class Solution:
                 r, c = r+1, c+1
         #print(dp)
         return dp[0][n-1]>=0
+
+class Solution2:
+    def PredictTheWinner(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        def dfs(nums, mm):
+            if len(nums)==0:
+                return 0
+            key = ",".join(nums)
+            if key in mm:
+                return mm[key]
+            l = int(nums[0])-dfs(nums[1:], mm)
+            r = int(nums[-1])-dfs(nums[:-1], mm)
+            mm[key] = max(l,r)
+            #print(mm)
+            return mm[key]
+
+        return dfs([str(num) for num in nums], dict())>=0
