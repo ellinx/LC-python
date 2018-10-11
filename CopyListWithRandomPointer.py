@@ -10,7 +10,7 @@ class RandomListNode(object):
         self.next = None
         self.random = None
 
-class CopyListWithRandomPointer(object):
+class Solution(object):
     #1 first loop: copy list without random pointer, memorize copied node
     #2 second loop: assign correct random pointer for each copied node
     def copyRandomList(self, head):
@@ -37,8 +37,9 @@ class CopyListWithRandomPointer(object):
             copyCur, cur = copyCur.next, cur.next
         return dummy2.next
 
+class Solution2(object):
     # without map
-    def copyRandomList2(self, head):
+    def copyRandomList(self, head):
         """
         :type head: RandomListNode
         :rtype: RandomListNode
