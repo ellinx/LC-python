@@ -4,7 +4,8 @@ There are N workers.  The i-th worker has a quality[i] and a minimum wage expect
 Now we want to hire exactly K workers to form a paid group.
 When hiring a group of K workers, we must pay them according to the following rules:
 
-1. Every worker in the paid group should be paid in the ratio of their quality compared to other workers in the paid group.
+1. Every worker in the paid group should be paid in the ratio of their quality compared to
+    other workers in the paid group.
 2. Every worker in the paid group must be paid at least their minimum wage expectation.
 
 Return the least amount of money needed to form a paid group satisfying the above conditions.
@@ -12,13 +13,11 @@ Return the least amount of money needed to form a paid group satisfying the abov
 
 
 Example 1:
-
 Input: quality = [10,20,5], wage = [70,50,30], K = 2
 Output: 105.00000
 Explanation: We pay 70 to 0-th worker and 35 to 2-th worker.
 
 Example 2:
-
 Input: quality = [3,1,10,10,1], wage = [4,8,2,2,7], K = 3
 Output: 30.66667
 Explanation: We pay 4 to 0-th worker, 13.33333 to 2-th and 3-th workers seperately.
@@ -42,17 +41,17 @@ class Solution:
         :type K: int
         :rtype: float
         """
-        wpq = [[wage[i]/quality[i],i] for i in range(len(quality))]
-        wpq.sort()
-        #print(wpq)
-        maxHeap = []
+        N = len(wage)
+        ratio = [[wage[i]/quality[i], i] for i in range(N)]
+        ratio.sort()
+        pq = []
         total = 0
-        ret = float("inf")
-        for i in range(len(wpq)):
-            total += quality[wpq[i][1]]
-            heapq.heappush(maxHeap, -quality[wpq[i][1]])
-            if len(maxHeap)>K:
-                total += heapq.heappop(maxHeap)
-            if len(maxHeap)==K:
-                ret = min(ret, total*wpq[i][0])
+        ret = float('inf')
+        for i,each in enumerate(ratio):
+            total += quality[each[1]]
+            heapq.heappush(pq,-quality[each[1]])
+            if len(pq)>K:
+                total += heapq.heappop(pq)
+            if len(pq)==K:
+                ret = min(ret, total*each[0])
         return ret
