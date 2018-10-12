@@ -78,3 +78,49 @@ class Codec:
 # Your Codec object will be instantiated and called as such:
 # codec = Codec()
 # codec.deserialize(codec.serialize(root))
+
+class Codec2:
+
+    def serialize(self, root):
+        """Encodes a tree to a single string.
+
+        :type root: Node
+        :rtype: str
+        """
+        stk = collections.deque()
+        ret = ""
+        while root is not None or len(stk):
+            if root is not None:
+                ret += ","+str(root.val)+":"+str(len(root.children))
+                if len(root.children):
+                    stk.append([root,1])
+                    root = root.children[0]
+                else:
+                    root = None
+            else:
+                cur = stk.pop()
+                if cur[1]<len(cur[0].children):
+                    stk.append([cur[0],cur[1]+1])
+                    root = cur[0].children[cur[1]]
+        if len(ret):
+            return ret[1:]
+        return ret
+
+    def deserialize(self, data):
+        """Decodes your encoded data to tree.
+
+        :type data: str
+        :rtype: Node
+        """
+        def helper(it):
+            cur = next(it).split(":")
+            ret = Node(int(cur[0]),[])
+            for i in range(int(cur[1])):
+                ret.children.append(helper(it))
+            return ret
+
+        #print(data)
+        if len(data)==0:
+            return None
+        vals = data.split(",")
+        return helper(iter(vals))
