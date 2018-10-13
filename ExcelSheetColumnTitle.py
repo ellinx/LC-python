@@ -41,3 +41,19 @@ class Solution:
                 n -=1
             ret = chr(ord('A')+remain-1)+ret
         return chr(ord('A')+n-1)+ret
+
+class Solution2:
+    def convertToTitle(self, n):
+        """
+        :type n: int
+        :rtype: str
+        """
+        title = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        ret = ""
+        if n%26==0:
+            if n==26:
+                return 'Z'
+            return self.convertToTitle((n-26)//26)+'Z'
+        if n>26:
+            return self.convertToTitle(n//26)+title[(n%26)]
+        return title[n]
