@@ -25,21 +25,20 @@ class Solution:
         :type n: int
         :rtype: float
         """
+        def helper(x, n, mm):
+            if n in mm:
+                return mm[n]
+            n1 = n//2
+            n2 = n-n1
+            mm[n] = helper(x, n1, mm)*helper(x, n2, mm)
+            return mm[n]
+
+        if x==0:
+            return 0
         if n==0:
             return 1
         if n<0:
             return 1/self.myPow(x, -n)
-        mm = []
-        bits = []
-        val, pos = x, 0
-        while (n>>pos)>0:
-            mm.append(val)
-            if ((n>>pos)&1)==1:
-                bits.append(pos)
-            pos += 1
-            val *= val
-        #print(mm, bits)
-        ret = 1.0
-        for each in bits:
-            ret *= mm[each]
-        return ret
+        mm = dict()
+        mm[0], mm[1] = 1, x
+        return helper(x, n, mm)
