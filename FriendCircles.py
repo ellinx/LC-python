@@ -44,21 +44,20 @@ class Solution:
         :type M: List[List[int]]
         :rtype: int
         """
-        def findRoot(node):
-            nonlocal roots
+        def findRoot(roots, node):
             while roots[node]!=node:
                 node = roots[node]
             return node
 
-        # union find
         N = len(M)
-        ret = N
         roots = [i for i in range(N)]
-        for i in range(N-1):
+        ret = N
+        for i in range(N):
             for j in range(i+1,N):
                 if M[i][j]==1:
-                    rooti = findRoot(i)
-                    rootj = findRoot(j)
+                    rooti = findRoot(roots, i)
+                    rootj = findRoot(roots, j)
+                    roots[i], roots[j] = rooti, rootj
                     if rooti!=rootj:
                         roots[rooti] = rootj
                         ret -= 1
