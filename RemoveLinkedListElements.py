@@ -5,45 +5,28 @@ Example
 Given: 1 --> 2 --> 6 --> 3 --> 4 --> 5 --> 6, val = 6
 Return: 1 --> 2 --> 3 --> 4 --> 5
 """
-
-
-class RemoveLinkedListElements:
+class Solution:
     def removeElements(self, head, val):
         """
         :type head: ListNode
         :type val: int
         :rtype: ListNode
         """
-        newHead = None
-        if head == None:
-            return newHead
-
-        pre = None
-        cur = head
-        while cur != None:
-            if newHead == None:
-                if cur.val == val:
-                    pre = cur
-                    cur = cur.next
-                else:
-                    newHead = cur
-                    pre = cur
-                    cur = cur.next
+        dummy = ListNode(0)
+        dummy.next = head
+        cur = dummy
+        while cur.next is not None:
+            if cur.next.val == val:
+                cur.next = cur.next.next
             else:
-                if cur.val == val:
-                    pre.next = cur.next
-                    cur = cur.next
-                else:
-                    pre = cur
-                    cur = cur.next
-
-        return newHead
+                cur = cur.next
+        return dummy.next
 
 
 # test
 from ListNode import *
 if __name__=="__main__":
-    test = RemoveLinkedListElements()
+    test = Solution()
     head = initList([1,2,6,3,4,5,6])
     result = test.removeElements(head, 6)
     printList(result)
