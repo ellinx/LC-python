@@ -70,30 +70,29 @@ class Solution2:
         def findRoot(roots, node):
             if node not in roots:
                 roots[node] = node
-                return node
             while roots[node]!=node:
                 node = roots[node]
             return node
 
-        roots = dict()
         m = len(grid)
         if m==0:
             return 0
         n = len(grid[0])
-        dirs = [[-1,0],[1,0],[0,1],[0,1]]
-        total = 0
+        dirs = [[-1,0],[0,-1]]
+        roots = dict()
+        ret = 0
         for i in range(m):
             for j in range(n):
                 if grid[i][j]=='1':
-                    total += 1
-                    root0 = findRoot(roots, i*n+j)
+                    root0 = findRoot(roots, (i,j))
+                    ret += 1
                     for each in dirs:
                         ni = i+each[0]
                         nj = j+each[1]
                         if ni>=0 and ni<m and nj>=0 and nj<n and grid[ni][nj]=='1':
-                            root1 = findRoot(roots, ni*n+nj)
+                            root1 = findRoot(roots, (ni,nj))
+                            roots[(ni,nj)] = root1
                             if root0!=root1:
+                                ret -= 1
                                 roots[root1] = root0
-                                total -= 1
-                            roots[ni*n+nj] = roots[root1]
-        return total
+        return ret
