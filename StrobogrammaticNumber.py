@@ -21,10 +21,12 @@ class Solution:
         :type num: str
         :rtype: bool
         """
-        numMap = {"1":"1", "6":"9", "8":"8", "9":"6", "0":"0"}
-        for i in range(len(num)):
-            if num[i] not in numMap:
-                return False
-            if numMap[num[i]]!=num[-1-i]:
-                return False
+        mm = {"0":"0","1":"1", "6":"9","8":"8","9":"6"}
+        s, e = 0, len(num)-1
+        while s<=e:
+            if num[s] in mm and mm[num[s]]==num[e]:
+                s += 1
+                e -= 1
+                continue
+            return False
         return True
