@@ -14,35 +14,28 @@ class Solution:
         :type n: int
         :rtype: List[str]
         """
-        def firstHalfList(numMap, size):
-            part1List = [k for k in numMap if k!="0"]
-            for i in range(size-1):
-                nextList = []
-                for j in range(len(part1List)):
-                    for k in numMap:
-                        nextList.append(part1List[j] + k)
-                part1List = nextList
-            return part1List
+        def dfs(s1, cur, n, ret):
+            if n==len(cur):
+                ret.append(cur)
+                return
+            tmp = s1[1:] if len(cur)==0 else s1
+            for c in tmp:
+                dfs(s1, cur+c, n, ret)
 
-        numMap = {"0":"0", "1":"1", "6":"9", "8":"8", "9":"6"}
-        ret = []
-        if n==1:
-            return ["0","1","8"]
+        def helper(mm, s):
+            ret = ""
+            for c in s:
+                ret += mm[c]
+            return ret[::-1]
+
+        mm = {"0":"0","1":"1","6":"9","8":"8","9":"6"}
+        s1 = "01689"
+        s2 = "180"
+        p1 = []
+        dfs(s1, "", n//2, p1)
         if n%2==0:
-            part1List = firstHalfList(numMap, n//2)
-            for i in range(len(part1List)):
-                part2 = ""
-                for c in part1List[i][::-1]:
-                    part2 += numMap[c]
-                part1List[i] += part2
-        else:
-            part1List = firstHalfList(numMap, (n-1)//2)
-            nextList = []
-            for i in range(len(part1List)):
-                for mid in "018":
-                    part2 = ""
-                    for c in part1List[i][::-1]:
-                        part2 += numMap[c]
-                    nextList.append(part1List[i]+mid+part2)
-            part1List = nextList
-        return part1List
+            return [each+helper(mm,each) for each in p1]
+        ret = []
+        for c in s2:
+            ret += [each+c+helper(mm,each) for each in p1]
+        return ret
