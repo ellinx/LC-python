@@ -21,32 +21,17 @@ class Solution:
         :type l2: ListNode
         :rtype: ListNode
         """
-        stk1, stk2 = collections.deque(), collections.deque()
-        while l1:
-            stk1.append(l1.val)
-            l1 = l1.next
-        while l2:
-            stk2.append(l2.val)
-            l2 = l2.next
-        stk = collections.deque()
-        carry = 0
-        while len(stk1) and len(stk2):
-            s = stk1.pop() + stk2.pop() + carry
-            carry = s//10
-            stk.append(s%10)
-        while len(stk1):
-            s = stk1.pop() + carry
-            carry = s//10
-            stk.append(s%10)
-        while len(stk2):
-            s = stk2.pop() + carry
-            carry = s//10
-            stk.append(s%10)
-        if carry:
-            stk.append(carry)
-        dummy = TreeNode(0)
+        def helper(l):
+            ret = ""
+            while l is not None:
+                ret += str(l.val)
+                l = l.next
+            return ret
+
+        s = int(helper(l1))+int(helper(l2))
+        dummy = ListNode(0)
         cur = dummy
-        while len(stk):
-            cur.next = ListNode(stk.pop())
+        for c in str(s):
+            cur.next = ListNode(int(c))
             cur = cur.next
         return dummy.next
