@@ -74,33 +74,32 @@ class Solution:
         :type click: List[int]
         :rtype: List[List[str]]
         """
-        if board[click[0]][click[1]]=='M':
-            board[click[0]][click[1]] = 'X'
+        m = len(board)
+        if m==0:
             return board
-        m, n = len(board), len(board[0])
-        visited = [[False]*n for _ in range(m)]
+        n = len(board[0])
+        dirs = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]
         q = collections.deque()
         q.append(click)
-        visited[click[0]][click[1]] = True
-        dirs = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]
         while len(q):
-            cur = q.popleft()
-            adjacent_mine = 0
-            adjacent_empty = []
-            for each in dirs:
-                i = cur[0]+each[0]
-                j = cur[1]+each[1]
-                if i>=0 and i<m and j>=0 and j<n:
-                    if board[i][j]=='M':
-                        adjacent_mine += 1
-                    if board[i][j]=='E' and not visited[i][j]:
-                        adjacent_empty.append([i,j])
-            if adjacent_mine>0:
-                board[cur[0]][cur[1]] = str(adjacent_mine)
-            else:
-                board[cur[0]][cur[1]] = 'B'
-                for pos in adjacent_empty:
-                    q.append(pos)
-                    visited[pos[0]][pos[1]] = True
-            #print(q)
+            i,j = q.popleft()
+            if board[i][j]=='M':
+                board[i][j] = 'X'
+                return board
+            if board[i][j]=='E':
+                mine = 0
+                adj = []
+                for each in dirs:
+                    ni = i+each[0]
+                    nj = j+each[1]
+                    if ni>=0 and ni<m and nj>=0 and nj<n:
+                        if board[ni][nj]=='M':
+                            mine += 1
+                        if board[ni][nj]=='E':
+                            adj.append([ni,nj])
+                if mine==0:
+                    board[i][j] = 'B'
+                    q.extend(adj)
+                else:
+                    board[i][j] = str(mine)
         return board
