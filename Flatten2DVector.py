@@ -24,31 +24,27 @@ class Vector2D(object):
         Initialize your data structure here.
         :type vec2d: List[List[int]]
         """
-        self.row = 0
-        self.col = 0
-        self.twoD = vec2d
+        self.vec2d = vec2d
+        self.r = 0
+        self.c = 0
 
     def next(self):
         """
         :rtype: int
         """
-        ret = self.twoD[self.row][self.col]
-        if self.col+1==len(self.twoD[self.row]):
-            self.row += 1
-            self.col = 0
-        else:
-            self.col += 1
+        ret = self.vec2d[self.r][self.c]
+        self.c += 1
         return ret
 
     def hasNext(self):
         """
         :rtype: bool
         """
-        if self.col==0:
-            while self.row<len(self.twoD) and len(self.twoD[self.row])==0:
-                self.row += 1
-        if self.row<len(self.twoD) and self.col<len(self.twoD[self.row]):
-            return True
+        while self.r<len(self.vec2d):
+            if self.c<len(self.vec2d[self.r]):
+                return True
+            self.r += 1
+            self.c = 0
         return False
 
 # Your Vector2D object will be instantiated and called as such:
