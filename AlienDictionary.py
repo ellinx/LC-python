@@ -1,7 +1,8 @@
 """
 There is a new alien language which uses the latin alphabet.
 However, the order among letters are unknown to you.
-You receive a list of non-empty words from the dictionary, where words are sorted lexicographically by the rules of this new language.
+You receive a list of non-empty words from the dictionary,
+where words are sorted lexicographically by the rules of this new language.
 Derive the order of letters in this language.
 
 Example 1:
@@ -42,10 +43,10 @@ Explanation: The order is invalid, so return "".
 
 Note:
 
-    You may assume all letters are in lowercase.
-    You may assume that if a is a prefix of b, then a must appear before b in the given dictionary.
-    If the order is invalid, return an empty string.
-    There may be multiple valid order of letters, return any one of them is fine.
+1. You may assume all letters are in lowercase.
+2. You may assume that if a is a prefix of b, then a must appear before b in the given dictionary.
+3. If the order is invalid, return an empty string.
+4. There may be multiple valid order of letters, return any one of them is fine.
 
 
 """
@@ -55,28 +56,26 @@ class Solution:
         :type words: List[str]
         :rtype: str
         """
-        # topology sort
         g = collections.defaultdict(set)
         indegree = dict()
-        for word in words:
-            for c in word:
-                if c not in indegree:
-                    indegree[c] = 0
-        for i in range(len(words)-1):
-            for j in range(i+1,len(words)):
-                index = 0
-                while index<min(len(words[i]),len(words[j])):
-                    if words[i][index]!=words[j][index]:
-                        # check if there is cycle
-                        if words[i][index] in g[words[j][index]]:
-                            return ""
-                        if words[j][index] not in g[words[i][index]]:
-                            indegree[words[j][index]] += 1
-                            g[words[i][index]].add(words[j][index])
-                        break
-                    index += 1
-
-        #print(g)
+        for c in words[0]:
+            indegree[c] = 0
+        for i in range(1,len(words)):
+            idx = 0
+            minLen = min(len(words[i-1]), len(words[i]))
+            while idx<minLen:
+                indegree[words[i][idx]] = indegree.get(words[i][idx], 0)
+                if words[i-1][idx]==words[i][idx]:
+                    idx += 1
+                    continue
+                break
+            if idx<minLen:
+                if words[i][idx] not in g[words[i-1][idx]]:
+                    indegree[words[i][idx]] += 1
+                    g[words[i-1][idx]].add(words[i][idx])
+            while idx<len(words[i]):
+                indegree[words[i][idx]] = indegree.get(words[i][idx], 0)
+                idx += 1
         #print(indegree)
         ret = ""
         q = collections.deque()
@@ -86,9 +85,10 @@ class Solution:
         while len(q):
             cur = q.popleft()
             ret += cur
-            for neighbor in g[cur]:
-                indegree[neighbor] -= 1
-                if indegree[neighbor]==0:
-                    q.append(neighbor)
-            g.pop(cur)
+            for adj in g[cur]:
+                indegree[adj] -= 1
+                if indegree[adj]==0:
+                    q.append(adj)
+        if len(ret)<len(indegree):
+            return ""
         return ret
