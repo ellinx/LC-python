@@ -16,7 +16,7 @@ A solution set is:
   [-1, -1, 2]
 ]
 """
-class ThreeSum:
+class Solution:
     """
     Thoughts:
     1. sort nums
@@ -31,25 +31,29 @@ class ThreeSum:
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        # n^2 search
         nums.sort()
+        N = len(nums)
         ret = []
-        for i in range(len(nums)-2):
+        for i in range(N-2):
+            if nums[i]+nums[i+1]+nums[i+2]>0:
+                break
             if i and nums[i-1]==nums[i]:
                 continue
-            target = 0-nums[i]
-            left, right = i+1, len(nums)-1
-            while left<right:
-                if nums[left]+nums[right]>target:
-                    right -= 1
-                elif nums[left]+nums[right]<target:
-                    left += 1
+            if nums[i]+nums[N-2]+nums[N-1]<0:
+                continue
+            j, k = i+1, N-1
+            while j<k:
+                if nums[i]+nums[j]+nums[k]==0:
+                    ret.append([nums[i], nums[j], nums[k]])
+                    j += 1
+                    k -= 1
+                    while j<k and nums[j-1]==nums[j]:
+                        j += 1
+                    while j<k and nums[k]==nums[k+1]:
+                        k -= 1
+                    continue
+                if nums[i]+nums[j]+nums[k]<0:
+                    j += 1
                 else:
-                    ret.append([nums[i], nums[left], nums[right]])
-                    while left<right and nums[left]==nums[left+1]:
-                        left += 1
-                    while right<left and nums[right]==nums[right-1]:
-                        right -= 1
-                    left += 1
-                    right -= 1
+                    k -= 1
         return ret
