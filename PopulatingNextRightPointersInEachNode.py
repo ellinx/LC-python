@@ -8,15 +8,17 @@ struct TreeLinkNode {
   TreeLinkNode *next;
 }
 
-Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+Populate each next pointer to point to its next right node. If there is no next right node,
+the next pointer should be set to NULL.
 
 Initially, all next pointers are set to NULL.
 
 Note:
 
-    You may only use constant extra space.
-    Recursive approach is fine, implicit stack space does not count as extra space for this problem.
-    You may assume that it is a perfect binary tree (ie, all leaves are at the same level, and every parent has two children).
+1. You may only use constant extra space.
+2. Recursive approach is fine, implicit stack space does not count as extra space for this problem.
+3. You may assume that it is a perfect binary tree (ie, all leaves are at the same level,
+    and every parent has two children).
 
 Example:
 
@@ -50,20 +52,21 @@ class Solution:
     # @param root, a tree link node
     # @return nothing
     def connect(self, root):
-        pre, cur, start = None, root, None
-        while cur:
-            while cur:
-                if cur.left:
-                    if not start:
-                        start = cur.left
-                    if pre:
-                        pre.next = cur.left
+        if root is None:
+            return root
+        cur = root
+        head, pre = None, None
+        while cur is not None:
+            while cur is not None:
+                if head is None:
+                    head = cur.left
                     pre = cur.left
-                if cur.right:
-                    if not start:
-                        start = cur.right
-                    if pre:
-                        pre.next = cur.right
-                    pre = cur.right
+                else:
+                    pre.next = cur.left
+                    pre = pre.next
+                if pre is not None:
+                    pre.next = cur.right
+                    pre = pre.next
                 cur = cur.next
-            pre, cur, start = None, start, None
+            cur = head
+            head, pre = None, None
