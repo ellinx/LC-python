@@ -20,7 +20,7 @@ Output:
 Note:
 The given dict won't contain duplicates, and its length won't exceed 100.
 All the strings in input have length in range [1, 1000].
-"""    
+"""
 class Solution:
     def addBoldTag(self, s, dict):
         """
@@ -28,32 +28,34 @@ class Solution:
         :type dict: List[str]
         :rtype: str
         """
-        # similar like merge intervals
-        lengthInDict = set()
-        for each in dict:
-            lengthInDict.add(len(each))
-        bold = []
-        cur = None
-        for i in range(len(s)):
-            for each in lengthInDict:
-                if i+each<=len(s) and s[i:i+each] in dict:
-                    if cur is None:
-                        cur = [i,i+each-1]
-                    else:
-                        if cur[1]<i-1:
-                            bold.append(cur)
-                            cur = [i, i+each-1]
-                        else:
-                            cur[1] = max(cur[1], i+each-1)
-        if cur is not None:
-            bold.append(cur)
-        #print(bold)
-        if len(bold)==0:
+        li = []
+        for word in dict:
+            length = len(word)
+            start = 0
+            while s.find(word, start)!=-1:
+                l = s.find(word, start)
+                r = l+length-1
+                li.append([l,r])
+                start = l+1
+        if len(li)==0:
             return s
+        li.sort()
+        #print(li)
+        merged = []
+        cur = li[0]
+        for i in range(1,len(li)):
+            if li[i][0]>cur[1]+1:
+                merged.append(cur)
+                cur = li[i]
+                continue
+            cur[1] = max(cur[1], li[i][1])
+        merged.append(cur)
+        #print(merged)
         ret = ""
-        start = 0
-        for each in bold:
-            ret += s[start:each[0]]+"<b>"+s[each[0]:each[1]+1]+"</b>"
-            start = each[1]+1
-        ret += s[start:]
+        idx = 0
+        for each in merged:
+            ret += s[idx:each[0]]
+            ret += "<b>"+s[each[0]:each[1]+1]+"</b>"
+            idx = each[1]+1
+        ret += s[idx:]
         return ret
