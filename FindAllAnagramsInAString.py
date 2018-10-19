@@ -71,6 +71,6 @@ class Solution:
 
 # test
 if __name__=="__main__":
-    test = FindAllAnagramsInString()
+    test = Solution()
     result = test.findAnagrams("abab","ab")
     print(result)
