@@ -17,28 +17,18 @@ Output: -1
 
 """
 class Solution:
-    """
-    Thoughts:
-    1. similar idea of next permutation
-    """
-    def nextGreaterElement(self, n):
+    def nextGreaterElements(self, nums):
         """
-        :type n: int
-        :rtype: int
+        :type nums: List[int]
+        :rtype: List[int]
         """
-        s = str(n)
-        start = len(s)-2
-        while start>=0:
-            if int(s[start])<int(s[start+1]):
-                break
-            start -= 1
-        if start<0:
-            return -1
-        index = start+1
-        for i in range(start+1,len(s)):
-            if int(s[i])>int(s[start]) and int(s[i])<int(s[index]):
-                index = i
-        ret = int(s[:start]+s[index]+"".join(sorted([s[j] for j in range(start+1,len(s)) if j!=index]+[s[start]])))
-        if ret<2**31-1:
-            return ret
-        return -1
+        N = len(nums)
+        ret = [-1]*N
+        stk = collections.deque()
+        for i in range(2*N):
+            idx = i%N
+            while len(stk) and nums[stk[-1]]<nums[idx]:
+                ret[stk.pop()] = nums[idx]
+            if idx<N:
+                stk.append(idx)
+        return ret
