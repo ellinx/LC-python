@@ -59,3 +59,43 @@ class Solution:
             else:
                 ret += sign*each
         return ret
+
+class Solution2:
+    def calculate(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        ret, last = 0, 0
+        op = '+'
+        l, r = 0, 0
+        while l<len(s):
+            while l<len(s) and s[l]==' ':
+                l += 1
+            if l==len(s):
+                break
+            if s[l] in '+-*/':
+                op = s[l]
+                l += 1
+                continue
+            r = l+1
+            while r<len(s) and s[r].isdigit():
+                r += 1
+            num = int(s[l:r])
+            if op=='+':
+                ret += num
+                last = num
+            elif op=='-':
+                ret -= num
+                last = -num
+            elif op=='*':
+                ret += -last+last*num
+                last *= num
+            elif op=='/':
+                # note that // always rounds down while int(float) will rounds towards 0
+                ret += -last+int(last/num)
+                #ret += -last+last//num
+                last = int(last/num)
+            l = r
+            #print(ret, last)
+        return ret
