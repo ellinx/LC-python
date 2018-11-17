@@ -63,26 +63,17 @@ class Solution2:
         :type T: str
         :rtype: bool
         """
-        def helper(s, cur):
-            total = 0
-            while cur>=0:
-                if s[cur]=='#':
-                    total += 1
-                    cur -= 1
-                    continue
-                if total>0:
-                    total -= 1
-                    cur -= 1
-                    continue
-                return cur
-            return cur
+        def helper(s):
+            ret = ""
+            b = 0
+            for c in s[::-1]:
+                if c=='#':
+                    b += 1
+                else:
+                    if b==0:
+                        ret = c+ret
+                    else:
+                        b -= 1
+            return ret
 
-        i1, i2 = helper(S, len(S)-1), helper(T, len(T)-1)
-        while i1>=0 and i2>=0:
-            if S[i1]!=T[i2]:
-                return False
-            i1 = helper(S, i1-1)
-            i2 = helper(T, i2-1)
-        if i1>=0 or i2>=0:
-            return False
-        return True
+        return helper(S)==helper(T)
