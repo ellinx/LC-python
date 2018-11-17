@@ -30,36 +30,31 @@ class Solution:
         :type target: int
         :rtype: List[str]
         """
-        def dfs(num, start, last, cur, target, ret):
+        def dfs(num, start, cur, val, last, target, ret):
             if start==len(num):
-                #print(start, cur, target)
-                if cur[1]==target:
-                    ret.append(cur[0])
+                if val==target:
+                    ret.append(cur)
                 return
-            if num[start]=='0':
+            for i in range(start,len(num)):
+                if num[start]=='0':
+                    dfs(num, start+1, cur+"+0", val, 0, target, ret)
+                    dfs(num, start+1, cur+"-0", val, 0, target, ret)
+                    dfs(num, start+1, cur+"*0", val-last, 0, target, ret)
+                    break
+                d = num[start:i+1]
                 # +
-                dfs(num, start+1, 0, [cur[0]+"+0", cur[1]], target, ret)
+                dfs(num, i+1, cur+"+"+d, val+int(d), int(d), target, ret)
                 # -
-                dfs(num, start+1, 0, [cur[0]+"-0", cur[1]], target, ret)
+                dfs(num, i+1, cur+"-"+d, val-int(d), -int(d), target, ret)
                 # *
-                dfs(num, start+1, 0, [cur[0]+"*0", cur[1]-last], target, ret)
-                return
-            for end in range(start+1,len(num)+1):
-                tmp = int(num[start:end])
-                # +
-                dfs(num, end, tmp, [cur[0]+"+"+str(tmp), cur[1]+tmp], target, ret)
-                # -
-                dfs(num, end, -tmp, [cur[0]+"-"+str(tmp), cur[1]-tmp], target, ret)
-                # *
-                dfs(num, end, last*tmp, [cur[0]+"*"+str(tmp), cur[1]-last+last*tmp], target, ret)
+                dfs(num, i+1, cur+"*"+d, val-last+last*int(d), last*int(d), target, ret)
 
         ret = []
         if len(num)==0:
             return ret
-        if num[0]=='0':
-            dfs(num, 1, 0, ["0", 0], target, ret)
-        else:
-            for i in range(1,len(num)+1):
-                tmp = int(num[0:i])
-                dfs(num, i, tmp, [str(tmp), tmp], target, ret)
+        for i in range(len(num)):
+            if num[0]=='0':
+                dfs(num, 1, "0", 0, 0, target, ret)
+                break
+            dfs(num, i+1, num[:i+1], int(num[:i+1]), int(num[:i+1]), target, ret)
         return ret
