@@ -16,23 +16,29 @@ class Solution:
         :type n: int
         :rtype: ListNode
         """
-        # ----pos1 pos2----pre cur-----
-        if m==n:
-            return head
         dummy = ListNode(0)
         dummy.next = head
-        pos1 = dummy
-        count = 1
-        while count<m:
-            pos1 = pos1.next
-            count += 1
-        pos2 = pos1.next
-        pre = pos2
-        cur = pre.next
-        for _ in range(n-m):
-            nextCur = cur.next
-            cur.next = pre
-            pre, cur = cur, nextCur
-        pos1.next = pre
-        pos2.next = cur
+        cur = dummy
+        p1, p2, p3, p4 = None, None, None, None
+        idx = 0
+        while idx<m-1:
+            idx += 1
+            cur = cur.next
+        p1 = cur
+        idx += 1
+        cur = cur.next
+        p2 = cur
+        while idx<n:
+            idx += 1
+            cur = cur.next
+        p3 = cur
+        p4 = cur.next
+        # reverse p2 to p3
+        tmp1, tmp2 = p2, p2.next
+        while tmp1!=p3:
+            tmp = tmp2.next
+            tmp2.next = tmp1
+            tmp1, tmp2 = tmp2, tmp
+        p1.next = p3
+        p2.next = p4
         return dummy.next
