@@ -13,7 +13,7 @@ Note:
 
 
 """
-class Solution(object):
+class Solution:
     def minWindow(self, s, t):
         """
         :type s: str
@@ -26,16 +26,16 @@ class Solution(object):
         start, end = 0, 0
         while end<len(s):
             if s[end] in counter:
-                counter[s[end]] -= 1
-                if counter[s[end]]>=0:
+                if counter[s[end]]>0:
                     total -= 1
-            while total==0:
-                if ret=="" or len(ret)>end-start+1:
-                    ret = s[start:end+1]
-                if s[start] in counter:
-                    counter[s[start]] += 1
-                    if counter[s[start]]>0:
-                        total += 1
-                start += 1
+                counter[s[end]] -= 1
             end += 1
+            while total==0:
+                if len(ret)==0 or len(ret)>end-start:
+                    ret = s[start:end]
+                if s[start] in counter:
+                    if counter[s[start]]>=0:
+                        total += 1
+                    counter[s[start]] += 1
+                start += 1
         return ret
