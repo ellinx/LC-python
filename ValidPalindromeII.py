@@ -19,14 +19,8 @@ class Solution:
         :type s: str
         :rtype: bool
         """
-        def isPalin(s):
-            start,end = 0,len(s)-1
-            while start<=end:
-                if s[start]!=s[end]:
-                    return False
-                start += 1
-                end -= 1
-            return True
+        def isPalindrome(s):
+            return s==s[::-1]
 
         start, end = 0, len(s)-1
         while start<=end:
