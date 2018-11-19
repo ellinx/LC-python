@@ -17,6 +17,8 @@ Output:
 Explanation:
 The substring with start index = 0 is "cba", which is an anagram of "abc".
 The substring with start index = 6 is "bac", which is an anagram of "abc".
+
+
 Example 2:
 
 Input:
@@ -30,8 +32,6 @@ The substring with start index = 0 is "ab", which is an anagram of "ab".
 The substring with start index = 1 is "ba", which is an anagram of "ab".
 The substring with start index = 2 is "ab", which is an anagram of "ab".
 """
-
-
 class Solution:
     """
     Thoughts:
@@ -54,18 +54,16 @@ class Solution:
             if s[end] in counter:
                 if counter[s[end]]>0:
                     total -= 1
-                counter[s[end]] -=1
-            if end-start+1<len(p):
-                end += 1
-                continue
-            if total==0:
-                ret.append(start)
-            if s[start] in counter:
-                if counter[s[start]]>=0:
-                    total += 1
-                counter[s[start]] +=1
-            start += 1
+                counter[s[end]] -= 1
             end += 1
+            if end-start==len(p):
+                if total==0:
+                    ret.append(start)
+                if s[start] in counter:
+                    if counter[s[start]]>=0:
+                        total += 1
+                    counter[s[start]] += 1
+                start += 1
         return ret
 
 
