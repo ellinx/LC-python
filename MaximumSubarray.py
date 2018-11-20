@@ -16,12 +16,11 @@ class Solution:
         :type nums: List[int]
         :rtype: int
         """
-        ret = float("-inf")
-        cur = 0
-        for i in range(len(nums)):
-            if cur>0:
-                cur += nums[i]
+        N = len(nums)
+        dp = [nums[0]]*N
+        for i in range(1,N):
+            if dp[i-1]>=0:
+                dp[i] = dp[i-1]+nums[i]
             else:
-                cur = nums[i]
-            ret = max(ret, cur)
-        return ret
+                dp[i] = nums[i]
+        return max(dp)
