@@ -21,10 +21,7 @@ class Solution:
         :type strs: List[str]
         :rtype: List[List[str]]
         """
-        mm = dict()
-        for each in strs:
-            key = "".join(sorted(each))
-            if key not in mm:
-                mm[key] = list()
-            mm[key].append(each)
+        mm = collections.defaultdict(list)
+        for s in strs:
+            mm[''.join(sorted(s))].append(s)
         return [mm[k] for k in mm]
