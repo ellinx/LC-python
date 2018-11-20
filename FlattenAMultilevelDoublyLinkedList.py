@@ -53,3 +53,28 @@ class Solution(object):
         if ret is not None:
             ret.prev = None
         return ret
+
+class Solution2(object):
+    def flatten(self, head):
+        """
+        :type head: Node
+        :rtype: Node
+        """
+        def helper(head):
+            ret = [head, head]
+            cur = head
+            while cur is not None:
+                ret[1] = cur
+                nxt = cur.next
+                if cur.child is not None:
+                    tmp = helper(cur.child)
+                    cur.child = None
+                    cur.next, tmp[0].prev = tmp[0], cur
+                    tmp[1].next = nxt
+                    if nxt is not None:
+                        nxt.prev = tmp[1]
+                    ret[1] = tmp[1]
+                cur = nxt
+            return ret
+
+        return helper(head)[0]
