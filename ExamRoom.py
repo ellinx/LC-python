@@ -40,51 +40,45 @@ class ExamRoom:
         :type N: int
         """
         self.N = N
-        self.pos = []
+        self.seats = []
 
     def seat(self):
         """
         :rtype: int
         """
-        if len(self.pos)==0:
-            self.pos.append(0)
+        if len(self.seats)==0:
+            self.seats.append(0)
             return 0
-        cur = [-1,-1]
-        for i in range(len(self.pos)-1):
-            dist = (self.pos[i+1]-self.pos[i]-2)//2
-            if cur[1]<dist:
-                cur = [i, dist]
-        #print("cur ",cur)
-        # check head
-        if self.pos[0]-1>=cur[1]:
-            cur = [-1, self.pos[0]-1]
-        # check tail
-        if self.N-1-self.pos[-1]-1>cur[1]:
-            cur = [self.N, 0]
-        if cur[0]==-1:
-            self.pos = [0]+self.pos
-            #print("seat:",0,self.pos)
-            return 0
-        if cur[0]==self.N:
-            self.pos.append(self.N-1)
-            #print("seat:",self.N-1,self.pos)
-            return self.N-1
-        ret = self.pos[cur[0]]+cur[1]+1
-        self.pos = self.pos[:cur[0]+1]+[ret]+self.pos[cur[0]+1:]
-        #print("seat:",ret,self.pos)
-        return ret
-
+        # [pos, insertIndex, dist]
+        cur = [-1, -1, 0]
+        for i in range(1,len(self.seats)):
+            dist = (self.seats[i]-self.seats[i-1])//2
+            if dist>cur[2]:
+                cur = [self.seats[i-1]+dist, i, dist]
+        if self.seats[0]!=0 and self.seats[0]>=cur[2]:
+            cur = [0, 0, self.seats[0]]
+        if self.seats[-1]!=self.N-1 and self.N-1-self.seats[-1]>cur[2]:
+            cur = [self.N-1, len(self.seats), self.N-1-self.seats[-1]]
+        self.seats.insert(cur[1], cur[0])
+        #print("sit ", self.seats)
+        return cur[0]
 
     def leave(self, p):
         """
         :type p: int
         :rtype: void
         """
-        for i in range(len(self.pos)):
-            if self.pos[i]==p:
-                self.pos = self.pos[:i]+self.pos[i+1:]
-                #print("leave:", p, self.pos)
+        l, r = 0, len(self.seats)-1
+        while l<=r:
+            m = l+(r-l)//2
+            if self.seats[m]==p:
+                self.seats.pop(m)
+                #print("leave ",self.seats)
                 return
+            if self.seats[m]<p:
+                l = m+1
+            else:
+                r = m-1
 
 
 # Your ExamRoom object will be instantiated and called as such:
