@@ -40,24 +40,18 @@ class Solution:
         :type stones: List[int]
         :rtype: bool
         """
-        if stones[1]-stones[0]!=1:
-            return False
-        if len(stones)==2:
-            return True
         mm = dict()
-        for i in range(2,len(stones)):
-            mm[stones[i]] = set()
-        q = collections.deque()
-        q.append([stones[1], 1])
-        while len(q):
-            #print(q)
-            cur = q.popleft()
-            k = cur[1]-1
-            for i in range(3):
-                if k+i>=0:
-                    if cur[0]+k+i==stones[-1]:
-                        return True
-                    if cur[0]+k+i in mm and k+i not in mm[cur[0]+k+i]:
-                        mm[cur[0]+k+i].add(k+i)
-                        q.append([cur[0]+k+i, k+i])
+        for each in stones:
+            mm[each] = set()
+        mm[0].add(1)
+        for i in range(len(stones)-1):
+            for k in mm[stones[i]]:
+                nxt = stones[i]+k
+                if nxt==stones[-1]:
+                    return True
+                if nxt in mm:
+                    mm[nxt].add(k+1)
+                    mm[nxt].add(k)
+                    if k-1>0:
+                        mm[nxt].add(k-1)
         return False
