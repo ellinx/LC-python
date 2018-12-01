@@ -12,25 +12,40 @@ Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
 Output: [[1,2],[3,10],[12,16]]
 Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].
 """
-class InsertInterval:
+class Solution:
     def insert(self, intervals, newInterval):
         """
         :type intervals: List[Interval]
         :type newInterval: Interval
         :rtype: List[Interval]
         """
-        intervals.append(newInterval)
-        intervals.sort(key=lambda x: (x.start,x.end))
-        ret = []
-        pre = None
-        for cur in intervals:
-            if not pre:
-                pre = cur
+        l, r = 0 ,len(intervals)-1
+        while l<=r:
+            m = l+(r-l)//2
+            if intervals[m].start==newInterval.start:
+                l = m
+                break
+            if intervals[m].start<newInterval.start:
+                l = m+1
             else:
-                if cur.start>pre.end:
-                    ret.append(pre)
-                    pre = cur
-                else:
-                    pre.end = max(pre.end,cur.end)
-        ret.append(pre)
+                r = m-1
+        curInterval = Interval()
+        ret = []
+        if l==0:
+            curInterval = newInterval
+        else:
+            ret.extend(intervals[:l-1])
+            if newInterval.start>intervals[l-1].end:
+                ret.append(intervals[l-1])
+                curInterval = newInterval
+            else:
+                curInterval.start = intervals[l-1].start
+                curInterval.end = max(intervals[l-1].end, newInterval.end)
+        for i in range(l,len(intervals)):
+            if intervals[i].start>curInterval.end:
+                ret.append(curInterval)
+                curInterval = intervals[i]
+            else:
+                curInterval.end = max(intervals[i].end, curInterval.end)
+        ret.append(curInterval)
         return ret
