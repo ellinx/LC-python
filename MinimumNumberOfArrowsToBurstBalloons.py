@@ -30,19 +30,19 @@ class Solution:
         # sort balloon based on end
         # short at the end to see how many following balloons can be skipped
         #
-        if len(points)==0:
-            return 0
-        points.sort(key=lambda x:x[1])
-        ret = 1
-        idx = 0
+        if len(points)<=1:
+            return len(points)
+        points.sort(key=lambda x:(x[1],x[0]))
+        ret = 0
+        curEnd, idx = points[0][1], 1
         while idx<len(points):
-            end = idx+1
-            while end<len(points) and points[end][0]<=points[idx][1]:
-                end += 1
-            if end==len(points):
-                break
-            idx = end
-            ret += 1
+            if curEnd<points[idx][0]:
+                ret += 1
+                curEnd = points[idx][1]
+                idx += 1
+                continue
+            idx += 1
+        ret += 1
         return ret
 
 
