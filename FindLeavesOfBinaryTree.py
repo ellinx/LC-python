@@ -1,5 +1,6 @@
 """
-Given a binary tree, collect a tree's nodes as if you were doing this: Collect and remove all leaves, repeat until the tree is empty.
+Given a binary tree, collect a tree's nodes as if you were doing this:
+Collect and remove all leaves, repeat until the tree is empty.
 
 Example:
 Given binary tree
@@ -28,7 +29,7 @@ Explanation:
 
           []
 
-Returns [4, 5, 3], [2], [1]. 
+Returns [4, 5, 3], [2], [1].
 """
 class Solution:
     def findLeaves(self, root):
@@ -36,29 +37,17 @@ class Solution:
         :type root: TreeNode
         :rtype: List[List[int]]
         """
-        def helper(root, lengthToLeave):
-            if not root:
-                return -1
-            left = helper(root.left, lengthToLeave)
-            right = helper(root.right, lengthToLeave)
-            if left==-1 and right==-1:
-                lengthToLeave[0].append(root.val)
+        def helper(root, mm):
+            if root is None:
                 return 0
-            if left==-1:
-                lengthToLeave[right+1].append(root.val)
-                return right+1
-            if right==-1:
-                lengthToLeave[left+1].append(root.val)
-                return left+1
-            temp = max(left,right)
-            lengthToLeave[temp+1].append(root.val)
-            return temp+1
+            if root in mm:
+                return mm[root]
+            mm[root] = max(helper(root.left, mm), helper(root.right, mm))+1
+            return mm[root]
 
-        if not root:
-            return []
-        lengthToLeave = collections.defaultdict(list)
-        helper(root, lengthToLeave)
-        ret = [[]]*(max(lengthToLeave.keys())+1)
-        for k in lengthToLeave:
-            ret[k] = lengthToLeave[k]
+        mm = dict()
+        height = helper(root, mm)
+        ret = [[] for _ in range(height)]
+        for k in mm:
+            ret[mm[k]-1].append(k.val)
         return ret
