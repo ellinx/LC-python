@@ -26,13 +26,13 @@ class Solution:
         :type costs: List[List[int]]
         :rtype: int
         """
-        n = len(costs)
-        if n<=0:
+        if len(costs)==0:
             return 0
-        dp = [[0]*3 for _ in range(n)]
-        dp[0] = costs[0]
-        for i in range(1,n):
-            dp[i][0] = costs[i][0] + min(dp[i-1][1], dp[i-1][2])
-            dp[i][1] = costs[i][1] + min(dp[i-1][0], dp[i-1][2])
-            dp[i][2] = costs[i][2] + min(dp[i-1][0], dp[i-1][1])
-        return min(dp[-1])
+        cost = costs[0]
+        for i in range(1,len(costs)):
+            tmp = [0]*3
+            tmp[0] = min(cost[1], cost[2])+costs[i][0]
+            tmp[1] = min(cost[0], cost[2])+costs[i][1]
+            tmp[2] = min(cost[0], cost[1])+costs[i][2]
+            cost = tmp
+        return min(cost)
