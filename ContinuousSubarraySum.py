@@ -29,20 +29,19 @@ class Solution:
         :type k: int
         :rtype: bool
         """
-        if len(nums)<2:
-            return False
-        sumToIndex = dict()
-        dp = [0]*len(nums)
-        for i in range(len(nums)):
-            if i==0:
-                dp[0] = nums[0]%k if k else nums[0]
-            else:
-                dp[i] = (dp[i-1]+nums[i])%k if k else dp[i-1]+nums[i]
-            if dp[i]==0 and i>0:
-                return True
-            if dp[i] not in sumToIndex:
-                sumToIndex[dp[i]] = i
-            else:
-                if i-sumToIndex[dp[i]]>1:
+        mm = dict()
+        total = 0
+        for i,num in enumerate(nums):
+            total += num
+            if k==0:
+                if total==0 and i!=0:
                     return True
+            else:
+                if total%k==0 and i!=0:
+                    return True
+                total %= k
+                if total in mm and i-mm[total]>1:
+                    return True
+            if total not in mm:
+                mm[total] = i
         return False
