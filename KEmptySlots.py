@@ -29,6 +29,9 @@ Note:
 The given array will be in the range [1, 20000].
 """
 class Solution:
+    """
+    Time: O(N)
+    """
     def kEmptySlots(self, flowers, k):
         """
         :type flowers: List[int]
@@ -62,6 +65,9 @@ class Solution:
 
 
 class Solution2:
+    """
+    Time: O(N*logN)
+    """
     def kEmptySlots(self, flowers, k):
         """
         :type flowers: List[int]
