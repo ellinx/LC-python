@@ -20,33 +20,30 @@ class Solution:
         :type time: str
         :rtype: str
         """
-        def dfs(nums, cur, allTimes):
+        def dfsAndCheck(nums, cur, ori, closest):
             if len(cur)==4:
-                if int(cur[-2:])<60:
-                    allTimes.append(cur)
-                return
-            if len(cur)==2 and int(cur)>23:
+                dist = int(cur[:2])*60+int(cur[2:])-ori
+                if dist==0:
+                    return
+                if dist<0:
+                    dist += 24*60
+                if dist<closest[0]:
+                    closest[0] = dist
+                    closest[1] = cur[:2]+":"+cur[2:]
                 return
             for i in range(len(nums)):
-                dfs(nums, cur+nums[i], allTimes)
+                nxt = cur+nums[i]
+                if (len(nxt)>=2 and int(nxt[:2])>=24) or (len(nxt)==4 and int(nxt[2:])>=60):
+                    continue
+                dfsAndCheck(nums, nxt, ori, closest)
 
-        nums = []
+
+        digits = ""
         for c in time:
-            if c.isdigit() and c not in nums:
-                nums.append(c)
-        allTimes = []
-        dfs(nums, "", allTimes)
-        #print(allTimes)
-        minDiff = 24*60
-        ret = None
-        cur = int(time[:2])*60+int(time[3:])
-        for each in allTimes:
-            if each==time[:2]+time[3:]:
-                continue
-            diff = int(each[:2])*60+int(each[2:])-cur
-            if diff<0:
-                diff = 24*60+diff
-            if minDiff>diff:
-                minDiff = diff
-                ret = each
-        return ret[:2]+":"+ret[2:] if ret else time
+            if c.isdigit() and c not in digits:
+                digits += c
+        ret = [float('inf'), ""]
+        dfsAndCheck(digits, "", int(time[:2])*60+int(time[3:]), ret)
+        if ret[1]=="":
+            return time
+        return ret[1]
