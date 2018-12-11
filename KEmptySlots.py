@@ -36,38 +36,56 @@ class Solution:
         :rtype: int
         """
         N = len(flowers)
-        if k+2>N:
-            return -1
-        # bloomDay[i] is ith position will bloom on day bloomDay[i]
-        bloomDay = [0]*(N+1)
-        for i in range(N):
-            bloomDay[flowers[i]] = i+1
+        bloomDay = [-1]*(N+1)
+        for day in range(N):
+            bloomDay[flowers[day]] = day+1
         #print(bloomDay)
-        minHeap = [(bloomDay[i],i) for i in range(2,k+2)]
-        heapq.heapify(minHeap)
-        start, end = 1, k+2
-        ret = -1
-        if k==0:
-            while end<N+1:
-                if ret==-1:
-                    ret = max(bloomDay[start],bloomDay[end])
-                else:
-                    ret = min(ret, max(bloomDay[start],bloomDay[end]))
-                start += 1
-                end += 1
-            return ret
-        while True:
-            while minHeap[0][1]<=start:
-                heapq.heappop(minHeap)
-            #print(start,end,minHeap)
-            if minHeap[0][0]>bloomDay[start] and minHeap[0][0]>bloomDay[end]:
-                if ret==-1:
-                    ret = max(bloomDay[start],bloomDay[end])
-                else:
-                    ret = min(ret, max(bloomDay[start],bloomDay[end]))
-            if end+1==N+1:
-                break
-            heapq.heappush(minHeap,(bloomDay[end],end))
-            start += 1
-            end += 1
+        ret = float('inf')
+        minQ = collections.deque()
+        l, r = 1, 3
+        while r<N+1:
+            while len(minQ) and bloomDay[minQ[-1]]>bloomDay[r-1]:
+                minQ.pop()
+            minQ.append(r-1)
+            if r-l-1>k:
+                l += 1
+            while len(minQ) and minQ[0]<=l:
+                minQ.popleft()
+            if r-l-1==k:
+                if (k==0 and len(minQ)==0) or bloomDay[minQ[0]]>max(bloomDay[l],bloomDay[r]):
+                    #print(l,r, pq)
+                    ret = min(ret, max(bloomDay[l],bloomDay[r]))
+            r += 1
+        if ret==float('inf'):
+            return -1
         return ret
+
+
+class Solution2:
+    def kEmptySlots(self, flowers, k):
+        """
+        :type flowers: List[int]
+        :type k: int
+        :rtype: int
+        """
+        def insertIndex(blooms, target):
+            l, r = 0, len(blooms)-1
+            while l<=r:
+                m = l+(r-l)//2
+                if blooms[m]>target:
+                    r = m-1
+                else:
+                    l = m+1
+            return l
+
+        N = len(flowers)
+        blooms = []
+        for i,x in enumerate(flowers):
+            idx = insertIndex(blooms, x)
+            blooms.insert(idx, x)
+            #print(i, blooms)
+            if idx-1>=0 and blooms[idx]-blooms[idx-1]-1==k:
+                return i+1
+            if idx+1<len(blooms) and blooms[idx+1]-blooms[idx]-1==k:
+                return i+1
+        return -1
