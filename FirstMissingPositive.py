@@ -17,24 +17,26 @@ Note:
 
 Your algorithm should run in O(n) time and uses constant extra space.
 """
-
-class FirstMissingPositive:
+class Solution:
     def firstMissingPositive(self, nums):
         """
         :type nums: List[int]
         :rtype: int
         """
+        n = len(nums)
+        if n==0:
+            return 1
         # first loop put i in nums[i-1]
-        index = 0
-        while index<len(nums):
-            if nums[index]>0 and nums[index]<=len(nums) and nums[nums[index]-1]!=nums[index]:
-                temp = nums[nums[index]-1]
-                nums[nums[index]-1] = nums[index]
-                nums[index] = temp
-            else:
-                index += 1
+        idx = 0
+        while idx<n:
+            if nums[idx]-1<0 or nums[idx]-1>=n or nums[nums[idx]-1]==nums[idx]:
+                idx += 1
+                continue
+            tmp = nums[idx]
+            nums[tmp-1], nums[idx] = tmp, nums[tmp-1]
+        #print(nums)
         # second loop check unmatched
-        for index in range(len(nums)):
-            if nums[index]!=index+1:
-                return index+1
-        return len(nums)+1
+        for i in range(n):
+            if nums[i]!=i+1:
+                return i+1
+        return n+1
