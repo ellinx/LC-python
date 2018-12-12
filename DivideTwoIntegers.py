@@ -19,53 +19,38 @@ The divisor will never be 0.
 Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [−2^31,  2^31 − 1].
 For the purpose of this problem, assume that your function returns 2^31 − 1 when the division result overflows.
 """
-class DivideTwoIntegers:
+class Solution:
     def divide(self, dividend, divisor):
         """
         :type dividend: int
         :type divisor: int
         :rtype: int
         """
-        def insertPos(nums, target):
-            start, end = 0, len(nums)-1
-            while start<=end:
-                mid = start+(end-start)//2
-                if nums[mid]==target:
-                    start=mid
-                    break
-                if nums[mid]>target:
-                    end = mid-1
-                else:
-                    start = mid+1
-            return start
-
+        max_int = 2**31-1
+        min_int = -2**31
+        sign = 1
         if dividend==0:
             return 0
-        sign = 1
-        if dividend>0 and divisor<0:
-            sign, divisor = -1, -1*divisor
-        elif dividend<0 and divisor>0:
-            sign, dividend = -1, -1*dividend
-        elif dividend<0 and divisor<0:
-            dividend, divisor = -1*dividend, -1*divisor
+        if (dividend>0 and divisor<0) or (dividend<0 and divisor>0):
+            sign = -1
+        dividend, divisor = abs(dividend), abs(divisor)
+        mm = [divisor]
+        while mm[-1]<dividend:
+            mm.append(mm[-1]<<1)
+        #print(mm)
         ret = 0
-        bitmap = [divisor*2**i for i in range(32)]
-        #print(bitmap)
-        #print(dividend)
-        while True:
-            pos = insertPos(bitmap, dividend)
-            if pos>31:
-                ret = 2**31
+        while dividend>=divisor:
+            idx = bisect.bisect_left(mm, dividend)
+            if mm[idx]==dividend:
+                ret += 2**idx
                 break
-            if bitmap[pos]==dividend:
-                ret |= 1<<pos
+            if idx==0:
                 break
-            if pos==0:
-                break
-            ret |= 1<<(pos-1)
-            dividend -= bitmap[pos-1]
-        if sign==1 and ret>=2**31:
-            return 2**31-1
-        if sign==-1 and ret>2**31:
-            return -1*2**31
-        return sign*ret
+            ret += 2**(idx-1)
+            dividend -= mm[idx-1]
+        ret *= sign
+        if ret>max_int:
+            return max_int
+        if ret<min_int:
+            return min_int
+        return ret
