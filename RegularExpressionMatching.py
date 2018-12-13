@@ -48,34 +48,35 @@ s = "mississippi"
 p = "mis*is*p*."
 Output: false
 """
-class RegularExpressionMatching:
+class Solution:
     def isMatch(self, s, p):
         """
         :type s: str
         :type p: str
         :rtype: bool
         """
-        # dp[i][j] stands for whether s[0:i] matches p[0:j]
-        dp = [[False]*(len(p)+1) for _ in range(len(s)+1)]
+        m, n = len(s), len(p)
+        # dp[i][j] stands for if s[:i] matches p[:j]
+        dp = [[False]*(n+1) for _ in range(m+1)]
         dp[0][0] = True
         #first row which is whether p[0:j] match empty string
-        for j in range(1, len(p)+1):
-            if p[j-1]=='*':
-                dp[0][j] = dp[0][j] or dp[0][j-2]
-        for i in range(1,len(s)+1):
-            for j in range(1,len(p)+1):
-                if p[j-1]=='.':
+        for i in range(1,n+1):
+            if p[i-1] != "*":
+                continue
+            dp[0][i] = dp[0][i-2]
+        for i in range(1,m+1):
+            for j in range(1,n+1):
+                if p[j-1]=='.' or s[i-1]==p[j-1]:
                     dp[i][j] = dp[i][j] or dp[i-1][j-1]
                 elif p[j-1]=='*':
                     # zero char
                     dp[i][j] = dp[i][j] or dp[i][j-2]
                     # one or more char
-                    for k in range(1,i+1):
-                        #print(k, dp[i-k][j-2], s[i-k:i], p[j-2]*k)
-                        dp[i][j] = dp[i][j] or (dp[i-k][j-2] and (s[i-k:i]==p[j-2]*k or p[j-2]=='.'))
-                        if dp[i][j]:
+                    for k in range(i-1,-1,-1):
+                        #print(s,p,i,j)
+                        if dp[i][j] or (p[j-2]!='.' and (s[k]!=s[i-1] or p[j-2]!=s[i-1])):
+                            print(i,j,k)
                             break
-                else:
-                    dp[i][j] = dp[i][j] or (dp[i-1][j-1] and s[i-1]==p[j-1])
+                        dp[i][j] = dp[i][j] or dp[k][j-2]
         #print(dp)
-        return dp[-1][-1]
+        return dp[m][n]
