@@ -19,16 +19,16 @@ class Solution:
         :type s: str
         :rtype: bool
         """
-        start, end =  0, len(s)-1
-        while start<end:
-            while start<len(s) and not s[start].isalnum():
-                start += 1
-            while end>=0 and not s[end].isalnum():
-                end -= 1
-            if start>=end:
+        l, r = 0, len(s)-1
+        while l<=r:
+            while l<=r and not s[l].isalnum():
+                l += 1
+            while r>=l and not s[r].isalnum():
+                r -= 1
+            if l>r:
                 break
-            if s[start].upper()!=s[end].upper():
+            if s[l].lower()!=s[r].lower():
                 return False
-            start += 1
-            end -= 1
+            l += 1
+            r -= 1
         return True
