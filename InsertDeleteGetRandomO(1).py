@@ -3,7 +3,8 @@ Design a data structure that supports all following operations in average O(1) t
 
 1. insert(val): Inserts an item val to the set if not already present.
 2. remove(val): Removes an item val from the set if present.
-3. getRandom: Returns a random element from current set of elements. Each element must have the same probability of being returned.
+3. getRandom: Returns a random element from current set of elements.
+    Each element must have the same probability of being returned.
 
 Example:
 
