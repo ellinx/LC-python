@@ -46,3 +46,44 @@ class Solution:
         if nums[-1]>target:
             return False
         return dfs(nums, [False]*len(nums), 0, 0, target, k)
+
+
+class Solution2:
+    def canPartitionKSubsets(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: bool
+        """
+        def dfs(nums, start, cur, target, mm):
+            if len(nums)==0:
+                if cur==target:
+                    return True
+                return False
+            if cur==target:
+                key = ",".join(map(str, nums))
+                if key in mm:
+                    return mm[key]
+            for i in range(start,len(nums)):
+                if cur<nums[i]:
+                    break
+                if cur==nums[i]:
+                    if dfs(nums[:i]+nums[i+1:], 0, target, target, mm):
+                        if cur==target:
+                            mm[key] = True
+                        return True
+                else:
+                    if dfs(nums[:i]+nums[i+1:], i, cur-nums[i], target, mm):
+                        if cur==target:
+                            mm[key] = True
+                        return True
+            if cur==target:
+                mm[key] = False
+            return False
+
+        total = sum(nums)
+        if total%k!=0:
+            return False
+        target = total//k
+        nums.sort()
+        return dfs(nums, 0, target, target, dict())
