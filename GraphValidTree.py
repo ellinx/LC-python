@@ -20,22 +20,22 @@ class Solution:
         :type edges: List[List[int]]
         :rtype: bool
         """
-        def findRoot(roots, node):
-            while roots[node]!=node:
-                node = roots[node]
-            return node
+        def findRoot(roots, n):
+            while roots[n]!=n:
+                n = roots[n]
+            return n
 
-        roots = [i for i in range(n)]
+        if len(edges)!=n-1:
+            return False
         total = n
-        for edge in edges:
-            root0 = findRoot(roots, edge[0])
-            root1 = findRoot(roots, edge[1])
-            roots[edge[0]] = root0
-            roots[edge[1]] = root1
-            if root0==root1:
-                return False
-            roots[root1] = root0
-            total -= 1
+        roots = [i for i in range(n)]
+        for i,j in edges:
+            rooti = findRoot(roots, i)
+            rootj = findRoot(roots, j)
+            roots[i], roots[j] = rooti, rootj
+            if rooti!=rootj:
+                roots[rooti] = rootj
+                total -= 1
         return total==1
 
 class Solution2:
