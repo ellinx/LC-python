@@ -20,10 +20,10 @@ class Solution:
         :type nums2: List[int]
         :rtype: List[int]
         """
-        counter = collections.Counter(nums1)
+        c1 = collections.Counter(nums1)
+        c2 = collections.Counter(nums2)
         ret = []
-        for num in nums2:
-            if num in counter:
-                ret.append(num)
-                counter.pop(num)
+        for k in c1:
+            if k in c2:
+                ret.append(k)
         return ret
