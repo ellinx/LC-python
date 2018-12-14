@@ -57,6 +57,26 @@ class Solution:
                 end = mid-1
         return -1
 
+class Solution2:
+
+    def __init__(self, w):
+        """
+        :type w: List[int]
+        """
+        self.list = []
+        total = -1
+        for each in w:
+            total += each
+            self.list.append(total)
+
+    def pickIndex(self):
+        """
+        :rtype: int
+        """
+        val = random.randrange(self.list[-1]+1)
+        idx = bisect.bisect_left(self.list, val)
+        return idx
+
 
 # Your Solution object will be instantiated and called as such:
 # obj = Solution(w)
