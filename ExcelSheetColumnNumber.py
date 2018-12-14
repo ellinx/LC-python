@@ -33,8 +33,6 @@ class Solution:
         :rtype: int
         """
         ret = 0
-        base = 1
-        for i in range(len(s)-1,-1,-1):
-            ret += (ord(s[i])-ord('A')+1)*base
-            base *= 26
+        for c in s:
+            ret = ret*26+ord(c)-ord('A')+1
         return ret
