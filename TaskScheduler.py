@@ -29,14 +29,14 @@ class Solution:
         :rtype: int
         """
         counter = collections.Counter(tasks)
-        most_freq = counter.most_common()[0][1]
-        total_most_freq = 0
-        for each in counter.most_common():
-            if each[1]==most_freq:
-                total_most_freq += 1
+        task_list = counter.most_common()
+        #print(task_list)
+        most_repeat = 1
+        for i in range(1,len(task_list)):
+            if task_list[i-1][1] == task_list[i][1]:
+                most_repeat += 1
                 continue
             break
-        total_unique = len(counter)
-        if total_unique-1<n:
-            return (most_freq-1)*(n+1)+total_most_freq
-        return max(len(tasks), (most_freq-1)*(n+1)+total_most_freq)
+        #print(most_repeat)
+        # no idle vs has idle
+        return max(len(tasks),(task_list[0][1]-1)*(n+1)+most_repeat)
