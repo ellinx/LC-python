@@ -41,34 +41,29 @@ class Solution:
         :type points: List[Point]
         :rtype: int
         """
-        def getGCD(a, b):
-            while b>0:
+        def gcd(a, b):
+            while b:
                 a, b = b, a%b
             return a
 
-        if len(points)<2:
-            return len(points)
-        points.sort(key=lambda p: [p.x,p.y])
-        ret = 2
+        points.sort(key=lambda p:p.x)
+        ret = 0
         for i in range(len(points)):
-            if i and points[i-1].x==points[i].x and points[i-1].y==points[i].y:
-                continue
-            same = 1
+            sameP = 1
             sameX = 0
-            mm = collections.defaultdict(int)
+            kdict = dict()
             for j in range(i+1,len(points)):
-                if points[j].x==points[i].x and points[j].y==points[i].y:
-                    same += 1
-                    ret = max(ret, same)
+                if points[i].x==points[j].x:
+                    if points[i].y==points[j].y:
+                        sameP += 1
+                    else:
+                        sameX += 1
                     continue
-                if points[j].x==points[i].x:
-                    sameX += 1
-                    ret = max(ret, sameX+same)
-                    continue
-                dy = points[j].y-points[i].y
-                dx = points[j].x-points[i].x
-                gcd = getGCD(dy,dx)
-                k = (dy//gcd,dx//gcd)
-                mm[k] += 1
-                ret = max(ret, mm[(k)]+same)
+                deltaY = points[j].y-points[i].y
+                deltaX = points[j].x-points[i].x
+                tmp = gcd(deltaY, deltaX)
+                k = str(deltaY//tmp)+","+str(deltaX//tmp)
+                kdict[k] = kdict.get(k, sameP)+1
+                ret = max(ret, kdict[k])
+            ret = max(ret, sameX+sameP)
         return ret
