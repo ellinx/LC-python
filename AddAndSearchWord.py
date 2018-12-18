@@ -3,7 +3,8 @@ Design a data structure that supports the following two operations:
 
 void addWord(word)
 bool search(word)
-search(word) can search a literal word or a regular expression string containing only letters a-z or .. A . means it can represent any one letter.
+search(word) can search a literal word or a regular expression string containing only letters a-z or .
+A . means it can represent any one letter.
 
 Example:
 
@@ -45,7 +46,8 @@ class WordDictionary:
 
     def search(self, word):
         """
-        Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter.
+        Returns if the word is in the data structure.
+        A word could contain the dot character '.' to represent any one letter.
         :type word: str
         :rtype: bool
         """
@@ -71,7 +73,8 @@ class WordDictionary:
 
     def searchDFS(self, word):
         """
-        Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter.
+        Returns if the word is in the data structure.
+        A word could contain the dot character '.' to represent any one letter.
         :type word: str
         :rtype: bool
         """
