@@ -64,58 +64,42 @@ class Solution:
         :type destination: List[int]
         :rtype: int
         """
-        if start==destination:
-            return 0
-        m = len(maze)
-        n = len(maze[0])
-        ret = -1
-        dist = dict()
+        m, n = len(maze), len(maze[0])
         q = collections.deque()
-        dist[tuple(start)] = 0
-        q.append([0,start])
+        q.append([0, start])
+        dist = dict()
         while len(q):
-            cur = q.popleft()
-            if cur[1]==destination:
-                ret = cur[0] if ret==-1 else min(ret,cur[0])
-            #print(cur)
-            #up
-            end = [cur[1][0], cur[1][1]]
-            while end[0]>=0 and maze[end[0]][end[1]]==0:
-                end[0] -= 1
-            end[0] += 1
-            #print("up:",end)
-            k, val = tuple(end), cur[0]+cur[1][0]-end[0]
-            if k not in dist or val<dist[k]:
-                dist[k] = val
-                q.append([val, end])
-            #down
-            end = [cur[1][0], cur[1][1]]
-            while end[0]<m and maze[end[0]][end[1]]==0:
-                end[0] += 1
-            end[0] -= 1
-            #print("down:",end)
-            k, val = tuple(end), cur[0]+end[0]-cur[1][0]
-            if k not in dist or val<dist[k]:
-                dist[k] = val
-                q.append([val, end])
-            #left
-            end = [cur[1][0], cur[1][1]]
-            while end[1]>=0 and maze[end[0]][end[1]]==0:
-                end[1] -= 1
-            end[1] += 1
-            #print("left:",end)
-            k, val = tuple(end), cur[0]+cur[1][1]-end[1]
-            if k not in dist or val<dist[k]:
-                dist[k] = val
-                q.append([val, end])
-            #right
-            end = [cur[1][0], cur[1][1]]
-            while end[1]<n and maze[end[0]][end[1]]==0:
-                end[1] += 1
-            end[1] -= 1
-            #print("right:",end)
-            k, val = tuple(end), cur[0]+end[1]-cur[1][1]
-            if k not in dist or val<dist[k]:
-                dist[k] = val
-                q.append([val, end])
-        return ret
+            step, cur = q.popleft()
+            # up
+            i, j = cur
+            while i>=0 and maze[i][j]==0:
+                i -= 1
+            i += 1
+            if step+cur[0]-i<dist.get((i,j), float('inf')):
+                dist[(i,j)] = step+cur[0]-i
+                q.append([dist[(i,j)], [i,j]])
+            # down
+            i, j = cur
+            while i<m and maze[i][j]==0:
+                i += 1
+            i -= 1
+            if step+i-cur[0]<dist.get((i,j), float('inf')):
+                dist[(i,j)] = step+i-cur[0]
+                q.append([dist[(i,j)], [i,j]])
+            # left
+            i, j = cur
+            while j>=0 and maze[i][j]==0:
+                j -= 1
+            j += 1
+            if step+cur[1]-j<dist.get((i,j), float('inf')):
+                dist[(i,j)] = step+cur[1]-j
+                q.append([dist[(i,j)], [i,j]])
+            # right
+            i, j = cur
+            while j<n and maze[i][j]==0:
+                j += 1
+            j -= 1
+            if step+j-cur[1]<dist.get((i,j), float('inf')):
+                dist[(i,j)] = step+j-cur[1]
+                q.append([dist[(i,j)], [i,j]])
+        return dist.get(tuple(destination), -1)
