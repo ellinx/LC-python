@@ -51,3 +51,28 @@ class Solution:
         if cur==K:
             return ret[:-1]
         return ret
+
+
+class Solution2:
+    def licenseKeyFormatting(self, S, K):
+        """
+        :type S: str
+        :type K: int
+        :rtype: str
+        """
+        ret = ""
+        idx = len(S)-1
+        i = 0
+        while idx>=0:
+            if S[idx]=='-':
+                idx -= 1
+                continue
+            ret = S[idx].upper()+ret
+            idx -= 1
+            i += 1
+            if i==K:
+                ret = '-'+ret
+                i = 0
+        if len(ret) and ret[0]=='-':
+            return ret[1:]
+        return ret
