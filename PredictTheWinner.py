@@ -68,3 +68,23 @@ class Solution2:
             return mm[key]
 
         return dfs([str(num) for num in nums], dict())>=0
+
+class Solution3:
+    def PredictTheWinner(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        def helper(nums, l, r, mm):
+            if l==r:
+                return nums[l]
+            key = str(l)+","+str(r)
+            if key in mm:
+                return mm[key]
+            pl = nums[l]+sum(nums[l+1:r+1])-helper(nums,l+1,r,mm)
+            pr = nums[r]+sum(nums[l:r])-helper(nums,l,r-1,mm)
+            mm[key] = max(pl,pr)
+            return mm[key]
+
+        p1 = helper(nums, 0, len(nums)-1, dict())
+        return p1>=sum(nums)-p1
