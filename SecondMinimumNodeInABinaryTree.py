@@ -3,7 +3,8 @@ Given a non-empty special binary tree consisting of nodes with the non-negative 
 where each node in this tree has exactly two or zero sub-node. If the node has two sub-nodes,
 then this node's value is the smaller value among its two sub-nodes.
 
-Given such a binary tree, you need to output the second minimum value in the set made of all the nodes' value in the whole tree.
+Given such a binary tree, you need to output the second minimum value
+in the set made of all the nodes' value in the whole tree.
 
 If no such second minimum value exists, output -1 instead.
 
@@ -27,27 +28,32 @@ Input:
 Output: -1
 Explanation: The smallest value is 2, but there isn't any second smallest value.
 """
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
 class Solution:
     def findSecondMinimumValue(self, root):
         """
         :type root: TreeNode
         :rtype: int
         """
-        stk = collections.deque()
-        pq = []
-        cur = root
-        while cur is not None or len(stk):
-            if cur is not None:
-                if -cur.val not in pq:
-                    heapq.heappush(pq, -cur.val)
-                    if len(pq)==3:
-                        heapq.heappop(pq)
-                stk.append(cur)
-                cur = cur.left
-            else:
-                cur = stk.pop()
-                cur = cur.right
-            #print(pq)
-        if len(pq)<2:
+        def helper(root, pre, ret):
+            if root is None:
+                return
+            if root.val!=pre:
+                heapq.heappush(ret, -root.val)
+            pre = root.val
+            helper(root.left, pre, ret)
+            helper(root.right, pre, ret)
+            while len(ret)>2:
+                heapq.heappop(ret)
+
+        ret = []
+        helper(root, None, ret)
+        if len(ret)<2:
             return -1
-        return -pq[0]
+        return -ret[0]
