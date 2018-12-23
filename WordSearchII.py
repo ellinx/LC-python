@@ -26,50 +26,43 @@ class TrieNode:
         self.children = dict()
 
 class Solution:
-    def __init__(self):
-        self.root = TrieNode()
-
-    def insertWord(self, words):
-        cur = self.root
-        for c in words:
-            if c not in cur.children:
-                cur.children[c] = TrieNode()
-            cur = cur.children[c]
-        cur.isWord = True
-
     def findWords(self, board, words):
         """
         :type board: List[List[str]]
         :type words: List[str]
         :rtype: List[str]
         """
-        def dfs(board, visited, curStr, curNode, i, j, ret):
-            if board[i][j] not in curNode.children:
-                return
-            curNode = curNode.children[board[i][j]]
-            curStr += board[i][j]
-            if curNode.isWord:
-                ret.add(curStr)
-            visited[i][j] = True
-            #up
-            if i and not visited[i-1][j]:
-                dfs(board, visited, curStr, curNode, i-1, j, ret)
-            #down
-            if i<len(board)-1 and not visited[i+1][j]:
-                dfs(board, visited, curStr, curNode, i+1, j, ret)
-            #left
-            if j and not visited[i][j-1]:
-                dfs(board, visited, curStr, curNode, i, j-1, ret)
-            #right
-            if j<len(board[0])-1 and not visited[i][j+1]:
-                dfs(board, visited, curStr, curNode, i, j+1, ret)
-            visited[i][j] = False
+        def insertWord(root, word):
+            for c in word:
+                if c not in root.children:
+                    root.children[c] = TrieNode()
+                root = root.children[c]
+            root.isWord = True
 
+        def dfs(root, board, i, j, cur, used, ret):
+            if board[i][j] not in root.children:
+                return
+            nxtNode = root.children[board[i][j]]
+            cur += board[i][j]
+            if nxtNode.isWord:
+                ret.append(cur)
+                nxtNode.isWord = False
+            used.add((i,j))
+            dirs = [[-1,0],[1,0],[0,-1],[0,1]]
+            m, n = len(board), len(board[0])
+            for each in dirs:
+                ni = i+each[0]
+                nj = j+each[1]
+                if ni>=0 and ni<m and nj>=0 and nj<n and (ni,nj) not in used:
+                    dfs(nxtNode, board, ni, nj, cur, used, ret)
+            used.remove((i,j))
+
+        root = TrieNode()
         for word in words:
-            self.insertWord(word)
-        ret = set()
-        visited = [[False]*len(board[0]) for _ in range(len(board))]
-        for i in range(len(board)):
-            for j in range(len(board[0])):
-                dfs(board, visited, "", self.root, i, j, ret)
-        return list(ret)
+            insertWord(root, word)
+        m, n = len(board), len(board[0])
+        ret = []
+        for i in range(m):
+            for j in range(n):
+                dfs(root, board, i, j, "", set(), ret)
+        return ret
