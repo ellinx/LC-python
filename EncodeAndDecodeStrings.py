@@ -32,8 +32,10 @@ Note:
 
 1. The string may contain any possible characters out of 256 valid ascii characters.
     Your algorithm should be generalized enough to work on any possible characters.
-2. Do not use class member/global/static variables to store states. Your encode and decode algorithms should be stateless.
-3. Do not rely on any library method such as eval or serialize methods. You should implement your own encode/decode algorithm.
+2. Do not use class member/global/static variables to store states.
+    Your encode and decode algorithms should be stateless.
+3. Do not rely on any library method such as eval or serialize methods.
+    You should implement your own encode/decode algorithm.
 
 """
 class Codec:
@@ -65,14 +67,14 @@ class Codec:
         :rtype: List[str]
         """
         ret = []
-        index = 0
-        while index<len(s):
-            hIndex = index+1
-            while hIndex<len(s) and s[hIndex]!="#":
-                hIndex += 1
-            size = int(s[index:hIndex])
-            ret.append(s[hIndex+1:hIndex+1+size])
-            index = hIndex+1+size
+        l, r = 0, 0
+        while l<len(s):
+            while s[r]!="#":
+                r += 1
+            length = int(s[l:r])
+            l, r = r+1, r+1+length
+            ret.append(s[l:r])
+            l = r
         return ret
 
 
