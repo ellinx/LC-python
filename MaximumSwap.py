@@ -1,5 +1,6 @@
 """
-Given a non-negative integer, you could swap two digits at most once to get the maximum valued number. Return the maximum valued number you could get.
+Given a non-negative integer, you could swap two digits at most once to get the maximum valued number.
+Return the maximum valued number you could get.
 
 Example 1:
 Input: 2736
@@ -20,13 +21,14 @@ class Solution:
         :type num: int
         :rtype: int
         """
-        ret = num
+        pos = [-1]*10
         numStr = str(num)
-        for i in range(len(numStr)-1):
-            maxAfterI = i+1
-            for j in range(i+1,len(numStr)):
-                if numStr[j]>=numStr[maxAfterI]:
-                    maxAfterI = j
-            if numStr[i]<numStr[maxAfterI]:
-                ret = max(ret, int(numStr[:i]+numStr[maxAfterI]+numStr[i+1:maxAfterI]+numStr[i]+numStr[maxAfterI+1:]))
-        return ret
+        for i,c in enumerate(numStr):
+            pos[int(c)] = i
+        for i,c in enumerate(numStr):
+            for j in range(9,int(c),-1):
+                if pos[j]>i:
+                    k = pos[j]
+                    ret = numStr[:i]+numStr[k]+numStr[i+1:k]+numStr[i]+numStr[k+1:]
+                    return int(ret)
+        return num
