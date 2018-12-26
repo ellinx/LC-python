@@ -1,5 +1,6 @@
 """
-Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+Write an efficient algorithm that searches for a value in an m x n matrix.
+This matrix has the following properties:
 
 1. Integers in each row are sorted in ascending from left to right.
 2. Integers in each column are sorted in ascending from top to bottom.
@@ -24,7 +25,8 @@ Given target = 20, return false.
 class Solution:
     """
     Thoughts:
-    1. Start from last element in first row, if target is smaller, go left; if target is greater, go down. If it's target, return True
+    1. Start from last element in first row, if target is smaller, go left;
+        if target is greater, go down. If it's target, return True
     2. repeat step 1 until out of range.
 
     Time: O(m+n) where m, n is row and col number of matrix
