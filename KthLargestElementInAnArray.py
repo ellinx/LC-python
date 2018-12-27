@@ -27,35 +27,40 @@ class Solution:
                 heapq.heappop(pq)
         return pq[0]
 
+
 class Solution2:
-    # quick sort
+    # similar to quick sort
     def findKthLargest(self, nums, k):
         """
         :type nums: List[int]
         :type k: int
         :rtype: int
         """
-        # similar to quick sort
-        index = 1
-        left, right = 1, len(nums)-1
-        while left<=right:
-            if nums[index]<=nums[0]:
-                nums[index], nums[right] = nums[right], nums[index]
-                right -= 1
+        def helper(nums, start, end, k):
+            #print(nums, start, end, k)
+            pivot = nums[start]
+            l, r = start+1, end
+            while l<=r:
+                while l<=end and nums[l]>=pivot:
+                    l += 1
+                while r>start and nums[r]<pivot:
+                    r -= 1
+                if l>r:
+                    break
+                nums[l], nums[r] = nums[r], nums[l]
+                l += 1
+                r -= 1
+            #print(l,r)
+            rank = l-start
+            if rank==k:
+                return pivot
+            nums[r], nums[start] = nums[start], nums[r]
+            if rank<k:
+                return helper(nums, l, end, k-rank)
             else:
-                if index==left:
-                    index += 1
-                    left += 1
-                else:
-                    nums[index], nums[left] = nums[left], nums[index]
-                    left += 1
-        #print(nums, left,right,k)
-        if left==k:
-            return nums[0]
-        if left<k:
-            return self.findKthLargest(nums[left:],k-left)
-        else:
-            return self.findKthLargest(nums[1:left],k)
+                return helper(nums, start, r-1, k)
+
+        return helper(nums, 0, len(nums)-1, k)
 
 if __name__=='__main__':
     temp = KthLargestElementInAnArray()
