@@ -18,15 +18,34 @@ Output:
   []
 ]
 """
-class Subsets(object):
+class Solution:
+    # iterative
     def subsets(self, nums):
         """
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        ret = [[]]
+        cur = [[]]
         for num in nums:
-            preSize = len(ret)
-            for i in range(preSize):
-                ret.append(ret[i]+[num])
+            nxt = []
+            for each in cur:
+                nxt.append(each+[num])
+            cur.extend(nxt)
+        return cur
+
+class Solution2:
+    def subsets(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        def dfs(nums, start, cur, ret):
+            if start==len(nums):
+                ret.append(cur)
+                return
+            dfs(nums, start+1, cur, ret)
+            dfs(nums, start+1, cur+[nums[start]], ret)
+
+        ret = []
+        dfs(nums, 0, [], ret)
         return ret
