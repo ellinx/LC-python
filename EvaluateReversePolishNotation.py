@@ -16,27 +16,20 @@ class Solution:
         :rtype: int
         """
         stk = collections.deque()
-        for each in tokens:
-            if each in "+-*/":
-                num2 = stk.pop()
-                num1 = stk.pop()
-                if each=="+":
-                    stk.append(num1+num2)
-                elif each=="-":
-                    stk.append(num1-num2)
-                elif each=="*":
-                    stk.append(num1*num2)
-                else:
-                    result = num1/num2
-                    if result>=0:
-                        result = math.floor(result)
-                    else:
-                        result = math.ceil(result)
-                    stk.append(result)
-            else:
-                stk.append(int(each))
-            #print(stk)
-        #print(stk)
+        for token in tokens:
+            if token in "+-*/":
+                op2 = stk.pop()
+                op1 = stk.pop()
+                if token=='+':
+                    stk.append(op1+op2)
+                elif token=='-':
+                    stk.append(op1-op2)
+                elif token=='*':
+                    stk.append(op1*op2)
+                elif token=='/':
+                    stk.append(int(op1/op2))
+                continue
+            stk.append(int(token))
         return stk[0]
 
 
