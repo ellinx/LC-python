@@ -36,3 +36,21 @@ class Solution:
         ret = []
         dfs(nums, 0, [], ret)
         return ret
+
+
+class Solution2:
+    # iterative
+    def subsetsWithDup(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        counter = collections.Counter(nums)
+        ret = [[]]
+        for k in counter:
+            nxt = []
+            for each in ret:
+                for i in range(1,counter[k]+1):
+                    nxt.append(each+[k]*i)
+            ret.extend(nxt)
+        return ret
