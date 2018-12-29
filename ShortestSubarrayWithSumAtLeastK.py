@@ -31,7 +31,6 @@ Note:
 """
 class Solution:
     """
-
     Time: O(n) where n is length of A
     Space: O(n)
     """
@@ -42,20 +41,15 @@ class Solution:
         :rtype: int
         """
         total = 0
-        # sumToI[i] is sum(A[0,i))
-        sumToI = [0]
-        for each in A:
-            total += each
-            sumToI.append(total)
-        dq = collections.deque()
         ret = -1
-        for i in range(len(sumToI)):
-            while len(dq) and sumToI[i]-sumToI[dq[0]]>=K:
-                if ret==-1:
-                    ret = i-dq[0]
-                ret = min(ret, i-dq[0])
+        dq = collections.deque()
+        dq.append([0,-1])
+        for i,a in enumerate(A):
+            total += a
+            while len(dq) and total-dq[0][0]>=K:
+                ret = i-dq[0][1] if ret==-1 else min(ret, i-dq[0][1])
                 dq.popleft()
-            while len(dq) and sumToI[i]<=sumToI[dq[-1]]:
+            while len(dq) and dq[-1][0]>total:
                 dq.pop()
-            dq.append(i)
+            dq.append([total, i])
         return ret
