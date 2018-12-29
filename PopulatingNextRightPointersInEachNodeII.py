@@ -38,30 +38,36 @@ After calling your function, the tree should look like:
 
 
 """
+# Definition for binary tree with next pointer.
+# class TreeLinkNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+#         self.next = None
+
 class Solution:
     # @param root, a tree link node
     # @return nothing
     def connect(self, root):
         if root is None:
-            return root
-        cur = root
+            return
         head, pre = None, None
-        while cur is not None:
-            while cur is not None:
-                if cur.left is not None:
-                    if head is None:
-                        head = cur.left
-                        pre = cur.left
-                    else:
-                        pre.next = cur.left
-                        pre = pre.next
-                if cur.right is not None:
-                    if head is None:
-                        head = cur.right
-                        pre = cur.right
-                    else:
-                        pre.next = cur.right
-                        pre = pre.next
-                cur = cur.next
-            cur = head
-            head, pre = None, None
+        node = root
+        while node is not None:
+            if node.left is not None:
+                if head is None:
+                    head, pre = node.left, node.left
+                else:
+                    pre.next = node.left
+                    pre = pre.next
+            if node.right is not None:
+                if head is None:
+                    head, pre = node.right, node.right
+                else:
+                    pre.next = node.right
+                    pre = pre.next
+            node = node.next
+            if node is None:
+                node = head
+                head, pre = None, None
