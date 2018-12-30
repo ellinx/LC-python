@@ -42,3 +42,37 @@ class Solution:
         mm = dict()
         mm[0], mm[1] = 1, x
         return helper(x, n, mm)
+
+
+class Solution2:
+    def myPow(self, x, n):
+        """
+        :type x: float
+        :type n: int
+        :rtype: float
+        """
+        def helper(mm, n):
+            l, r = 0, len(mm)-1
+            while l<=r:
+                m = l+(r-l)//2
+                if 2**m==n:
+                    return m
+                if 2**m<n:
+                    l = m+1
+                else:
+                    r = m-1
+            return l-1
+
+        if n==0:
+            return 1
+        if n<0:
+            return 1/self.myPow(x,-n)
+        mm = [x]
+        ret = 1
+        while n>0:
+            while 2**(len(mm)-1)<n:
+                mm.append(mm[-1]*mm[-1])
+            idx = helper(mm, n)
+            ret *= mm[idx]
+            n -= 2**idx
+        return ret
