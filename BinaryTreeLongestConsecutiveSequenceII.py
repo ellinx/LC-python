@@ -26,44 +26,47 @@ Explanation: The longest consecutive path is [1, 2, 3] or [3, 2, 1].
 Note: All the values of tree nodes are in the range of [-1e7, 1e7].
 
 """
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
 class Solution:
     def longestConsecutive(self, root):
         """
         :type root: TreeNode
         :rtype: int
         """
-        def helper(root):
-            if not root:
-                return None
-            left = helper(root.left)
-            right = helper(root.right)
-            ret = [0,[0,0]]
-            ret[0] = root.val
-            if left:
-                if root.val+1==left[0]:
-                    ret[1][0] = left[1][0]+1
-                if root.val-1==left[0]:
-                    ret[1][1] = left[1][1]+1
-            if right:
-                if root.val+1==right[0]:
-                    ret[1][0] = max(ret[1][0], right[1][0]+1)
-                if root.val-1==right[0]:
-                    ret[1][1] = max(ret[1][1], right[1][1]+1)
-            if ret[1][0]==0:
-                ret[1][0] = 1
-            if ret[1][1]==0:
-                ret[1][1] = 1
-            nonlocal maxPath
-            maxPath = max(maxPath, ret[1][0], ret[1][1])
-            if left and right:
-                if root.val+1==left[0] and root.val-1==right[0]:
-                    maxPath = max(maxPath, left[1][0]+1+right[1][1])
-                if root.val-1==left[0] and root.val+1==right[0]:
-                    maxPath = max(maxPath, left[1][1]+1+right[1][0])
-            return ret
+        def helper(root, ret):
+            if root is None:
+                return [[0,0], [0,0]]
+            li, ld = helper(root.left, ret)
+            ri, rd = helper(root.right, ret)
+            rooti, rootd = [root.val, 1], [root.val, 1]
+            if li[0]+1==root.val:
+                rooti[1] = li[1]+1
+                if root.val+1==rd[0]:
+                    ret[0] = max(ret[0], li[1]+1+rd[1])
+                else:
+                    ret[0] = max(ret[0], li[1]+1)
+            if ld[0]-1==root.val:
+                rootd[1] = ld[1]+1
+                if root.val-1==ri[0]:
+                    ret[0] = max(ret[0], ld[1]+1+ri[1])
+                else:
+                    ret[0] = max(ret[0], ld[1]+1)
+            if root.val+1==rd[0]:
+                rootd[1] = max(rootd[1], rd[1]+1)
+                ret[0] = max(ret[0], 1+rd[1])
+            if root.val-1==ri[0]:
+                rooti[1] = max(rooti[1], ri[1]+1)
+                ret[0] = max(ret[0], 1+ri[1])
+            return [rooti, rootd]
 
-        maxPath = 0
-        if not root:
+        if root is None:
             return 0
-        helper(root)
-        return maxPath
+        ret = [1]
+        helper(root, ret)
+        return ret[0]
