@@ -8,7 +8,6 @@ The integer represents the root's value and a pair of parenthesis contains a chi
 You always start to construct the left child node of the parent first if it exists.
 
 Example:
-
 Input: "4(2(3)(1))(6(5))"
 Output: return the tree root node representing the following tree:
 
