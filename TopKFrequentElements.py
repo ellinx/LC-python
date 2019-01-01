@@ -20,13 +20,13 @@ class Solution:
         :type k: int
         :rtype: List[int]
         """
-        counter = collections.Counter(nums)
+        counter = collections.defaultdict(int)
+        for num in nums:
+            counter[num] += 1
         pq = []
         for key in counter:
-            heapq.heappush(pq, [counter[key], key])
-            if len(pq)>k:
-                heapq.heappop(pq)
+            heapq.heappush(pq, [-counter[key], key])
         ret = []
-        while len(pq):
-            ret = [heapq.heappop(pq)[1]]+ret
+        while len(ret)<k and len(pq):
+            ret.append(heapq.heappop(pq)[1])
         return ret
