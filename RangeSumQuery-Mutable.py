@@ -90,3 +90,72 @@ class NumArray:
 # obj = NumArray(nums)
 # obj.update(i,val)
 # param_2 = obj.sumRange(i,j)
+
+
+class SegmentNode:
+    def __init__(self, s, e, val):
+        self.start = s
+        self.end = e
+        self.val = val
+        self.left = None
+        self.right = None
+
+class NumArray2:
+
+    def __init__(self, nums):
+        """
+        :type nums: List[int]
+        """
+        def createSegmentNode(nums, l, r):
+            if l>r:
+                return None
+            if l==r:
+                return SegmentNode(l,r,nums[l])
+            m = l+(r-l)//2
+            left = createSegmentNode(nums, l, m)
+            right = createSegmentNode(nums, m+1, r)
+            ret = SegmentNode(l, r, left.val+right.val)
+            ret.left, ret.right = left, right
+            return ret
+
+        self.root = createSegmentNode(nums, 0, len(nums)-1)
+        self.nums = nums
+
+    def update(self, i, val):
+        """
+        :type i: int
+        :type val: int
+        :rtype: void
+        """
+        cur = self.root
+        while True:
+            cur.val += val-self.nums[i]
+            if cur.start==cur.end:
+                break
+            mid = cur.start+(cur.end-cur.start)//2
+            if i<=mid:
+                cur = cur.left
+            else:
+                cur = cur.right
+        self.nums[i] = val
+
+    def sumRange(self, i, j):
+        """
+        :type i: int
+        :type j: int
+        :rtype: int
+        """
+        def sumFromNode(cur, i, j):
+            if cur is None or i>cur.end or j<cur.start:
+                return 0
+            if i<=cur.start and j>=cur.end:
+                return cur.val
+            mid = cur.start+(cur.end-cur.start)//2
+            if i>mid:
+                return sumFromNode(cur.right, i, j)
+            elif j<=mid:
+                return sumFromNode(cur.left, i, j)
+            else:
+                return sumFromNode(cur.left, i, mid)+sumFromNode(cur.right, mid+1, j)
+
+        return sumFromNode(self.root, i, j)
