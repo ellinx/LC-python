@@ -10,7 +10,8 @@ Example:
 int[] nums = new int[] {1,2,3,3,3};
 Solution solution = new Solution(nums);
 
-// pick(3) should return either index 2, 3, or 4 randomly. Each index should have equal probability of returning.
+// pick(3) should return either index 2, 3, or 4 randomly.
+// Each index should have equal probability of returning.
 solution.pick(3);
 
 // pick(1) should return 0. Since in the array only nums[0] is equal to 1.
@@ -22,17 +23,17 @@ class Solution:
         """
         :type nums: List[int]
         """
-        self.indexMap = collections.defaultdict(list)
-        for i in range(len(nums)):
-            self.indexMap[nums[i]].append(i)
+        self.nums = collections.defaultdict(list)
+        for i,num in enumerate(nums):
+            self.nums[num].append(i)
 
     def pick(self, target):
         """
         :type target: int
         :rtype: int
         """
-        li = self.indexMap[target]
-        return li[random.randrange(len(li))]
+        targetList = self.nums[target]
+        return targetList[random.randrange(0,len(targetList))]
 
 
 # Your Solution object will be instantiated and called as such:
