@@ -28,55 +28,31 @@ class Solution:
         m, n = len(nums1), len(nums2)
         if m>n:
             return self.findMedianSortedArrays(nums2, nums1)
-
-        #if nums1 is empty
-        if m==0:
-            return (nums2[(n-1)//2]+nums2[n//2])/2.0
-
-        start, end = -1, m-1
-        target = (m+n)//2
-            #                   A
-            #               mid | mid+1  ~[-1, m-1]
-            #                   B
-            #      target-mid-2 | target-mid-1  ~[-1, n-1]
-
-        while start<=end:
-            mid = start+(end-start)//2
-            print(start, end, mid, target-mid-2)
-            if mid==-1 or target-mid-1==n:
-                if nums1[mid+1]>=nums2[target-mid-2]:
-                    break
-                else:
-                    start = mid+1
-                    continue
-            if mid+1==m or target-mid-2==-1:
-                if nums1[mid]<=nums2[target-mid-1]:
-                    break
-                else:
-                    end = mid-1
-                    continue
-
-            if nums1[mid]>nums2[target-mid-1]:
-                end = mid-1
-            elif nums1[mid+1]<nums2[target-mid-2]:
-                start = mid+1
-            else:
+        l, r = -1, m-1
+        #                   A
+        #               i1-1 | i1  ~[-1, m-1]
+        #                   B
+        #               i2-1 | i2  ~[-1, n-1]
+        while l<=r:
+            mid = l+(r-l)//2
+            i1 = mid+1
+            i2 = (m+n)//2-i1
+            if (i1-1<0 or i2>=n or nums1[i1-1]<=nums2[i2]) and (i1>=m or i2-1<0 or nums1[i1]>=nums2[i2-1]):
                 break
-        #print(mid,target-mid-2)
-        left, right = float('-inf'), float('inf')
+            if i1-1>=0 and i2<n and nums1[i1-1]>nums2[i2]:
+                r = mid-1
+            elif i1<m and i2-1>=0 and nums1[i1]<nums2[i2-1]:
+                l = mid+1
+        #print(i1, i2)
+        maxL, minR = float('-inf'), float('inf')
+        if i1-1>=0 and i1-1<m:
+            maxL = max(maxL, nums1[i1-1])
+        if i2-1>=0 and i2-1<n:
+            maxL = max(maxL, nums2[i2-1])
+        if i1>=0 and i1<m:
+            minR = min(minR, nums1[i1])
+        if i2>=0 and i2<n:
+            minR = min(minR, nums2[i2])
         if (m+n)%2==0:
-            if mid>=0:
-                left = nums1[mid]
-            if target-mid-2>=0:
-                left = max(left, nums2[target-mid-2])
-            if mid+1<m:
-                right = nums1[mid+1]
-            if target-mid-1<n:
-                right = min(right, nums2[target-mid-1])
-            return (left+right)/2.0
-        else:
-            if mid+1==m:
-                return nums2[target-mid-1]
-            if target-mid-1==n:
-                return nums1[mid+1]
-            return min(nums1[mid+1], nums2[target-mid-1])
+            return (maxL+minR)/2
+        return minR
