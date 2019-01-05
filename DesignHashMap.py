@@ -5,9 +5,9 @@ To be specific, your design should include these functions:
 
 put(key, value) : Insert a (key, value) pair into the HashMap.
                     If the value already exists in the HashMap, update the value.
-get(key): Returns the value to which the specified key is mapped,
-            or -1 if this map contains no mapping for the key.
-remove(key) : Remove the mapping for the value key if this map contains the mapping for the key.
+get(key):         Returns the value to which the specified key is mapped,
+                    or -1 if this map contains no mapping for the key.
+remove(key) :     Remove the mapping for the value key if this map contains the mapping for the key.
 
 Example:
 
@@ -33,7 +33,19 @@ class MyHashMap:
         """
         Initialize your data structure here.
         """
-        self.bucket = [[] for i in range(10000)]
+        self.bucket = [[]]*10000
+
+    def insertIndex(self, items, key):
+        l, r = 0, len(items)-1
+        while l<=r:
+            m = l+(r-l)//2
+            if key==items[m][0]:
+                return m
+            if key<items[m][0]:
+                r = m-1
+            else:
+                l = m+1
+        return l
 
     def put(self, key, value):
         """
@@ -42,12 +54,13 @@ class MyHashMap:
         :type value: int
         :rtype: void
         """
-        index = key//100
+        index = key%10000
         idx = self.insertIndex(self.bucket[index], key)
         if idx<len(self.bucket[index]) and self.bucket[index][idx][0]==key:
             self.bucket[index][idx][1] = value
             return
         self.bucket[index].insert(idx, [key,value])
+
 
     def get(self, key):
         """
@@ -55,12 +68,11 @@ class MyHashMap:
         :type key: int
         :rtype: int
         """
-        index = key//100
+        index = key%10000
         idx = self.insertIndex(self.bucket[index], key)
         if idx<len(self.bucket[index]) and self.bucket[index][idx][0]==key:
             return self.bucket[index][idx][1]
         return -1
-
 
     def remove(self, key):
         """
@@ -68,23 +80,10 @@ class MyHashMap:
         :type key: int
         :rtype: void
         """
-        index = key//100
+        index = key%10000
         idx = self.insertIndex(self.bucket[index], key)
         if idx<len(self.bucket[index]) and self.bucket[index][idx][0]==key:
             self.bucket[index].pop(idx)
-
-
-    def insertIndex(self, nums, target):
-        s, e = 0, len(nums)-1
-        while s<=e:
-            m = s+(e-s)//2
-            if nums[m][0]==target:
-                return m
-            if nums[m][0]<target:
-                s = m+1
-            else:
-                e = m-1
-        return s
 
 # Your MyHashMap object will be instantiated and called as such:
 # obj = MyHashMap()
