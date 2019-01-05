@@ -11,7 +11,7 @@ By calling next repeatedly until hasNext returns false, the order of elements re
 Example 2:
 Given the list [1,[4,[6]]],
 
-By calling next repeatedly until hasNext returns false, the order of elements returned by next should be: [1,4,6]. 
+By calling next repeatedly until hasNext returns false, the order of elements returned by next should be: [1,4,6].
 """
 # """
 # This is the interface that allows for creating nested lists.
@@ -45,32 +45,32 @@ class NestedIterator(object):
         Initialize your data structure here.
         :type nestedList: List[NestedInteger]
         """
-        def flattern(nested):
-            ret = []
-            if nested.isInteger():
-                ret.append(nested.getInteger())
-                return ret
-            for each in nested.getList():
-                ret.extend(flattern(each))
-            return ret
+        self.buf = collections.deque()
+        self.list = nestedList
+        self.idx = 0
 
-        self.nums = []
-        self.index = 0
-        for each in nestedList:
-            self.nums.extend(flattern(each))
+    def saveInBuf(self, nestedInt):
+        if nestedInt.isInteger():
+            self.buf.append(nestedInt.getInteger())
+            return
+        for each in nestedInt.getList():
+            self.saveInBuf(each)
 
     def next(self):
         """
         :rtype: int
         """
-        self.index += 1
-        return self.nums[self.index-1]
+        return self.buf.popleft()
 
     def hasNext(self):
         """
         :rtype: bool
         """
-        return self.index<len(self.nums)
+        while self.idx<len(self.list) and len(self.buf)==0:
+            nestedInt = self.list[self.idx]
+            self.saveInBuf(nestedInt)
+            self.idx += 1
+        return len(self.buf)>0
 
 # Your NestedIterator object will be instantiated and called as such:
 # i, v = NestedIterator(nestedList), []
