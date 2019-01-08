@@ -34,35 +34,48 @@ Explanation: The given directed graph will be like this:
 
 Note:
 1. The size of the input 2D-array will be between 3 and 1000.
-2. Every integer represented in the 2D-array will be between 1 and N, where N is the size of the input array.
+2. Every integer represented in the 2D-array will be between 1 and N,
+    where N is the size of the input array.
 """
 class Solution:
+    """
+    case 1: one node has two parent
+        1.1 delete the second edge and union&find
+        1.2 if ok return it, otherwise return the other edge
+    case 2: there is a loop
+    """
     def findRedundantDirectedConnection(self, edges):
         """
         :type edges: List[List[int]]
         :rtype: List[int]
         """
+        def findRoot(roots, node):
+            while roots[node]!=node:
+                node = roots[node]
+            return node
+
         N = len(edges)
-        parent = [i for i in range(N+1)]
+        parent = dict()
         can = []
-        for edge in edges:
-            if parent[edge[1]]==edge[1]:
-                parent[edge[1]] = edge[0]
-            else:
-                can = [[parent[edge[1]],edge[1]],edge]
-                break
-        #union&find
-        parent = [i for i in range(N+1)]
-        for edge in edges:
-            if len(can)!=0 and edge==can[1]:
+        for u,v in edges:
+            if v in parent:
+                can = [[u,v],[parent[v],v]]
+            parent[v] = u
+        #print(can)
+        roots = [i for i in range(N+1)]
+        total = N
+        for u,v in edges:
+            if len(can) and [u,v]==can[0]:
                 continue
-            r0 = parent[edge[0]]
-            while parent[r0]!=r0:
-                r0 = parent[r0]
-            if r0!= edge[1] and parent[edge[1]]==edge[1]:
-                parent[edge[1]] = edge[0]
-            else:
+            ru = findRoot(roots, u)
+            rv = findRoot(roots, v)
+            #print(ru,rv,u,v)
+            if ru==rv:
                 if len(can)==0:
-                    return edge
-                return can[0]
+                    return [u,v]
+                return can[1]
+            roots[rv] = ru
+            total -= 1
+        if total==1:
+            return can[0]
         return can[1]
