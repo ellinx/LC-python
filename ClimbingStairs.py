@@ -30,12 +30,6 @@ class Solution:
         :type n: int
         :rtype: int
         """
-        class Solution:
-    def climbStairs(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
         a, b = 1, 2
         if n==1:
             return a
