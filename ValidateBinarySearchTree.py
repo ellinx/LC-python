@@ -45,3 +45,19 @@ class Solution:
                 pre = root.val
                 root = root.right
         return True
+
+
+class Solution2:
+    def isValidBST(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        def dfs(root, lbound, rbound):
+            if root is None:
+                return True
+            if root.val<=lbound or root.val>=rbound:
+                return False
+            return dfs(root.left, lbound, root.val) and dfs(root.right, root.val, rbound)
+
+        return dfs(root, float('-inf'), float('inf'))
