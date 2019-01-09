@@ -32,3 +32,31 @@ class Solution:
             step += 1
             start, end = end+1, maxend
         return step
+
+
+class Solution2:
+    def jump(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        if n==1:
+            return 0
+        visited = [False]*n
+        pq = [[0,0]]
+        visited[0] = True
+        while len(pq):
+            # negative idx
+            step, idx = heapq.heappop(pq)
+            for each in range(1,nums[-idx]+1):
+                nxt = -idx+each
+                if nxt>=n:
+                    break
+                if visited[nxt]:
+                    continue
+                if nxt==n-1:
+                    return step+1
+                visited[nxt] = True
+                heapq.heappush(pq, [step+1, -nxt])
+        return -1
