@@ -6,13 +6,11 @@ Each element in the array represents your maximum jump length at that position.
 Determine if you are able to reach the last index.
 
 Example 1:
-
 Input: [2,3,1,1,4]
 Output: true
 Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
 
 Example 2:
-
 Input: [3,2,1,0,4]
 Output: false
 Explanation: You will always arrive at index 3 no matter what. Its maximum
@@ -26,11 +24,11 @@ class Solution:
         :type nums: List[int]
         :rtype: bool
         """
-        index, lastIndex = 0, 0
-        while index<=lastIndex:
-            if index+nums[index]>lastIndex:
-                lastIndex = index+nums[index]
-            if lastIndex>=len(nums)-1:
+        maxReach = 0
+        idx = 0
+        while idx<=maxReach:
+            maxReach = max(maxReach, idx+nums[idx])
+            idx += 1
+            if maxReach>=len(nums)-1:
                 return True
-            index += 1
         return False
