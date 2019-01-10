@@ -37,3 +37,30 @@ class Solution:
             return ret
         dfs(nums, [], [False]*len(nums), ret)
         return ret
+
+
+class Solution2:
+    def permuteUnique(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        def dfs(n, arr, cur, ret):
+            if len(cur)==n:
+                ret.append(cur)
+                return
+            for i in range(len(arr)):
+                if arr[i][1]:
+                    arr[i][1] -= 1
+                    dfs(n, arr, cur+[arr[i][0]],ret)
+                    arr[i][1] += 1
+
+        n = len(nums)
+        counter = collections.Counter(nums)
+        arr = list(map(list,counter.items()))
+        ret = []
+        for i in range(len(arr)):
+            arr[i][1] -= 1
+            dfs(n, arr, [arr[i][0]],ret)
+            arr[i][1] += 1
+        return ret
