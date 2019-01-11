@@ -35,22 +35,19 @@ class Solution:
         :type root: TreeNode
         :rtype: void Do not return anything, modify root in-place instead.
         """
-        def helper(root):
+        def flatTree(root):
             if root is None:
-                return None
-            l = helper(root.left)
-            r = helper(root.right)
-            if l is not None and r is not None:
-                root.left = None
-                root.right = l[0]
-                l[1].right = r[0]
-                return [root, r[1]]
-            if l is not None:
-                root.left = None
-                root.right = l[0]
-                return [root, l[1]]
-            if r is not None:
-                return [root, r[1]]
-            return [root,root]
+                return [None, None]
+            lhead, ltail = flatTree(root.left)
+            rhead, rtail = flatTree(root.right)
+            root.left = None
+            ret = [root, root]
+            if lhead is not None:
+                ret[1].right = lhead
+                ret[1] = ltail
+            if rhead is not None:
+                ret[1].right = rhead
+                ret[1] = rtail
+            return ret
 
-        helper(root)
+        flatTree(root)
