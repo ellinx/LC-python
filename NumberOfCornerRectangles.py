@@ -4,8 +4,6 @@ Given a grid where each entry is only 0 or 1, find the number of corner rectangl
 A corner rectangle is 4 distinct 1s on the grid that form an axis-aligned rectangle.
 Note that only the corners need to have the value 1. Also, all four 1s used must be distinct.
 
-
-
 Example 1:
 
 Input: grid =
@@ -47,13 +45,14 @@ class Solution:
         :type grid: List[List[int]]
         :rtype: int
         """
-        counter = collections.defaultdict(int)
+        mm = collections.defaultdict(int)
+        m, n = len(grid), len(grid[0])
         ret = 0
-        for i in range(len(grid)):
-            for j in range(len(grid[0])-1):
+        for i in range(m):
+            for j in range(n):
                 if grid[i][j]==1:
-                    for k in range(j+1,len(grid[0])):
+                    for k in range(j+1,n):
                         if grid[i][k]==1:
-                            ret += counter[(j,k)]
-                            counter[(j,k)] += 1
+                            ret += mm[(j,k)]
+                            mm[(j,k)] += 1
         return ret
