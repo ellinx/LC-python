@@ -34,17 +34,22 @@ class Solution:
         :type c: int
         :rtype: float
         """
-        # back from final state to initial state
-        dirs = [[-2,1],[-1,2],[1,2],[2,1],[2,-1],[1,-2],[-1,-2],[-2,-1]]
-        cur = [[1]*N for _ in range(N)]
+        dirs = [[-1,-2],[-2,-1],[-2,1],[-1,2],[1,2],[2,1],[2,-1],[1,-2]]
+        cur = [[0]*N for _ in range(N)]
+        cur[r][c] = 1
         for _ in range(K):
-            pre = [[0]*N for _ in range(N)]
+            nxt = [[0]*N for _ in range(N)]
             for i in range(N):
                 for j in range(N):
+                    if cur[i][j]==0:
+                        continue
                     for each in dirs:
                         ni = i+each[0]
                         nj = j+each[1]
                         if ni>=0 and ni<N and nj>=0 and nj<N:
-                            pre[i][j] += cur[ni][nj]
-            cur = pre
-        return cur[r][c]/(8**K)
+                            nxt[ni][nj] += cur[i][j]/8
+            cur = nxt
+        ret = 0
+        for i in range(N):
+            ret += sum(cur[i])
+        return ret
