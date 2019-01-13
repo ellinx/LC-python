@@ -44,17 +44,20 @@ class Solution:
         """
         pq = []
         for i in range(len(wall)):
-            heapq.heappush(pq, [wall[i][0], i, 1])
+            if len(wall[i])>1:
+                heapq.heappush(pq, [wall[i][0], i, 0])
         maxSame = 0
-        record = [0,0]
-        while len(pq)==len(wall):
+        pre = None
+        same = 0
+        while len(pq):
             #print(pq)
-            cur = heapq.heappop(pq)
-            if cur[0]==record[0]:
-                record[1] += 1
+            dist, i, idx = heapq.heappop(pq)
+            if pre is None or pre!=dist:
+                maxSame = max(maxSame, same)
+                pre, same = dist, 1
             else:
-                maxSame = max(maxSame, record[1])
-                record = [cur[0], 1]
-            if cur[2]<len(wall[cur[1]]):
-                heapq.heappush(pq, [cur[0]+wall[cur[1]][cur[2]], cur[1], cur[2]+1])
+                same += 1
+            if idx+1<len(wall[i])-1:
+                heapq.heappush(pq, [dist+wall[i][idx+1], i, idx+1])
+        maxSame = max(maxSame, same)
         return len(wall)-maxSame
