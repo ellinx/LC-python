@@ -2,8 +2,11 @@
  Design and implement a data structure for Least Recently Used (LRU) cache.
  It should support the following operations: get and put.
 
-get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
-put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache,
+            otherwise return -1.
+put(key, value) - Set or insert the value if the key is not already present.
+                    When the cache reached its capacity, it should invalidate the least recently used item
+                    before inserting a new item.
 
 Follow up:
 Could you do both operations in O(1) time complexity?
@@ -23,10 +26,10 @@ cache.get(3);       // returns 3
 cache.get(4);       // returns 4
 
 """
-class DataNode:
-    def __init__(self, key, val):
-        self.data = [key,val]
-        self.pre = None
+class DLNode:
+    def __init__(self, k, v):
+        self.data = [k,v]
+        self.prev = None
         self.next = None
 
 class LRUCache:
@@ -35,35 +38,33 @@ class LRUCache:
         """
         :type capacity: int
         """
+        self.map = dict()
+        self.size = 0
         self.capacity = capacity
-        self.head = DataNode(0,0)
-        self.tail = DataNode(0,0)
-        self.head.next = self.tail
-        self.tail.pre = self.head
-        self.keyToNode = dict()
+        self.head = DLNode(0,0)
+        self.tail = DLNode(0,0)
+        self.head.next, self.tail.prev = self.tail, self.head
 
-    # remove data node from list
-    def removeNode(self, node):
-        node.pre.next = node.next
-        node.next.pre = node.pre
+    def deleteNode(self, node):
+        pre, nxt = node.prev, node.next
+        pre.next, nxt.prev = nxt, pre
 
-    # append data node at end of the list
-    def appendNode(self, node):
-        self.tail.pre.next = node
-        node.pre = self.tail.pre
-        node.next = self.tail
-        self.tail.pre = node
+    def addToTail(self, node):
+        pre = self.tail.prev
+        pre.next, node.next = node, self.tail
+        node.prev, self.tail.prev = pre, node
 
     def get(self, key):
         """
         :type key: int
         :rtype: int
         """
-        if key not in self.keyToNode:
-            return -1
-        self.removeNode(self.keyToNode[key])
-        self.appendNode(self.keyToNode[key])
-        return self.keyToNode[key].data[1]
+        if key in self.map:
+            node = self.map[key]
+            self.deleteNode(node)
+            self.addToTail(node)
+            return node.data[1]
+        return -1
 
     def put(self, key, value):
         """
@@ -71,19 +72,21 @@ class LRUCache:
         :type value: int
         :rtype: void
         """
-        if key not in self.keyToNode:
-            if len(self.keyToNode)==self.capacity:
-                if self.head.next!=self.tail:
-                    self.keyToNode.pop(self.head.next.data[0])
-                    self.removeNode(self.head.next)
-                else:
-                    return
-            self.keyToNode[key] = DataNode(key,value)
-            self.appendNode(self.keyToNode[key])
-        else:
-            self.keyToNode[key].data[1] = value
-            self.removeNode(self.keyToNode[key])
-            self.appendNode(self.keyToNode[key])
+        if key in self.map:
+            node = self.map[key]
+            self.deleteNode(node)
+            self.addToTail(node)
+            node.data[1] = value
+            return
+        node = DLNode(key,value)
+        self.map[key] = node
+        self.addToTail(node)
+        self.size += 1
+        if self.size>self.capacity:
+            node = self.head.next
+            self.deleteNode(node)
+            self.map.pop(node.data[0])
+            self.size -= 1
 
 
 # Your LRUCache object will be instantiated and called as such:
