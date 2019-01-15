@@ -55,19 +55,19 @@ class Solution:
         :type num: int
         :rtype: str
         """
-        pair = ["IV", "XL", "CD", "M"]
-        ret  = ''
-        numStr = str(num)
-        for i in range(len(numStr)):
-            c = numStr[-1-i]
-            if c=="0":
-                continue
-            elif int(c)<4:
-                ret = pair[i][0]*int(c)+ret
-            elif c=="4":
-                ret = pair[i][0]+pair[i][1]+ret
-            elif int(c)<9:
-                ret = pair[i][1] + pair[i][0]*(int(c)-5)+ret
+        mm = [["I","V"],["X","L"], ["C","D"], ["M"]]
+        ret = ""
+        idx = 0
+        while num!=0:
+            digit = num%10
+            if digit<=3:
+                ret = mm[idx][0]*digit+ret
+            elif digit<=5:
+                ret = mm[idx][0]*(5-digit)+mm[idx][1]+ret
+            elif digit<=8:
+                ret = mm[idx][1]+mm[idx][0]*(digit-5)+ret
             else:
-                ret = pair[i][0] + pair[i+1][0]+ret
+                ret = mm[idx][0]*(10-digit)+mm[idx+1][0]+ret
+            num //= 10
+            idx += 1
         return ret
