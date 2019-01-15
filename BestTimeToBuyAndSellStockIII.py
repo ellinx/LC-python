@@ -23,23 +23,27 @@ Input: [7,6,4,3,1]
 Output: 0
 Explanation: In this case, no transaction is done, i.e. max profit = 0.
 """
-class BestTimeToBuyAndSellStockIII:
+class Solution:
     def maxProfit(self, prices):
         """
         :type prices: List[int]
         :rtype: int
         """
-        ret = 0
-        if not len(prices):
-            return ret
-        # dp[i][j][k] is max profit on day i with max j transactions allowed and hold k share of stock
-        dp = [[[0,0] for i in range(3)] for _ in prices]
-        dp[0][1][1] = -prices[0]
-        dp[0][2][1] = -prices[0]
-        for i in range(1, len(prices)):
-            dp[i][0][0] = max(dp[i-1][0][0], dp[i-1][1][1]+prices[i])
-            dp[i][1][0] = max(dp[i-1][1][0], dp[i-1][2][1]+prices[i])
-            dp[i][1][1] = max(dp[i-1][1][0]-prices[i], dp[i-1][1][1])
-            dp[i][2][0] = dp[i-1][2][0]
-            dp[i][2][1] = max(dp[i-1][2][0]-prices[i],dp[i-1][2][1])
-        return max(max(dp[-1][0]),max(dp[-1][1]),max(dp[-1][2]))
+        n = len(prices)
+        if n==0:
+            return 0
+        hold = [float('-inf'),-prices[0],-prices[0]]
+        notHold = [0]*3
+        for i in range(1,n):
+            new_hold, new_notHold = [0]*3,[0]*3
+
+            new_notHold[2] = notHold[2]
+            new_notHold[1] = max(notHold[1], prices[i]+hold[2])
+            new_notHold[0] = max(notHold[0], prices[i]+hold[1])
+
+            new_hold[2] = max(hold[2], notHold[2]-prices[i])
+            new_hold[1] = max(hold[1], notHold[1]-prices[i])
+
+            hold, notHold = new_hold, new_notHold
+            #print(hold, notHold)
+        return max(max(hold),max(notHold))
