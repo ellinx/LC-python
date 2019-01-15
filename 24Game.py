@@ -26,22 +26,44 @@ class Solution:
         :type nums: List[int]
         :rtype: bool
         """
-        n = len(nums)
-        if n==1:
-            return abs(nums[0]-24)<0.001
-        for i in range(n-1):
-            for j in range(i+1,n):
-                nxt = nums[:i]+nums[i+1:j]+nums[j+1:]
-                if self.judgePoint24(nxt+[nums[i]+nums[j]]):
-                    return True
-                if self.judgePoint24(nxt+[nums[i]*nums[j]]):
-                    return True
-                if self.judgePoint24(nxt+[nums[i]-nums[j]]):
-                    return True
-                if self.judgePoint24(nxt+[nums[j]-nums[i]]):
-                    return True
-                if nums[j]!=0 and self.judgePoint24(nxt+[nums[i]/nums[j]]):
-                    return True
-                if nums[i]!=0 and self.judgePoint24(nxt+[nums[j]/nums[i]]):
-                    return True
-        return False
+        def dfs(nums, mm):
+            n = len(nums)
+            if n==1:
+                return abs(nums[0]-24)<0.1**10
+            nums.sort()
+            key = tuple(nums)
+            if key in mm:
+                return mm[key]
+            ipre = None
+            for i in range(n-1):
+                if nums[i]==ipre:
+                    continue
+                jpre = None
+                for j in range(i+1,n):
+                    if nums[j]==jpre:
+                        continue
+                    other = nums[:i]+nums[i+1:j]+nums[j+1:]
+                    if dfs(other+[nums[i]+nums[j]], mm):
+                        mm[key] = True
+                        return True
+                    if dfs(other+[nums[i]-nums[j]], mm):
+                        mm[key] = True
+                        return True
+                    if dfs(other+[nums[j]-nums[i]], mm):
+                        mm[key] = True
+                        return True
+                    if dfs(other+[nums[i]*nums[j]], mm):
+                        mm[key] = True
+                        return True
+                    if nums[j]!=0 and dfs(other+[nums[i]/nums[j]], mm):
+                        mm[key] = True
+                        return True
+                    if nums[i]!=0 and dfs(other+[nums[j]/nums[i]], mm):
+                        mm[key] = True
+                        return True
+                    jpre = nums[j]
+                ipre = nums[i]
+            mm[key] = False
+            return False
+
+        return dfs(nums, dict())
