@@ -31,22 +31,24 @@ class Solution:
         :type stones: List[List[int]]
         :rtype: int
         """
+        def findRoot(roots, node):
+            if node not in roots:
+                roots[node] = node
+                return node
+            while roots[node]!=node:
+                node = roots[node]
+            return node
+
+        connected = 0
         roots = dict()
-
-        def find(x):
-            while roots[x]!=x:
-                x = roots[x]
-            return x
-
-        def union(x, y):
-            rx = find(x)
-            ry = find(y)
-            if rx!=ry:
-                roots[rx] = ry
-
-        for x,y in stones:
-            roots.setdefault((x,-1), (x,-1))
-            roots.setdefault((-1,y), (-1,y))
-            union((x,-1),(-1,y))
-        #print(roots)
-        return len(stones)-len({find(each) for each in roots})
+        for i,j in stones:
+            if (i,-1) not in roots:
+                connected += 1
+            rooti = findRoot(roots, (i,-1))
+            if (-1,j) not in roots:
+                connected += 1
+            rootj = findRoot(roots, (-1,j))
+            if rooti!=rootj:
+                connected -= 1
+                roots[rooti] = rootj
+        return len(stones)-connected
