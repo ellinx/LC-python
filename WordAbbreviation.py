@@ -17,71 +17,35 @@ Note:
 3. The words consist of lowercase English letters only.
 4. The return answers should be in the same order as the original array.
 """
-class TrieNode:
-    def __init__(self):
-        self.isWord = False
-        self.total = 0
-        self.children = dict()
-
 class Solution:
     def wordsAbbreviation(self, dict):
         """
         :type dict: List[str]
         :rtype: List[str]
         """
-        def addWord(root, word):
-            for c in word:
-                root.total += 1
-                if c not in root.children:
-                    root.children[c] = TrieNode()
-                root = root.children[c]
-            root.isWord = True
+        def getAbbr(word, prefix):
+            if len(word)-prefix-1<2:
+                return word
+            return word[:prefix]+str(len(word)-prefix-1)+word[-1]
 
-        # count how many words has same abbr
-        counter = collections.defaultdict(int)
-        for word in dict:
-            if len(word)<=3:
-                continue
-            counter[word[0]+str(len(word)-2)+word[-1]] += 1
-        #print(counter)
-
-        # for each abbr which comes from more than one word, give it a trie root node
-        root = {}
-        for word in dict:
-            if len(word)<=3:
-                continue
-            abbr = word[0]+str(len(word)-2)+word[-1]
-            if counter[abbr]>1:
-                if abbr not in root:
-                    root[abbr] = TrieNode()
-                addWord(root[abbr], word)
-        #print(root)
-
-        # produce result
+        n = len(dict)
         ret = []
+        prefix = [1]*n
         for word in dict:
             if len(word)<=3:
                 ret.append(word)
                 continue
-            key = word[0]+str(len(word)-2)+word[-1]
-            if key not in root:
-                ret.append(key)
-                continue
-            cur, abbr = root[key], ""
-            #print(word)
-            for i,c in enumerate(word):
-                #print(c, cur.children[c].children.keys(), cur.children[c].total)
-                if cur.children[c].total==1:
-                    if cur.children[c].isWord:
-                        ret.append(word)
-                    else:
-                        abbr += c+str(len(word)-i-2)+word[-1]
-                        #print(c, word, abbr)
-                        if len(abbr)>=len(word):
-                            ret.append(word)
-                        else:
-                            ret.append(abbr)
+            ret.append(getAbbr(word, 1))
+        for i in range(n):
+            while True:
+                dup = []
+                for j in range(i+1,n):
+                    if ret[i]==ret[j]:
+                        dup.append(j)
+                if len(dup)==0:
                     break
-                abbr += c
-                cur = cur.children[c]
+                dup.append(i)
+                for idx in dup:
+                    prefix[idx] += 1
+                    ret[idx] = getAbbr(dict[idx], prefix[idx])
         return ret
