@@ -26,41 +26,51 @@ class Solution:
         def isValid(s):
             left = 0
             for c in s:
-                if c=="(":
+                if c=='(':
                     left += 1
                 elif c==")":
                     if left==0:
                         return False
-                    left -= 1
+                    else:
+                        left -= 1
             return left==0
 
-        def dfs(s, start, l, r, ret):
-            if l==0 and r==0:
+        def dfs(s, start, invalidL, invalidR, ret):
+            if invalidL==0 and invalidR==0:
                 if isValid(s):
                     ret.append(s)
                 return
-            if r:
-                for i in range(start,len(s)):
-                    if s[i]==")":
-                        if i==0 or s[i-1]!=")":
-                            dfs(s[:i]+s[i+1:], i, l, r-1, ret)
-            if l:
-                for i in range(start,len(s)):
-                    if s[i]=="(":
-                        if i==0 or s[i-1]!="(":
-                            dfs(s[:i]+s[i+1:], i, l-1, r, ret)
+            if invalidL:
+                continuous = False
+                for i in range(start, len(s)):
+                    if s[i]=='(':
+                        if not continuous:
+                            dfs(s[:i]+s[i+1:], i, invalidL-1, invalidR, ret)
+                        continuous = True
+                        continue
+                    continuous = False
+            if invalidR:
+                continuous = False
+                for i in range(start, len(s)):
+                    if s[i]==')':
+                        if not continuous:
+                            dfs(s[:i]+s[i+1:], i, invalidL, invalidR-1, ret)
+                        continuous = True
+                        continue
+                    continuous = False
 
-        l, r = 0, 0
+        invalidL, invalidR = 0, 0
         for c in s:
-            if c=="(":
-                l += 1
+            if c=='(':
+                invalidL += 1
             elif c==")":
-                if l==0:
-                    r += 1
+                if invalidL==0:
+                    invalidR += 1
                 else:
-                    l -= 1
+                    invalidL -= 1
+        #print(invalidL,invalidR)
         ret = []
-        dfs(s, 0, l, r, ret)
+        dfs(s, 0, invalidL, invalidR, ret)
         return ret
 
 class Solution2:
