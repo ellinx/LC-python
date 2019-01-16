@@ -1,5 +1,6 @@
 """
-Given a non-negative integer num represented as a string, remove k digits from the number so that the new number is the smallest possible.
+Given a non-negative integer num represented as a string,
+remove k digits from the number so that the new number is the smallest possible.
 
 Note:
 The length of num is less than 10002 and will be ≥ k.
@@ -21,28 +22,55 @@ Output: "0"
 Explanation: Remove all the digits from the number and it is left with nothing which is 0.
 """
 class Solution:
+    """
+    DFS, each time remove one digit
+    """
     def removeKdigits(self, num, k):
         """
         :type num: str
         :type k: int
         :rtype: str
         """
-        if k==0:
-            return num
-        if k>=len(num):
-            return '0'
+        def removeDigit(numStr, k):
+            if k>=len(numStr):
+                return "0"
+            if k==0:
+                return numStr
+            idx = 0
+            while idx<len(numStr)-1:
+                if numStr[idx]>numStr[idx+1]:
+                    break
+                idx += 1
+            nxt = numStr[:idx]+numStr[idx+1:]
+            idx = 0
+            while idx<len(nxt) and nxt[idx]=='0':
+                idx += 1
+            nxt = nxt[idx:]
+            return removeDigit(nxt, k-1)
+
+        return removeDigit(num, k)
+
+
+class Solution2:
+    def removeKdigits(self, num, k):
+        """
+        :type num: str
+        :type k: int
+        :rtype: str
+        """
         stk = collections.deque()
-        for i,c in enumerate(num):
-            while len(stk)>0 and int(stk[-1])>int(c):
-                if stk[-1]!='0':
-                    stk.pop()
-                    k -= 1
-                    if k==0:
-                        return str(int("".join(stk)+num[i:]))
-            if c!='0':
-                stk.append(c)
-        #print(stk, k)
-        ret = "".join(stk)[:-k]
-        if ret=="":
-            return '0'
-        return ret
+        for c in num:
+            while len(stk) and stk[-1]>c and k:
+                stk.pop()
+                k -= 1
+            stk.append(c)
+        ret = "".join(stk)
+        idx = 0
+        while idx<len(ret) and ret[idx]=='0':
+            idx += 1
+        ret = ret[idx:]
+        if k>=len(ret):
+            return "0"
+        if k==0:
+            return ret
+        return ret[:-k]
