@@ -32,24 +32,31 @@ The root-to-leaf path 4->9->1 represents the number 491.
 The root-to-leaf path 4->0 represents the number 40.
 Therefore, sum = 495 + 491 + 40 = 1026.
 """
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
 class Solution:
     def sumNumbers(self, root):
         """
         :type root: TreeNode
         :rtype: int
         """
-        def helper(root, cur, paths):
-            if root.left is None and root.right is None:
-                paths.append(cur)
+        def dfs(cur, num):
+            nonlocal ret
+            if cur.left is None and cur.right is None:
+                ret += num*10+cur.val
                 return
-            if root.left is not None:
-                helper(root.left, cur+str(root.left.val), paths)
-            if root.right is not None:
-                helper(root.right, cur+str(root.right.val), paths)
+            if cur.left is not None:
+                dfs(cur.left, num*10+cur.val)
+            if cur.right is not None:
+                dfs(cur.right, num*10+cur.val)
 
-
+        ret = 0
         if root is None:
-            return 0
-        paths = []
-        helper(root, str(root.val), paths)
-        return sum(map(int, paths))
+            return ret
+        dfs(root, 0)
+        return ret
