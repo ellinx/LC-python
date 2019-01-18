@@ -19,24 +19,30 @@ Explanation: All root-to-leaf paths are: 1->2->5, 1->3
 
 
 """
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
 class Solution:
     def binaryTreePaths(self, root):
         """
         :type root: TreeNode
         :rtype: List[str]
         """
+        def dfs(node, cur, ret):
+            if node.left is None and node.right is None:
+                ret.append(cur)
+                return
+            if node.left is not None:
+                dfs(node.left, cur+"->"+str(node.left.val), ret)
+            if node.right is not None:
+                dfs(node.right, cur+"->"+str(node.right.val), ret)
+
         ret = []
-        if not root:
-            return ret
-        left = self.binaryTreePaths(root.left)
-        right = self.binaryTreePaths(root.right)
-        if len(left)==0 and len(right)==0:
-            ret.append(str(root.val))
-            return ret
-        if len(left):
-            for each in left:
-                ret.append(str(root.val)+"->"+each)
-        if len(right):
-            for each in right:
-                ret.append(str(root.val)+"->"+each)
+        if root is None:
+            return []
+        dfs(root, str(root.val), ret)
         return ret
