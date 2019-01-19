@@ -15,10 +15,8 @@ Person's IDs may not be linear, e.g. we could have the persons 0, 1, 2
 or we could also have the persons 0, 2, 6.
 
 Example 1:
-
 Input:
 [[0,1,10], [2,0,5]]
-
 Output:
 2
 
@@ -30,10 +28,8 @@ Two transactions are needed.
 One way to settle the debt is person #1 pays person #0 and #2 $5 each.
 
 Example 2:
-
 Input:
 [[0,1,10], [1,0,1], [1,2,5], [2,0,5]]
-
 Output:
 1
 
@@ -51,19 +47,16 @@ class Solution:
         :type transactions: List[List[int]]
         :rtype: int
         """
-        def dfs(nums, start):
-            while start<len(nums) and nums[start]==0:
-                start += 1
-            if start==len(nums):
-                return 0
+        def dfs(nums):
+            if len(nums)==2:
+                return 1
             ret = float('inf')
-            visited = set()
-            for i in range(start+1, len(nums)):
-                if nums[start]*nums[i]<0 and nums[i] not in visited:
-                    visited.add(nums[i])
-                    nums[i] += nums[start]
-                    ret = min(ret, dfs(nums, start+1)+1)
-                    nums[i] -= nums[start]
+            for i in range(1,len(nums)):
+                if nums[0]*nums[i]<0:
+                    nxt = nums[1:i]+nums[i+1:]
+                    if nums[0]+nums[i]!=0:
+                        nxt.append(nums[0]+nums[i])
+                    ret = min(ret, 1+dfs(nxt))
             return ret
 
         balance = dict()
@@ -72,4 +65,6 @@ class Solution:
             balance[y] = balance.get(y,0)+z
         nums = [balance[k] for k in balance if balance[k]!=0]
         #print(nums)
-        return dfs(nums, 0)
+        if len(nums)==0:
+            return 0
+        return dfs(nums)
