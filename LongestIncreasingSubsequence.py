@@ -21,27 +21,11 @@ class Solution:
         :type nums: List[int]
         :rtype: int
         """
-        def insertIndex(seq, num):
-            start, end = 0, len(seq)-1
-            while start<=end:
-                mid = start+(end-start)//2
-                if seq[mid]==num:
-                    return mid
-                if seq[mid]<num:
-                    start = mid+1
-                else:
-                    end = mid-1
-            return start
-
-        if len(nums)==0:
-            return 0
-        seq = [nums[0]]
-        for i in range(1,len(nums)):
-            index = insertIndex(seq, nums[i])
-            if index==len(seq):
-                seq.append(nums[i])
-                continue
-            if seq[index]==nums[i]:
-                continue
-            seq[index] = nums[i]
+        seq = []
+        for num in nums:
+            idx = bisect.bisect_left(seq, num)
+            if idx==len(seq):
+                seq.append(num)
+            else:
+                seq[idx] = num
         return len(seq)
