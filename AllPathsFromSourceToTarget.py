@@ -26,17 +26,19 @@ class Solution:
         :type graph: List[List[int]]
         :rtype: List[List[int]]
         """
-        def dfs(g, path, ret, target):
-            if path[-1]==target:
+        def dfs(graph, cur, path, visited, ret):
+            #print(cur, path, visited)
+            if cur==len(graph)-1:
                 ret.append(path)
                 return
-            for each in g[path[-1]]:
-                dfs(g, path+[each], ret, target)
+            for nxt in graph[cur]:
+                if not visited[nxt]:
+                    visited[nxt] = True
+                    dfs(graph, nxt, path+[nxt], visited, ret)
+                    visited[nxt] = False
 
         ret = []
-        g = collections.defaultdict(set)
-        for i in range(len(graph)):
-            for each in graph[i]:
-                g[i].add(each)
-        dfs(g, [0], ret, len(graph)-1)
+        visited = [False]*len(graph)
+        visited[0] = True
+        dfs(graph, 0, [0], visited, ret)
         return ret
