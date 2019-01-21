@@ -25,15 +25,16 @@ class Solution:
         :type k: int
         :rtype: int
         """
+        n = len(nums)
+        presum = dict()
         ret = 0
-        sumToI = dict()
         total = 0
-        for i in range(len(nums)):
-            total += nums[i]
+        for i,num in enumerate(nums):
+            total += num
             if total==k:
-                ret = max(ret,i+1)
-            if total-k in sumToI:
-                ret = max(ret, i-sumToI[total-k])
-            if total not in sumToI:
-                sumToI[total] = i
-        return ret
+                ret = max(ret, i+1)
+            elif total-k in presum:
+                ret = max(ret, i-presum[total-k])
+            if total not in presum:
+                presum[total] = i
+        return ret  
