@@ -1,9 +1,11 @@
 """
 There are a total of n courses you have to take, labeled from 0 to n-1.
 
-Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed as a pair: [0,1]
+Some courses may have prerequisites, for example to take course 0 you have to first take course 1,
+which is expressed as a pair: [0,1]
 
-Given the total number of courses and a list of prerequisite pairs, is it possible for you to finish all courses?
+Given the total number of courses and a list of prerequisite pairs,
+is it possible for you to finish all courses?
 
 Example 1:
 Input: 2, [[1,0]]
@@ -29,31 +31,28 @@ If a cycle exists, no topological ordering exists and therefore it will be impos
 Topological Sort via DFS - A great video tutorial (21 minutes) on Coursera explaining the basic concepts of Topological Sort.
 Topological sort could also be done via BFS.
 """
-class CourseSchedule:
+class Solution:
     def canFinish(self, numCourses, prerequisites):
         """
         :type numCourses: int
         :type prerequisites: List[List[int]]
         :rtype: bool
         """
-        g = collections.defaultdict(set)
         indegree = [0]*numCourses
-        for each in prerequisites:
-            g[each[1]].add(each[0])
-            indegree[each[0]] += 1
-        #print(g)
-        #print(indegree)
+        g = collections.defaultdict(set)
+        for v,u in prerequisites:
+            g[u].add(v)
+            indegree[v] += 1
         q = collections.deque()
-        for i in range(len(indegree)):
+        for i in range(numCourses):
             if indegree[i]==0:
                 q.append(i)
-        order = []
-        while len(q):
+        ret = []
+        while len(q)>0:
             cur = q.popleft()
-            order.append(cur)
-            for each in g[cur]:
-                indegree[each] -= 1
-                if indegree[each]==0:
-                    q.append(each)
-        #print(order)
-        return len(order)==numCourses
+            ret.append(cur)
+            for nxt in g[cur]:
+                indegree[nxt] -= 1
+                if indegree[nxt]==0:
+                    q.append(nxt)
+        return len(ret)==numCourses
