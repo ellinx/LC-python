@@ -34,7 +34,9 @@ After removing the comments from the source code, return the source code in the 
 Example 1:
 
 Input:
-source = ["/*Test program */", "int main()", "{ ", "  // variable declaration ", "int a, b, c;", "/* This is a test", "   multiline  ", "   comment for ", "   testing */", "a = b + c;", "}"]
+source = [
+"/*Test program */", "int main()", "{ ", "  // variable declaration ",
+"int a, b, c;", "/* This is a test", "   multiline  ", "   comment for ", "   testing */", "a = b + c;", "}"]
 
 The line by line code is visualized as below:
 /*Test program */
@@ -83,30 +85,29 @@ class Solution:
         :type source: List[str]
         :rtype: List[str]
         """
+        flag = 0
         ret = []
-        cur = ""
-        lb = False # left block comment
         for line in source:
+            if flag==0:
+                temp = ""
             i = 0
             while i<len(line):
-                if not lb:
-                    if len(cur) and cur[-1]=="/" and line[i]=="/":
-                        if len(cur)-1:
-                            ret.append(cur[:-1])
-                        cur = ""
+                #print(line, i, temp, flag)
+                if flag==1:
+                    if line[i]=="*" and i+1<len(line) and line[i+1]=="/":
+                        flag = 0
+                        i += 1
+                    i += 1
+                    continue
+                if line[i]=="/" and i+1<len(line):
+                    if line[i+1]=="/":
                         break
-                    if len(cur) and cur[-1]=="/" and line[i]=="*":
-                        cur = cur[:-1]
-                        lb = True
+                    elif line[i+1]=="*":
+                        flag = 1
                         i += 2
                         continue
-                    cur += line[i]
-                else:
-                    if i and line[i-1]=="*" and line[i]=="/":
-                        lb = False
+                temp += line[i]
                 i += 1
-            if not lb:
-                if len(cur):
-                    ret.append(cur)
-                cur = ""
+            if len(temp)>0 and flag==0:
+                ret.append(temp)
         return ret
