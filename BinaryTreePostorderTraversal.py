@@ -54,3 +54,22 @@ class Solution2:
                     stk.append([root, 1])
                     root = root.right
         return ret
+
+
+class Solution3:
+    def postorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        ret = []
+        stk = collections.deque()
+        while root is not None or len(stk)>0:
+            if root is not None:
+                stk.append(root)
+                ret.insert(0, root.val)
+                root = root.right
+            else:
+                root = stk.pop()
+                root = root.left
+        return ret
