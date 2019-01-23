@@ -19,7 +19,9 @@ class Solution:
         :type newInterval: Interval
         :rtype: List[Interval]
         """
-        l, r = 0 ,len(intervals)-1
+        if len(intervals)==0:
+            return [newInterval]
+        l, r = 0, len(intervals)-1
         while l<=r:
             m = l+(r-l)//2
             if intervals[m].start==newInterval.start:
@@ -29,23 +31,22 @@ class Solution:
                 l = m+1
             else:
                 r = m-1
-        curInterval = Interval()
-        ret = []
         if l==0:
-            curInterval = newInterval
+            ret = []
+            cur = newInterval
         else:
-            ret.extend(intervals[:l-1])
-            if newInterval.start>intervals[l-1].end:
-                ret.append(intervals[l-1])
-                curInterval = newInterval
+            ret = list(intervals[:l-1])
+            cur = intervals[l-1]
+            if newInterval.start>cur.end:
+                ret.append(cur)
+                cur = newInterval
             else:
-                curInterval.start = intervals[l-1].start
-                curInterval.end = max(intervals[l-1].end, newInterval.end)
+                cur.end = max(cur.end, newInterval.end)
         for i in range(l,len(intervals)):
-            if intervals[i].start>curInterval.end:
-                ret.append(curInterval)
-                curInterval = intervals[i]
+            if intervals[i].start>cur.end:
+                ret.append(cur)
+                cur = intervals[i]
             else:
-                curInterval.end = max(intervals[i].end, curInterval.end)
-        ret.append(curInterval)
+                cur.end = max(cur.end, intervals[i].end)
+        ret.append(cur)
         return ret
