@@ -30,7 +30,8 @@ So function 0 totally execute 2 + 1 = 3 units of time, and function 1 totally ex
 
 Note:
 1. Input logs will be sorted by timestamp, NOT log id.
-2. Your output should be sorted by function id, which means the 0th element of your output corresponds to the exclusive time of function 0.
+2. Your output should be sorted by function id, which means the 0th element of your output corresponds
+    to the exclusive time of function 0.
 3. Two functions won't start or end at the same time.
 4. Functions could be called recursively, and will always end.
 5. 1 <= n <= 100
@@ -42,22 +43,20 @@ class Solution:
         :type logs: List[str]
         :rtype: List[int]
         """
-        ret = [0]*n
         stk = collections.deque()
-        cur = []
+        ret = [0]*n
+        fid, cur, cnt = None, None, 0
         for log in logs:
-            entry = log.split(':')
-            if len(cur)==0:
-                cur = [entry[0], entry[2]]
-                continue
-            if entry[1]=='start':
-                ret[int(cur[0])] += int(entry[2])-int(cur[1])
-                stk.append(cur[0])
-                cur = [entry[0], entry[2]]
+            data = log.split(":")
+            if data[1]=="start":
+                if fid is not None:
+                    stk.append([fid,cur,cnt+int(data[2])-cur])
+                fid, cur, cnt = int(data[0]), int(data[2]), 0
             else:
-                ret[int(cur[0])] += int(entry[2])-int(cur[1])+1
+                ret[fid] += cnt+int(data[2])-cur+1
                 if len(stk):
-                    cur = [stk.pop(), str(int(entry[2])+1)]
+                    fid, cur, cnt = stk.pop()
+                    cur = int(data[2])+1
                 else:
-                    cur = []
+                    fid, cur, cnt = None, None, 0
         return ret
