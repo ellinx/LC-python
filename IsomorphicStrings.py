@@ -7,17 +7,14 @@ All occurrences of a character must be replaced with another character while pre
 No two characters may map to the same character but a character may map to itself.
 
 Example 1:
-
 Input: s = "egg", t = "add"
 Output: true
 
 Example 2:
-
 Input: s = "foo", t = "bar"
 Output: false
 
 Example 3:
-
 Input: s = "paper", t = "title"
 Output: true
 
