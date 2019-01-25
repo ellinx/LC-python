@@ -12,6 +12,7 @@ Return: [1,2],[1,4],[1,6]
 
 The first 3 pairs are returned from the sequence:
 [1,2],[1,4],[1,6],[7,2],[7,4],[11,2],[7,6],[11,4],[11,6]
+
 Example 2:
 Given nums1 = [1,1,2], nums2 = [1,2,3],  k = 2
 
@@ -19,6 +20,7 @@ Return: [1,1],[1,1]
 
 The first 2 pairs are returned from the sequence:
 [1,1],[1,1],[1,2],[2,1],[1,2],[2,2],[1,3],[1,3],[2,3]
+
 Example 3:
 Given nums1 = [1,2], nums2 = [3],  k = 3
 
@@ -27,8 +29,7 @@ Return: [1,3],[2,3]
 All possible pairs are returned from the sequence:
 [1,3],[2,3]
 """
-
-class FindKPairsWithSmallestSums:
+class Solution:
     def kSmallestPairs(self, nums1, nums2, k):
         """
         :type nums1: List[int]
@@ -36,17 +37,15 @@ class FindKPairsWithSmallestSums:
         :type k: int
         :rtype: List[List[int]]
         """
-        if not len(nums1) or not len(nums2):
+        if len(nums1)==0 or len(nums2)==0:
             return []
-        minHeap = [(nums1[i]+nums2[0], i, 0) for i in range(len(nums1))]
-        heapq.heapify(minHeap)
+        pq = []
+        for i in range(len(nums1)):
+            heapq.heappush(pq, [nums1[i]+nums2[0], i, 0])
         ret = []
-        for i in range(k):
-            if not len(minHeap):
-                break
-            cur = heapq.heappop(minHeap)
-            ret.append((nums1[cur[1]], nums2[cur[2]]))
-            if cur[2]==len(nums2)-1:
-                continue
-            heapq.heappush(minHeap, (nums1[cur[1]]+nums2[cur[2]+1], cur[1], cur[2]+1))
+        while len(pq) and len(ret)<k:
+            total, i1, i2 = heapq.heappop(pq)
+            ret.append([nums1[i1], nums2[i2]])
+            if i2+1<len(nums2):
+                heapq.heappush(pq, [nums1[i1]+nums2[i2+1], i1, i2+1])
         return ret
