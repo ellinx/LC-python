@@ -123,3 +123,90 @@ class Solution2:
                 ret.append(val2)
                 val2 = None
         return ret
+
+
+class Solution3:
+    def closestKValues(self, root, target, k):
+        """
+        :type root: TreeNode
+        :type target: float
+        :type k: int
+        :rtype: List[int]
+        """
+        def getNextGreater(stk):
+            cur, ret = None, None
+            while cur is not None or len(stk)>0:
+                if cur is not None:
+                    stk.append(cur)
+                    cur = cur.left
+                else:
+                    if ret is not None:
+                        break
+                    cur = stk.pop()
+                    ret = cur.val
+                    cur = cur.right
+            return ret
+
+        def getNextLess(stk):
+            cur, ret = None, None
+            while cur is not None or len(stk)>0:
+                if cur is not None:
+                    stk.append(cur)
+                    cur = cur.right
+                else:
+                    if ret is not None:
+                        break
+                    cur = stk.pop()
+                    ret = cur.val
+                    cur = cur.left
+            return ret
+
+        lstk = collections.deque()
+        cur = root
+        while cur is not None or len(lstk)>0:
+            if cur is not None:
+                lstk.append(cur)
+                cur = cur.left
+            else:
+                cur = lstk.pop()
+                if cur.val>=target:
+                    lstk.append(cur)
+                    break
+                cur = cur.right
+        rstk = collections.deque()
+        cur = root
+        while cur is not None or len(rstk)>0:
+            if cur is not None:
+                rstk.append(cur)
+                cur = cur.right
+            else:
+                cur = rstk.pop()
+                if cur.val<target:
+                    rstk.append(cur)
+                    break
+                cur = cur.left
+        ret = []
+        left, right = None, None
+        while len(ret)<k:
+            if left is None:
+                left = getNextLess(rstk)
+            if right is None:
+                right = getNextGreater(lstk)
+            #print(left, right)
+            if left is None and right is None:
+                break
+            if left is None:
+                ret.append(right)
+                right = None
+                continue
+            if right is None:
+                ret.append(left)
+                left = None
+                continue
+            if target-left<=right-target:
+                ret.append(left)
+                left = None
+            else:
+                ret.append(right)
+                right = None
+        return ret
