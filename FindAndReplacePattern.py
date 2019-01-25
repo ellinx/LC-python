@@ -23,9 +23,8 @@ since a and b map to the same letter.
 
 
 Note:
-
-1 <= words.length <= 50
-1 <= pattern.length = words[i].length <= 20
+1. 1 <= words.length <= 50
+2. 1 <= pattern.length = words[i].length <= 20
 """
 class Solution:
     def findAndReplacePattern(self, words, pattern):
@@ -34,22 +33,20 @@ class Solution:
         :type pattern: str
         :rtype: List[str]
         """
-        def isValid(word, pattern):
-            if len(word)!=len(pattern):
-                return False
-            mm = dict()
-            for i in range(len(pattern)):
-                if pattern[i] in mm:
-                    if mm[pattern[i]]==word[i]:
-                        continue
-                    return False
-                if word[i] in mm.values():
-                    return False
-                mm[pattern[i]] = word[i]
-            return True
-
         ret = []
         for word in words:
-            if isValid(word, pattern):
+            mp = dict()
+            match = True
+            for i in range(len(word)):
+                if word[i] in mp:
+                    if mp[word[i]]==pattern[i]:
+                        continue
+                    match = False
+                    break
+                if pattern[i] in mp.values():
+                    match = False
+                    break
+                mp[word[i]] = pattern[i]
+            if match:
                 ret.append(word)
         return ret
