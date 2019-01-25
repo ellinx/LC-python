@@ -1,5 +1,6 @@
 """
-Given two integers representing the numerator and denominator of a fraction, return the fraction in string format.
+Given two integers representing the numerator and denominator of a fraction,
+return the fraction in string format.
 
 If the fractional part is repeating, enclose the repeating part in parentheses.
 
@@ -15,7 +16,6 @@ Example 3:
 Input: numerator = 2, denominator = 3
 Output: "0.(6)"
 
-
 """
 class Solution:
     def fractionToDecimal(self, numerator, denominator):
@@ -24,37 +24,35 @@ class Solution:
         :type denominator: int
         :rtype: str
         """
-        if numerator==0:
-            return "0"
-        sign1, sign2 = 1, 1
-        if numerator<0:
-            sign1 = -1
-        if denominator<0:
-            sign2 = -1
-        if sign1==-1 or sign2==-1:
-            if sign1==-1 and sign2==-1:
-                return self.fractionToDecimal(-numerator, -denominator)
-            return "-"+self.fractionToDecimal(sign1*numerator, sign2*denominator)
         ret = ""
+        sign = "+"
+        if numerator/denominator<0:
+            sign = "-"
+        numerator, denominator = abs(numerator), abs(denominator)
         if numerator>=denominator:
             ret += str(numerator//denominator)
             numerator %= denominator
         else:
             ret = "0"
         if numerator==0:
+            if sign=="-":
+                return sign+ret
             return ret
         ret += "."
-        mem = dict()
-        while numerator:
-            nxt = numerator*10
-            temp = nxt//denominator
-            nxt %= denominator
-            if ret[-1]=="." or numerator not in mem:
-                ret += str(temp)
-                mem[numerator] = len(ret)-1
-                numerator = nxt
-                continue
-            if numerator in mem:
-                ret = ret[:mem[numerator]]+"("+ ret[mem[numerator]:] +")"
+        mp = dict()
+        idx = len(ret)
+        while True:
+            if numerator in mp:
+                ret = ret[:mp[numerator]]+"("+ret[mp[numerator]:]+")"
+                if sign=="-":
+                    return sign+ret
+                return ret
+            mp[numerator] = idx
+            idx += 1
+            ret += str((numerator*10)//denominator)
+            numerator = (numerator*10)%denominator
+            if numerator==0:
                 break
+        if sign=="-":
+            return sign+ret
         return ret
