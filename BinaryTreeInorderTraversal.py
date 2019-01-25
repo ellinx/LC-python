@@ -72,19 +72,20 @@ class Solution3:
         :rtype: List[int]
         """
         ret = []
-        while root is not None:
-            if root.left is None:
-                ret.append(root.val)
-                root = root.right
+        cur = root
+        while cur is not None:
+            if cur.left is None:
+                ret.append(cur.val)
+                cur = cur.right
+                continue
+            pre = cur.left
+            while pre.right is not None and pre.right!=cur:
+                pre = pre.right
+            if pre.right==cur:
+                pre.right = None
+                ret.append(cur.val)
+                cur = cur.right
             else:
-                pre = root.left
-                while pre.right is not None and pre.right!=root:
-                    pre = pre.right
-                if pre.right is None:
-                    pre.right = root
-                    root = root.left
-                else:
-                    pre.right = None
-                    ret.append(root.val)
-                    root = root.right
+                pre.right = cur
+                cur = cur.left
         return ret
