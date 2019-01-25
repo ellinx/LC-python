@@ -13,7 +13,6 @@ Output: ""
 Explanation: There is no common prefix among the input strings.
 
 Note:
-
 All given inputs are in lowercase letters a-z.
 
 """
@@ -27,12 +26,14 @@ class Solution:
             return ""
         ret = strs[0]
         for i in range(1,len(strs)):
-            index = 0
-            while index<min(len(ret),len(strs[i])):
-                if ret[index]!=strs[i][index]:
-                    break
-                index += 1
-            if index==0:
-                return ""
-            ret = ret[:index]
+            i1, i2 = 0, 0
+            while i1<len(ret) and i2<len(strs[i]):
+                if ret[i1]==strs[i][i2]:
+                    i1 += 1
+                    i2 += 1
+                    continue
+                break
+            ret = ret[:i1]
+            if len(ret)==0:
+                return ret
         return ret
