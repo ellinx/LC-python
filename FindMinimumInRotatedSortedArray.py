@@ -23,13 +23,11 @@ class Solution:
         :type nums: List[int]
         :rtype: int
         """
-        s, e = 0, len(nums)-1
-        while s<e:
-            if nums[s]<nums[e]:
-                return nums[s]
-            m = s+(e-s)//2
-            if nums[m]>=nums[s]:
-                s = m+1
+        l, r = 0, len(nums)-1
+        while l<r:
+            m = l+(r-l)//2
+            if nums[m]>nums[r]:
+                l = m+1
             else:
-                e = m
-        return nums[s]
+                r = m
+        return nums[l]
