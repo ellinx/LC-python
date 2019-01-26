@@ -20,15 +20,14 @@ class Solution:
         :type n: int
         :rtype: int
         """
-        def helper(n, mm):
+        def countTrees(n, mm):
             if n<=1:
                 return 1
             if n in mm:
                 return mm[n]
-            ret = 0
+            mm[n] = 0
             for i in range(1,n+1):
-                ret += helper(i-1, mm)*helper(n-i, mm)
-            mm[n] = ret
-            return ret
+                mm[n] += countTrees(i-1, mm)*countTrees(n-i, mm)
+            return mm[n]
 
-        return helper(n, dict())
+        return countTrees(n, dict())
