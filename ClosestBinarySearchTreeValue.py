@@ -20,26 +20,26 @@ Output: 4
 
 
 """
-class Solution:
-    """
-    Thoughts:
-    1. similar like search a target in BST
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
 
-    Time: O(n) where n is total number of nodes in the tree
-    Space: O(1)
-    """
+class Solution:
     def closestValue(self, root, target):
         """
         :type root: TreeNode
         :type target: float
         :rtype: int
         """
-        ret = None
-        while root:
-            if ret==None or abs(root.val-target)<abs(ret-target):
-                ret = root.val
+        ret = root.val
+        while root is not None:
             if root.val==target:
-                break
+                return root.val
+            if abs(target-root.val)<abs(target-ret):
+                ret = root.val
             if root.val>target:
                 root = root.left
             else:
