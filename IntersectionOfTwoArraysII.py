@@ -29,7 +29,7 @@ class Solution:
         counter = collections.Counter(nums1)
         ret = []
         for num in nums2:
-            if counter.get(num, 0):
+            if counter.get(num, 0)>0:
                 ret.append(num)
                 counter[num] -= 1
         return ret
