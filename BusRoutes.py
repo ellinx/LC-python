@@ -29,27 +29,29 @@ class Solution:
         :type T: int
         :rtype: int
         """
+        stops = collections.defaultdict(list)
+        for i in range(len(routes)):
+            for stopIdx in routes[i]:
+                stops[stopIdx].append(i)
         if S==T:
             return 0
-        stations = collections.defaultdict(set)
-        for i in range(len(routes)):
-            for each in routes[i]:
-                stations[each].add(i)
-        step = 1
-        visited = set()
-        visited.add(S)
-        q = collections.deque()
-        q.append(S)
+        q = collections.deque([S])
+        visitedStops, visitedBus = set(), set()
+        visitedStops.add(S)
+        steps = 0
         while len(q):
             size = len(q)
             for _ in range(size):
+                #print(q,steps,visitedStops)
                 cur = q.popleft()
-                for routeIdx in stations[cur]:
-                    for each in routes[routeIdx]:
-                        if each not in visited:
+                for bus in stops[cur]:
+                    if bus not in visitedBus:
+                        visitedBus.add(bus)
+                        for each in routes[bus]:
                             if each==T:
-                                return step
-                            visited.add(each)
-                            q.append(each)
-            step += 1
+                                return steps+1
+                            if each not in visitedStops and each in stops:
+                                visitedStops.add(each)
+                                q.append(each)
+            steps += 1
         return -1
