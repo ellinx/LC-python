@@ -37,19 +37,19 @@ class Solution2:
         """
         if root is None:
             return 0
-        cur = [root]
         ret = 0
-        while len(cur):
-            ret += len(cur)
+        cur = [root]
+        while len(cur)>0:
             nxt = []
             for each in cur:
+                ret += 1
                 if each.left is not None:
                     nxt.append(each.left)
                 else:
-                    break
+                    return (ret-1)*2+1
                 if each.right is not None:
                     nxt.append(each.right)
                 else:
-                    break
+                    return 2*ret
             cur = nxt
         return ret
