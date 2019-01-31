@@ -23,18 +23,18 @@ class Solution:
         :type n: int
         :rtype: void Do not return anything, modify nums1 in-place instead.
         """
-        index1,index2 = m-1, n-1
-        index = m+n-1
-        while index1>=0 and index2>=0:
-            if nums1[index1]<=nums2[index2]:
-                nums1[index] = nums2[index2]
-                index -= 1
-                index2 -=1
+        i1, i2 = m-1, n-1
+        idx = m+n-1
+        while i1>=0 and i2>=0:
+            if nums1[i1]<=nums2[i2]:
+                nums1[idx] = nums2[i2]
+                idx -= 1
+                i2 -= 1
             else:
-                nums1[index] = nums1[index1]
-                index -= 1
-                index1 -=1
-        while index2>=0:
-            nums1[index] = nums2[index2]
-            index -= 1
-            index2 -= 1
+                nums1[idx] = nums1[i1]
+                idx -= 1
+                i1 -= 1
+        while i2>=0:
+            nums1[idx] = nums2[i2]
+            idx -= 1
+            i2 -= 1
