@@ -33,16 +33,15 @@ class Solution:
         :type target: int
         :rtype: List[List[int]]
         """
-        def dfs(nums, start, cur, target, ret):
-            if target==0:
+        def dfs(candidates, start, cur, total, target, ret):
+            if total>target:
+                return
+            if total==target:
                 ret.append(cur)
                 return
-            for i in range(start, len(nums)):
-                if nums[i]>target:
-                    break
-                dfs(nums, i, cur+[nums[i]], target-nums[i], ret)
+            for i in range(start, len(candidates)):
+                dfs(candidates, i, cur+[candidates[i]], total+candidates[i], target, ret)
 
         ret = []
-        candidates.sort()
-        dfs(candidates, 0, [], target, ret)
+        dfs(candidates, 0, [], 0, target, ret)
         return ret
