@@ -41,22 +41,20 @@ class Solution:
             level += 1
         return n
 
-        # TLE for python
-        def numSquaresDP(self, n):
+class Solution2:
+    def numSquares(self, n):
         """
         :type n: int
         :rtype: int
         """
-        # dp[i] is least number of perfect square numbers sum to i
-        dp = [0]*(n+1)
-        for i in range(1,n+1):
-            j = 1
-            pre = i-j**2
-            while pre>=0:
-                if dp[i]==0:
-                    dp[i] = dp[pre]+1
-                else:
-                    dp[i] = min(dp[i],dp[pre]+1)
-                j += 1
-                pre = i-j**2
+        dp = [float('inf')]*(n+1)
+        dp[0] = 0
+        for i in range(n+1):
+            m = 1
+            while True:
+                idx = i+m*m
+                if idx>n:
+                    break
+                dp[idx] = min(dp[idx], dp[i]+1)
+                m += 1
         return dp[n]
