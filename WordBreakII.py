@@ -9,7 +9,6 @@ Note:
     You may assume the dictionary does not contain duplicate words.
 
 Example 1:
-
 Input:
 s = "catsanddog"
 wordDict = ["cat", "cats", "and", "sand", "dog"]
@@ -20,7 +19,6 @@ Output:
 ]
 
 Example 2:
-
 Input:
 s = "pineapplepenapple"
 wordDict = ["apple", "pen", "applepen", "pine", "pineapple"]
@@ -33,7 +31,6 @@ Output:
 Explanation: Note that you are allowed to reuse a dictionary word.
 
 Example 3:
-
 Input:
 s = "catsandog"
 wordDict = ["cats", "dog", "sand", "and", "cat"]
