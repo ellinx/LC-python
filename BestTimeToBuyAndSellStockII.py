@@ -31,19 +31,19 @@ class Solution:
         :type prices: List[int]
         :rtype: int
         """
+        l = 0
         ret = 0
-        buy = None
-        idx = 1
-        while idx<len(prices):
-            if buy is None:
-                while idx<len(prices) and prices[idx-1]>=prices[idx]:
-                    idx += 1
-                if idx==len(prices):
-                    break
-                buy = prices[idx-1]
-            else:
-                while idx<len(prices) and prices[idx-1]<=prices[idx]:
-                    idx += 1
-                ret += prices[idx-1]-buy
-                buy = None
+        while l+1<len(prices):
+            if prices[l]>=prices[l+1]:
+                l += 1
+                continue
+            r = l+1
+            while r+1<len(prices):
+                if prices[r]<=prices[r+1]:
+                    r += 1
+                    continue
+                break
+            #print(prices[l],prices[r])
+            ret += prices[r]-prices[l]
+            l = r+1
         return ret
