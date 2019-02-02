@@ -1,8 +1,10 @@
 """
-Given a non-empty 2D array grid of 0's and 1's, an island is a group of 1's (representing land) connected 4-directionally (horizontal or vertical.)
+Given a non-empty 2D array grid of 0's and 1's, an island is a group of 1's
+(representing land) connected 4-directionally (horizontal or vertical.)
 You may assume all four edges of the grid are surrounded by water.
 
-Find the maximum area of an island in the given 2D array. (If there is no island, the maximum area is 0.)
+Find the maximum area of an island in the given 2D array.
+(If there is no island, the maximum area is 0.)
 
 Example 1:
 
@@ -31,26 +33,24 @@ class Solution:
         :type grid: List[List[int]]
         :rtype: int
         """
-        def dfs(grid, row, col):
+        def dfs(grid, i, j):
+            grid[i][j] = 0
+            dirs = [[-1,0],[1,0],[0,-1],[0,1]]
+            m, n = len(grid), len(grid[0])
             ret = 1
-            grid[row][col] = 0
-            #up
-            if row and grid[row-1][col]==1:
-                ret += dfs(grid, row-1, col)
-            #down
-            if row<len(grid)-1 and grid[row+1][col]==1:
-                ret += dfs(grid, row+1, col)
-            #left
-            if col and grid[row][col-1]==1:
-                ret += dfs(grid, row, col-1)
-            #right
-            if col<len(grid[0])-1 and grid[row][col+1]==1:
-                ret += dfs(grid, row, col+1)
+            for each in dirs:
+                ni, nj = i+each[0], j+each[1]
+                if ni>=0 and ni<m and nj>=0 and nj<n and grid[ni][nj]==1:
+                    ret += dfs(grid, ni, nj)
             return ret
 
         ret = 0
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
+        m = len(grid)
+        if m==0:
+            return 0
+        n = len(grid[0])
+        for i in range(m):
+            for j in range(n):
                 if grid[i][j]==1:
                     ret = max(ret, dfs(grid, i, j))
         return ret
