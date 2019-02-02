@@ -124,3 +124,45 @@ class Codec2:
             return None
         vals = data.split(",")
         return helper(iter(vals))
+
+
+class Codec3:
+
+    def serialize(self, root):
+        """Encodes a tree to a single string.
+
+        :type root: Node
+        :rtype: str
+        """
+        ret = ""
+        if root is None:
+            return "#"
+        ret += str(root.val)
+        ret += " "+str(len(root.children))
+        for i in range(len(root.children)):
+            ret += " "+self.serialize(root.children[i])
+        #print(ret)
+        return ret
+
+
+    def deserialize(self, data):
+        """Decodes your encoded data to tree.
+
+        :type data: str
+        :rtype: Node
+        """
+        def dfs(it):
+            val = next(it)
+            if val=="#":
+                return None
+            val = int(val)
+            childrenNum = int(next(it))
+            ret = Node(val, [])
+            if childrenNum==0:
+                return ret
+            for _ in range(childrenNum):
+                ret.children.append(dfs(it))
+            return ret
+
+        vals = data.split(" ")
+        return dfs(iter(vals))
