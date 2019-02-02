@@ -11,10 +11,11 @@ this string can be deserialized to the original tree structure.
 
 For example, you may serialize the following 3-ary tree
 
-
-
-
-
+                1
+              / | \
+             3  2  4
+            / \
+           5   6
 
 
 as [1 [3[5 6] 2 4]]. You do not necessarily need to follow this format,
