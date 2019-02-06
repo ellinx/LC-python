@@ -9,15 +9,17 @@ The string can contain additional characters after those that form the integral 
 which are ignored and have no effect on the behavior of this function.
 
 If the first sequence of non-whitespace characters in str is not a valid integral number,
-or if no such sequence exists because either str is empty or it contains only whitespace characters, no conversion is performed.
+or if no such sequence exists because either str is empty or it contains only whitespace characters,
+no conversion is performed.
 
 If no valid conversion could be performed, a zero value is returned.
 
 Note:
 
 Only the space character ' ' is considered as whitespace character.
-Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [−231,  231 − 1].
-If the numerical value is out of the range of representable values, INT_MAX (231 − 1) or INT_MIN (−231) is returned.
+Assume we are dealing with an environment which could only store integers
+within the 32-bit signed integer range: [−2^31,  2^31 − 1].
+If the numerical value is out of the range of representable values, INT_MAX (2^31 − 1) or INT_MIN (−2^31) is returned.
 
 Example 1:
 Input: "42"
@@ -47,38 +49,33 @@ Explanation: The number "-91283472332" is out of the range of a 32-bit signed in
              Thefore INT_MIN (−231) is returned.
 """
 class Solution:
-    def myAtoi(self, str):
-        """
-        :type str: str
-        :rtype: int
-        """
-        max_int = 2**31-1
-        min_int = -2**31
+    def myAtoi(self, str: 'str') -> 'int':
+        sign = 1
         ret = 0
-        sign = None
+        valid = False
         for c in str:
-            if sign is None:
+            if not valid:
                 if c==" ":
                     continue
-                if c.isdigit():
-                    ret = ret*10+int(c)
-                    sign = 1
+                if c in "+-":
+                    valid = True
+                    if c=="-":
+                        sign = -1
                     continue
-                if c=="+":
-                    sign = 1
-                elif c=="-":
-                    sign = -1
-                else:
-                    break
-            else:
-                if not c.isdigit():
-                    break
-                ret = ret*10+int(c)
-        if sign is None:
-            return 0
-        ret *= sign
-        if ret>max_int:
-            return max_int
-        if ret<min_int:
-            return min_int
+                if c.isdigit():
+                    valid = True
+                    ret = 10*ret+int(c)
+                    continue
+                return 0
+            if c.isdigit():
+                valid = True
+                ret = 10*ret+int(c)
+                continue
+            break
+        ret = sign*ret
+        MIN, MAX = -2**31, 2**31-1
+        if ret<MIN:
+            return MIN
+        if ret>MAX:
+            return MAX
         return ret
