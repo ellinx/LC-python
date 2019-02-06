@@ -54,27 +54,28 @@ class Solution(object):
             ret.prev = None
         return ret
 
-class Solution2(object):
+class Solution2:
     def flatten(self, head):
         """
         :type head: Node
         :rtype: Node
         """
-        def helper(head):
+        def dfs(head):
+            if head is None:
+                return [None]*2
             ret = [head, head]
             cur = head
             while cur is not None:
-                ret[1] = cur
+                if cur.child is None:
+                    ret[1], cur = cur, cur.next
+                    continue
+                h, t = dfs(cur.child)
+                cur.child = None
                 nxt = cur.next
-                if cur.child is not None:
-                    tmp = helper(cur.child)
-                    cur.child = None
-                    cur.next, tmp[0].prev = tmp[0], cur
-                    tmp[1].next = nxt
-                    if nxt is not None:
-                        nxt.prev = tmp[1]
-                    ret[1] = tmp[1]
-                cur = nxt
+                cur.next, h.prev, t.next = h, cur, nxt
+                if nxt is not None:
+                    nxt.prev = t
+                ret[1], cur = t, nxt
             return ret
 
-        return helper(head)[0]
+        return dfs(head)[0]
