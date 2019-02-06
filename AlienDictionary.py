@@ -51,44 +51,44 @@ Note:
 
 """
 class Solution:
-    def alienOrder(self, words):
-        """
-        :type words: List[str]
-        :rtype: str
-        """
-        g = collections.defaultdict(set)
+    def alienOrder(self, words: 'List[str]') -> 'str':
+        if len(words)==1:
+            return words[0]
         indegree = dict()
-        for c in words[0]:
-            indegree[c] = 0
+        g = collections.defaultdict(set)
         for i in range(1,len(words)):
             idx = 0
-            minLen = min(len(words[i-1]), len(words[i]))
-            while idx<minLen:
-                indegree[words[i][idx]] = indegree.get(words[i][idx], 0)
+            while idx<len(words[i-1]) and idx<len(words[i]):
+                if words[i-1][idx] not in indegree:
+                    indegree[words[i-1][idx]] = 0
+                if words[i][idx] not in indegree:
+                    indegree[words[i][idx]] = 0
                 if words[i-1][idx]==words[i][idx]:
                     idx += 1
                     continue
-                break
-            if idx<minLen:
                 if words[i][idx] not in g[words[i-1][idx]]:
-                    indegree[words[i][idx]] += 1
                     g[words[i-1][idx]].add(words[i][idx])
-            while idx<len(words[i]):
-                indegree[words[i][idx]] = indegree.get(words[i][idx], 0)
-                idx += 1
+                    indegree[words[i][idx]] += 1
+                break
+            for j in range(idx, len(words[i-1])):
+                if words[i-1][j] not in indegree:
+                    indegree[words[i-1][j]] = 0
+            for j in range(idx, len(words[i])):
+                if words[i][j] not in indegree:
+                    indegree[words[i][j]] = 0
         #print(indegree)
-        ret = ""
         q = collections.deque()
         for k in indegree:
             if indegree[k]==0:
                 q.append(k)
-        while len(q):
+        order = []
+        while len(q)>0:
             cur = q.popleft()
-            ret += cur
-            for adj in g[cur]:
-                indegree[adj] -= 1
-                if indegree[adj]==0:
-                    q.append(adj)
-        if len(ret)<len(indegree):
+            order.append(cur)
+            for nxt in g[cur]:
+                indegree[nxt] -= 1
+                if indegree[nxt]==0:
+                    q.append(nxt)
+        if len(order)<len(indegree):
             return ""
-        return ret
+        return "".join(order)
