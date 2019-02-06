@@ -37,31 +37,25 @@ Topological Sort via DFS - A great video tutorial (21 minutes) on Coursera expla
 Topological Sort.
 Topological sort could also be done via BFS. https://en.wikipedia.org/wiki/Topological_sorting#Algorithms
 """
-class CourseScheduleII:
-    def findOrder(self, numCourses, prerequisites):
-        """
-        :type numCourses: int
-        :type prerequisites: List[List[int]]
-        :rtype: List[int]
-        """
-        g = collections.defaultdict(set)
+class Solution:
+    def findOrder(self, numCourses: 'int', prerequisites: 'List[List[int]]') -> 'List[int]':
         indegree = [0]*numCourses
-        for each in prerequisites:
-            g[each[1]].add(each[0])
-            indegree[each[0]] += 1
-        #print(g)
-        #print(indegree)
+        g = collections.defaultdict(set)
+        for cur, pre in prerequisites:
+            g[pre].add(cur)
+            indegree[cur] += 1
         q = collections.deque()
-        for i in range(len(indegree)):
+        for i in range(numCourses):
             if indegree[i]==0:
                 q.append(i)
         order = []
-        while len(q):
+        while len(q)>0:
             cur = q.popleft()
             order.append(cur)
-            for each in g[cur]:
-                indegree[each] -= 1
-                if indegree[each]==0:
-                    q.append(each)
-        #print(order)
-        return order if len(order)==numCourses else []
+            for nxt in g[cur]:
+                indegree[nxt] -= 1
+                if indegree[nxt]==0:
+                    q.append(nxt)
+        if len(order)<numCourses:
+            return []
+        return order
