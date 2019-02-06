@@ -15,25 +15,20 @@ Input: ["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"], 
 Output: ["the", "is", "sunny", "day"]
 Explanation: "the", "is", "sunny" and "day" are the four most frequent words,
     with the number of occurrence being 4, 3, 2 and 1 respectively.
-    
+
 Note:
-You may assume k is always valid, 1 ≤ k ≤ number of unique elements.
-Input words contain only lowercase letters.
+1. You may assume k is always valid, 1 ≤ k ≤ number of unique elements.
+2. Input words contain only lowercase letters.
 
 Follow up:
 Try to solve it in O(n log k) time and O(n) extra space.
 """
-class TopKFrequentWords:
-    def topKFrequent(self, words, k):
-        """
-        :type words: List[str]
-        :type k: int
-        :rtype: List[str]
-        """
+class Solution:
+    def topKFrequent(self, words: 'List[str]', k: 'int') -> 'List[str]':
         counter = collections.Counter(words)
-        maxHeap = [ (-counter[each], each) for each in counter ]
-        heapq.heapify(maxHeap)
+        pq = [[-counter[k],k] for k in counter]
+        heapq.heapify(pq)
         ret = []
         for _ in range(k):
-            ret.append(heapq.heappop(maxHeap)[1])
+            ret.append(heapq.heappop(pq)[1])
         return ret
