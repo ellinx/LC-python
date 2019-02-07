@@ -44,29 +44,28 @@ Follow up:
 
 """
 class Solution:
-    def gameOfLife(self, board):
+    def gameOfLife(self, board: 'List[List[int]]') -> 'None':
         """
-        :type board: List[List[int]]
-        :rtype: void Do not return anything, modify board in-place instead.
+        Do not return anything, modify board in-place instead.
         """
-        # store next state in bit 1
+        m = len(board)
+        if m==0:
+            return
+        n = len(board[0])
         dirs = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]
-        m, n = len(board), len(board[0])
         for i in range(m):
             for j in range(n):
-                live = 0
+                liveNeighbor = 0
                 for each in dirs:
-                    ni = i+each[0]
-                    nj = j+each[1]
-                    if ni>=0 and ni<m and nj>=0 and nj<n and board[ni][nj]&1==1:
-                        live += 1
-                if board[i][j]&1==1:
-                    if live==2 or live==3:
-                        board[i][j] |= (1<<1)
+                    ni, nj = i+each[0], j+each[1]
+                    if ni>=0 and ni<m and nj>=0 and nj<n and (board[ni][nj]&1)==1:
+                        liveNeighbor += 1
+                if board[i][j]==0:
+                    if liveNeighbor==3:
+                        board[i][j] |= 2
                 else:
-                    if live==3:
-                        board[i][j] |= (1<<1)
-        #print(board)
+                    if liveNeighbor==2 or liveNeighbor==3:
+                        board[i][j] |= 2
         for i in range(m):
             for j in range(n):
                 board[i][j] >>= 1
