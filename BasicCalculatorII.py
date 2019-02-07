@@ -61,41 +61,35 @@ class Solution:
         return ret
 
 class Solution2:
-    def calculate(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-        ret, last = 0, 0
-        op = '+'
-        l, r = 0, 0
-        while l<len(s):
-            while l<len(s) and s[l]==' ':
-                l += 1
-            if l==len(s):
-                break
-            if s[l] in '+-*/':
-                op = s[l]
-                l += 1
+    def calculate(self, s: 'str') -> 'int':
+        cur, last, sign = 0, 0, "+"
+        idx = 0
+        while idx<len(s):
+            if s[idx]==" ":
+                idx += 1
                 continue
-            r = l+1
-            while r<len(s) and s[r].isdigit():
-                r += 1
-            num = int(s[l:r])
-            if op=='+':
-                ret += num
-                last = num
-            elif op=='-':
-                ret -= num
-                last = -num
-            elif op=='*':
-                ret += -last+last*num
-                last *= num
-            elif op=='/':
-                # note that // always rounds down while int(float) will rounds towards 0
-                ret += -last+int(last/num)
-                #ret += -last+last//num
-                last = int(last/num)
-            l = r
-            #print(ret, last)
-        return ret
+            if s[idx] in "+-*/":
+                sign=s[idx]
+                idx += 1
+            elif s[idx].isdigit():
+                end = idx+1
+                while end<len(s) and s[end].isdigit():
+                    end += 1
+                num = int(s[idx:end])
+                idx = end
+                #print(cur, last, sign, num)
+                if sign=="+":
+                    cur += num
+                    last = num
+                elif sign=="-":
+                    cur -= num
+                    last = -num
+                elif sign=="*":
+                    cur -= last
+                    cur += last*num
+                    last = last*num
+                else:
+                    cur -= last
+                    cur += int(last/num)
+                    last = int(last/num)
+        return cur
