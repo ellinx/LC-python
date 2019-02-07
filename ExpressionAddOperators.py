@@ -24,37 +24,33 @@ Input: num = "3456237490", target = 9191
 Output: []
 """
 class Solution:
-    def addOperators(self, num, target):
-        """
-        :type num: str
-        :type target: int
-        :rtype: List[str]
-        """
-        def dfs(num, start, cur, val, last, target, ret):
+    def addOperators(self, num: 'str', target: 'int') -> 'List[str]':
+        def dfs(num, start, curExp, curRes, last, target, ret):
             if start==len(num):
-                if val==target:
-                    ret.append(cur)
+                if curRes==target:
+                    ret.append("".join(curExp))
                 return
-            for i in range(start,len(num)):
-                if num[start]=='0':
-                    dfs(num, start+1, cur+"+0", val, 0, target, ret)
-                    dfs(num, start+1, cur+"-0", val, 0, target, ret)
-                    dfs(num, start+1, cur+"*0", val-last, 0, target, ret)
-                    break
-                d = num[start:i+1]
-                # +
-                dfs(num, i+1, cur+"+"+d, val+int(d), int(d), target, ret)
-                # -
-                dfs(num, i+1, cur+"-"+d, val-int(d), -int(d), target, ret)
-                # *
-                dfs(num, i+1, cur+"*"+d, val-last+last*int(d), last*int(d), target, ret)
+            if num[start]=="0":
+                dfs(num, start+1, curExp+["+0"], curRes, 0, target, ret)
+                dfs(num, start+1, curExp+["-0"], curRes, 0, target, ret)
+                dfs(num, start+1, curExp+["*0"], curRes-last, 0, target, ret)
+                return
+            for i in range(start+1, len(num)+1):
+                nxtStr = num[start:i]
+                nxt = int(nxtStr)
+                dfs(num, i, curExp+["+"+nxtStr], curRes+nxt, nxt, target, ret)
+                dfs(num, i, curExp+["-"+nxtStr], curRes-nxt, -nxt, target, ret)
+                dfs(num, i, curExp+["*"+nxtStr], curRes-last+last*nxt, last*nxt, target, ret)
+
 
         ret = []
         if len(num)==0:
+            return []
+        if num[0]=="0":
+            dfs(num, 1, ["0"], 0, 0, target, ret)
             return ret
-        for i in range(len(num)):
-            if num[0]=='0':
-                dfs(num, 1, "0", 0, 0, target, ret)
-                break
-            dfs(num, i+1, num[:i+1], int(num[:i+1]), int(num[:i+1]), target, ret)
+        for i in range(1,len(num)+1):
+            firstStr = num[:i]
+            first = int(firstStr)
+            dfs(num, i, [firstStr], first, first, target, ret)
         return ret
