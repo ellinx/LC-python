@@ -55,3 +55,27 @@ class Solution:
                     if k-1>0:
                         mm[nxt].add(k-1)
         return False
+
+
+class Solution2:
+    def canCross(self, stones: 'List[int]') -> 'bool':
+        def jump(stones, idx, last, mm):
+            if idx==len(stones)-1:
+                return True
+            if idx in mm and last in mm[idx]:
+                return mm[idx][last]
+            for off in range(-1,2):
+                nxtIdx = bisect.bisect_left(stones, stones[idx]+last+off, lo=idx+1)
+                if nxtIdx<len(stones) and stones[nxtIdx]==stones[idx]+last+off:
+                    if jump(stones, nxtIdx, last+off, mm):
+                        mm[idx][last] = True
+                        return True
+            mm[idx][last] = False
+            return False
+
+        if len(stones)==1:
+            return True
+        if stones[1]-stones[0]!=1:
+            return False
+        mm = collections.defaultdict(dict)
+        return jump(stones, 1, 1, mm)
