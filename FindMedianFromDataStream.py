@@ -27,33 +27,25 @@ class MedianFinder:
         """
         initialize your data structure here.
         """
-        self.maxHeap = []
-        self.minHeap = []
+        self.left = []
+        self.right = []
+        self.total = 0
 
-    # (small half) in max heap and (large half) in min heap
-    def addNum(self, num):
-        """
-        :type num: int
-        :rtype: void
-        """
-        if not len(self.minHeap):
-            heapq.heappush(self.minHeap, num)
-            return
-        if len(self.maxHeap)==len(self.minHeap):
-            num = -heapq.heappushpop(self.maxHeap, -num)
-            heapq.heappush(self.minHeap, num)
+    def addNum(self, num: 'int') -> 'None':
+        if self.total%2==1:
+            heapq.heappush(self.left, -num)
+            temp = -heapq.heappop(self.left)
+            heapq.heappush(self.right, temp)
         else:
-            num = heapq.heappushpop(self.minHeap, num)
-            heapq.heappush(self.maxHeap, -num)
-        #print(self.maxHeap, self.minHeap)
+            heapq.heappush(self.right, num)
+            temp = heapq.heappop(self.right)
+            heapq.heappush(self.left, -temp)
+        self.total += 1
 
-    def findMedian(self):
-        """
-        :rtype: float
-        """
-        if len(self.maxHeap)<len(self.minHeap):
-            return self.minHeap[0]
-        return (-self.maxHeap[0]+self.minHeap[0])/2
+    def findMedian(self) -> 'float':
+        if self.total%2==1:
+            return -self.left[0]
+        return (-self.left[0]+self.right[0])/2
 
 
 # Your MedianFinder object will be instantiated and called as such:
