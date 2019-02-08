@@ -1,7 +1,8 @@
 """
 Given an undirected graph, return true if and only if it is bipartite.
 
-Recall that a graph is bipartite if we can split it's set of nodes into two independent subsets A and B such that every edge in the graph has one node in A and another node in B.
+Recall that a graph is bipartite if we can split it's set of nodes into
+two independent subsets A and B such that every edge in the graph has one node in A and another node in B.
 
 The graph is given in the following form: graph[i] is a list of indexes j for which the edge between nodes i and j exists.
 Each node is an integer between 0 and graph.length - 1.
@@ -30,27 +31,22 @@ The graph looks like this:
 We cannot find a way to divide the set of nodes into two independent subsets.
 """
 class Solution:
-    def isBipartite(self, graph):
-        """
-        :type graph: List[List[int]]
-        :rtype: bool
-        """
-        def helper(graph, i, group):
-            if group[i]==0:
-                group[i] = 1
-            for each in graph[i]:
-                if group[each]==0:
-                    group[each] = 3-group[i]
-                    if not helper(graph, each, group):
-                        return False
-                    continue
-                if group[each] != 3-group[i]:
+    def isBipartite(self, graph: 'List[List[int]]') -> 'bool':
+        def dfs(graph, cur, mark, group):
+            if cur in group:
+                return group[cur]==mark
+            group[cur]=mark
+            for nxt in graph[cur]:
+                if not dfs(graph, nxt, 1-mark, group):
                     return False
             return True
 
-        N = len(graph)
-        group = [0]*N
-        for i in range(len(graph)):
-            if not helper(graph, i, group):
+        n = len(graph)
+        group = dict()
+        for i in range(n):
+            if i in group:
+                continue
+            # if current node is not marked, mark it as 0
+            if not dfs(graph, i, 0, group):
                 return False
         return True
