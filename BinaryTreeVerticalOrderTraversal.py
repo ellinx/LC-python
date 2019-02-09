@@ -1,5 +1,6 @@
 """
-Given a binary tree, return the vertical order traversal of its nodes' values. (ie, from top to bottom, column by column).
+Given a binary tree, return the vertical order traversal of its nodes' values.
+(ie, from top to bottom, column by column).
 
 If two nodes are in the same row and column, the order should be from left to right.
 
@@ -92,4 +93,4 @@ class Solution:
                 if each[0].right is not None:
                     nxt.append([each[0].right, each[1]+1])
             cur = nxt
-        return [mm[i] for i in sorted(mm.keys())]
+        return [mm[k] for k in sorted(mm)]
