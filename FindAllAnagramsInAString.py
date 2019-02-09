@@ -40,30 +40,25 @@ class Solution:
     Time: O(m+n) where m is length of s and n is length of p
     Space: O(n)
     """
-    def findAnagrams(self, s, p):
-        """
-        :type s: str
-        :type p: str
-        :rtype: List[int]
-        """
+    def findAnagrams(self, s: 'str', p: 'str') -> 'List[int]':
         counter = collections.Counter(p)
-        total = len(p)
+        cnt = len(p)
         ret = []
-        start, end = 0, 0
-        while end<len(s):
-            if s[end] in counter:
-                if counter[s[end]]>0:
-                    total -= 1
-                counter[s[end]] -= 1
-            end += 1
-            if end-start==len(p):
-                if total==0:
-                    ret.append(start)
-                if s[start] in counter:
-                    if counter[s[start]]>=0:
-                        total += 1
-                    counter[s[start]] += 1
-                start += 1
+        l, r = 0, 0
+        while r<len(s):
+            if s[r] in counter:
+                if counter[s[r]]>0:
+                    cnt -= 1
+                counter[s[r]] -= 1
+            r += 1
+            if r-l==len(p):
+                if cnt==0:
+                    ret.append(l)
+                if s[l] in counter:
+                    if counter[s[l]]>=0:
+                        cnt += 1
+                    counter[s[l]] += 1
+                l += 1
         return ret
 
 
