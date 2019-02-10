@@ -52,19 +52,18 @@ class Solution:
         :type master: Master
         :rtype: None
         """
-        def getMatched(w1, w2):
+        def distance(s1, s2):
             ret = 0
             for i in range(6):
-                if w1[i]==w2[i]:
+                if s1[i]==s2[i]:
                     ret += 1
             return ret
 
-        index = random.randrange(len(wordlist))
-        matched = master.guess(wordlist[index])
-        if matched==6:
-            return
-        nextList = []
-        for each in wordlist:
-            if getMatched(each, wordlist[index])==matched:
-                nextList.append(each)
-        self.findSecretWord(nextList, master)
+        while len(wordlist)>0:
+            nxtList = []
+            idx = random.randrange(len(wordlist))
+            dist = master.guess(wordlist[idx])
+            for i in range(len(wordlist)):
+                if i!=idx and distance(wordlist[idx], wordlist[i])==dist:
+                    nxtList.append(wordlist[i])
+            wordlist = nxtList
