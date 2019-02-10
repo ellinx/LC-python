@@ -1,39 +1,33 @@
 """
-The API: int read4(char *buf) reads 4 characters at a time from a file.
+The read4 API is already defined for you.
 
-The return value is the actual number of characters read. For example, it returns 3 if there is only 3 characters left in the file.
+    @param buf, a list of characters
+    @return an integer
+    def read4(buf):
 
-By using the read4 API, implement the function int read(char *buf, int n) that reads n characters from the file.
-
-Example 1:
-Input: buf = "abc", n = 4
-Output: "abc"
-Explanation: The actual number of characters read is 3, which is "abc".
-
-Example 2:
-Input: buf = "abcde", n = 5
-Output: "abcde"
-
-Note:
-The read function will only be called once for each test case.
+# Below is an example of how the read4 API can be called.
+file = File("abcdefghijk") # File is "abcdefghijk", initially file pointer (fp) points to 'a'
+buf = [' '] * 4 # Create buffer with enough space to store characters
+read4(buf) # read4 returns 4. Now buf = ['a','b','c','d'], fp points to 'e'
+read4(buf) # read4 returns 4. Now buf = ['e','f','g','h'], fp points to 'i'
+read4(buf) # read4 returns 3. Now buf = ['i','j','k',...], fp points to end of file
 """
-# The read4 API is already defined for you.
-# @param buf, a list of characters
-# @return an integer
-# def read4(buf):
-
-class Solution(object):
+class Solution:
     def read(self, buf, n):
         """
         :type buf: Destination buffer (List[str])
-        :type n: Maximum number of characters to read (int)
-        :rtype: The number of characters read (int)
+        :type n: Number of characters to read (int)
+        :rtype: The number of actual characters read (int)
         """
-        total, read = 0, 4
-        while total<n and read==4:
-            temp = [""]*4
-            read = read4(temp)
-            for i in range(read):
-                buf[total+i] = temp[i]
-            total += read
-        return min(total,n)
+        temp = [" "]*4
+        idx = 0
+        while idx<n:
+            total = read4(temp)
+            if total==0:
+                return idx
+            for i in range(total):
+                buf[idx] = temp[i]
+                idx += 1
+                if idx==n:
+                    break
+        return idx
