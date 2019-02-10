@@ -13,26 +13,29 @@ Return [[0, 1], [1, 0], [3, 2], [2, 4]]
 The palindromes are ["dcbaabcd", "abcddcba", "slls", "llssssll"]
 """
 class Solution:
-    def palindromePairs(self, words):
-        """
-        :type words: List[str]
-        :rtype: List[List[int]]
-        """
+    def palindromePairs(self, words: 'List[str]') -> 'List[List[int]]':
+        def isPalindrome(s):
+            l, r = 0, len(s)-1
+            while l<r:
+                if s[l]!=s[r]:
+                    return False
+                l += 1
+                r -= 1
+            return True
+
+        wordIdx = dict()
+        n = len(words)
+        for i in range(n):
+            wordIdx[words[i]] = i
         ret = []
-        wordToIndex = dict()
-        for i in range(len(words)):
-            wordToIndex[words[i]] = i
-        for i in range(len(words)):
-            for j in range(len(words[i])+1):
-                s1 = words[i][:j]
-                s2 = words[i][j:]
-                rs1 = s1[::-1]
-                rs2 = s2[::-1]
-                #print(i,s1,s2)
-                if s1==rs1:
-                    if rs2 in wordToIndex and wordToIndex[rs2]!=i:
-                        ret.append([wordToIndex[rs2], i])
-                if len(s2) and s2==rs2:
-                    if rs1 in wordToIndex and wordToIndex[rs1]!=i:
-                        ret.append([i, wordToIndex[rs1]])
+        for i in range(n):
+            if isPalindrome(words[i]) and "" in wordIdx and wordIdx[""]!=i:
+                ret.append([wordIdx[""], i])
+            for j in range(len(words[i])):
+                s1, s2 = words[i][:j], words[i][j:]
+                rs1, rs2 = s1[::-1], s2[::-1]
+                if isPalindrome(s2) and rs1 in wordIdx and wordIdx[rs1]!=i:
+                    ret.append([i, wordIdx[rs1]])
+                if isPalindrome(s1) and rs2 in wordIdx and wordIdx[rs2]!=i:
+                    ret.append([wordIdx[rs2], i])
         return ret
