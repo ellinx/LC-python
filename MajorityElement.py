@@ -13,21 +13,17 @@ Input: [2,2,1,1,1,2,2]
 Output: 2
 """
 class Solution:
-    def majorityElement(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        cur = nums[0]
-        count = 1
+    def majorityElement(self, nums: 'List[int]') -> 'int':
+        cand = nums[0]
+        cnt = 1
         for i in range(1,len(nums)):
-            if nums[i]==cur:
-                count += 1
-            elif count==0:
-                cur = nums[i]
-                count = 1
+            if cand==nums[i]:
+                cand = nums[i]
+                cnt += 1
             else:
-                count -= 1
-
+                if cnt>0:
+                    cnt -= 1
+                else:
+                    cand, cnt = nums[i], 1
         # should verify, but assumption is it exists
-        return cur
+        return cand
