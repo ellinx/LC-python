@@ -8,9 +8,11 @@ For example, given a 3-ary tree:
 
 We should return its level order traversal:
 
-
-
-
+         1
+       / |  \
+     3   2   4
+    /  \
+   5    6
 
 [
      [1],
@@ -21,36 +23,29 @@ We should return its level order traversal:
 
 
 Note:
+1. The depth of the tree is at most 1000.
+2. The total number of nodes is at most 5000.
 
-    The depth of the tree is at most 1000.
-    The total number of nodes is at most 5000.
-
-"""
 """
 # Definition for a Node.
-class Node(object):
+class Node:
     def __init__(self, val, children):
         self.val = val
         self.children = children
 """
-class Solution(object):
-    def levelOrder(self, root):
-        """
-        :type root: Node
-        :rtype: List[List[int]]
-        """
-        ret = []
+class Solution:
+    def levelOrder(self, root: 'Node') -> 'List[List[int]]':
         if root is None:
-            return ret
+            return []
+        ret = []
         cur = [root]
-        while len(cur):
-            nxt = []
+        while len(cur)>0:
             vals = []
+            nxt = []
             for each in cur:
                 vals.append(each.val)
                 for child in each.children:
-                    if child:
-                        nxt.append(child)
+                    nxt.append(child)
             ret.append(vals)
             cur = nxt
         return ret
