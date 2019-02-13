@@ -9,13 +9,11 @@ You are giving candies to these children subjected to the following requirements
 What is the minimum candies you must give?
 
 Example 1:
-
 Input: [1,0,2]
 Output: 5
 Explanation: You can allocate to the first, second and third child with 2, 1, 2 candies respectively.
 
 Example 2:
-
 Input: [1,2,2]
 Output: 4
 Explanation: You can allocate to the first, second and third child with 1, 2, 1 candies respectively.
@@ -24,19 +22,15 @@ Explanation: You can allocate to the first, second and third child with 1, 2, 1 
 
 """
 class Solution:
-    def candy(self, ratings):
-        """
-        :type ratings: List[int]
-        :rtype: int
-        """
-        candies = [1]*len(ratings)
+    def candy(self, ratings: 'List[int]') -> 'int':
+        n = len(ratings)
+        candies = [1]*n
         # handle cases where cur child has higher ratings than pre child
-        for i in range(len(ratings)):
-            if i and ratings[i]>ratings[i-1]:
+        for i in range(1,n):
+            if ratings[i]>ratings[i-1]:
                 candies[i] = candies[i-1]+1
         # handle cases where pre child has higher ratings than cur child
-        for i in range(len(ratings)-2,-1,-1):
+        for i in range(n-2,-1,-1):
             if ratings[i]>ratings[i+1]:
                 candies[i] = max(candies[i], candies[i+1]+1)
-        #print(candies)
         return sum(candies)
