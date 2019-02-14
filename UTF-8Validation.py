@@ -39,32 +39,28 @@ But the second continuation byte does not start with 10, so it is invalid.
 
 """
 class Solution:
-    def validUtf8(self, data):
-        """
-        :type data: List[int]
-        :rtype: bool
-        """
-        index = 0
-        while index<len(data):
-            if data[index]>=512:
-                return False
-            first = '{0:08b}'.format(data[index])
-            #print("first=",first)
-            length = 0
-            while length<len(first) and first[length]=='1':
-                length += 1
-            #print("length=",length)
-            if length==0:
-                index += 1
+    def validUtf8(self, data: 'List[int]') -> 'bool':
+        n = len(data)
+        idx = 0
+        while idx<n:
+            mask = 1<<7
+            # one byte
+            if data[idx]&mask==0:
+                idx += 1
                 continue
-            if length==1 or length>4:
+            # multiple bytes
+            length = 0
+            for _ in range(8):
+                if data[idx]&mask==0:
+                    break
+                mask >>= 1
+                length += 1
+            # can only be 2,3,4 bytes
+            if length<2 or length>4:
                 return False
-            if index+length>len(data):
-                return False
+            mask = 3<<6
             for i in range(1,length):
-                tmp = '{0:08b}'.format(data[index+i])
-                #print(tmp)
-                if tmp[:2]!="10":
+                if idx+1>=n or (data[idx+i]&mask!=(1<<7)):
                     return False
-            index += length
+            idx += length
         return True
