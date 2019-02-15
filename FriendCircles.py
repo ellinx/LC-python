@@ -39,11 +39,7 @@ class Solution:
     Time: O(N^2*logN)
     Space: O(N)
     """
-    def findCircleNum(self, M):
-        """
-        :type M: List[List[int]]
-        :rtype: int
-        """
+    def findCircleNum(self, M: 'List[List[int]]') -> 'int':
         def findRoot(roots, node):
             while roots[node]!=node:
                 node = roots[node]
@@ -53,12 +49,11 @@ class Solution:
         roots = [i for i in range(N)]
         ret = N
         for i in range(N):
+            rooti = findRoot(roots, i)
             for j in range(i+1,N):
                 if M[i][j]==1:
-                    rooti = findRoot(roots, i)
                     rootj = findRoot(roots, j)
-                    roots[i], roots[j] = rooti, rootj
                     if rooti!=rootj:
-                        roots[rooti] = rootj
+                        roots[rootj] = rooti
                         ret -= 1
         return ret
