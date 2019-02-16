@@ -13,6 +13,11 @@ Output: 200
 Explanation:
 The graph looks like this:
 
+            0
+        /(100)  \(500)
+       /         \
+      1  -------->  2
+          (100)
 
 The cheapest price from city 0 to city 2 with at most 1 stop costs 200, as marked red in the picture.
 
@@ -25,6 +30,11 @@ Output: 500
 Explanation:
 The graph looks like this:
 
+            0
+        /(100)  \(500)
+       /         \
+      1  -------->  2
+          (100)
 
 The cheapest price from city 0 to city 2 with at most 0 stop costs 500, as marked blue in the picture.
 
@@ -39,25 +49,16 @@ k is in the range of [0, n - 1].
 There will not be any duplicated flights or self cycles.
 """
 class Solution:
-    def findCheapestPrice(self, n, flights, src, dst, K):
-        """
-        :type n: int
-        :type flights: List[List[int]]
-        :type src: int
-        :type dst: int
-        :type K: int
-        :rtype: int
-        """
+    def findCheapestPrice(self, n: 'int', flights: 'List[List[int]]', src: 'int', dst: 'int', K: 'int') -> 'int':
         g = collections.defaultdict(dict)
         for u,v,w in flights:
             g[u][v] = w
-        pq = [[0, 0, src]]
-        while len(pq):
-            cost, stop, cur = heapq.heappop(pq)
+        pq = [[0,0,src]]
+        while len(pq)>0:
+            cost, step, cur = heapq.heappop(pq)
             if cur==dst:
                 return cost
-            if stop==K+1:
-                continue
-            for neighbor in g[cur]:
-                heapq.heappush(pq, [cost+g[cur][neighbor], stop+1, neighbor])
+            for nxt in g[cur]:
+                if step+1<=K+1:
+                    heapq.heappush(pq, [cost+g[cur][nxt], step+1, nxt])
         return -1
