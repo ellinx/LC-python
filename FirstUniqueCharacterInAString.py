@@ -1,5 +1,6 @@
 """
-Given a string, find the first non-repeating character in it and return it's index. If it doesn't exist, return -1.
+Given a string, find the first non-repeating character in it and return it's index.
+If it doesn't exist, return -1.
 
 Examples:
 
@@ -19,11 +20,7 @@ class Solution:
     Time: O(n)
     Space: O(n)
     """
-    def firstUniqChar(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
+    def firstUniqChar(self, s: 'str') -> 'int':
         counter = collections.Counter(s)
         for i in range(len(s)):
             if counter[s[i]]==1:
