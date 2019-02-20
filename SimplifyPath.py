@@ -20,20 +20,14 @@ class Solution:
     Time: O(n) where n is length of path
     Space: O(n)
     """
-    def simplifyPath(self, path):
-        """
-        :type path: str
-        :rtype: str
-        """
-        if not len(path):
-            return ""
-        names = path.split("/")
+    def simplifyPath(self, path: 'str') -> 'str':
+        dirs = path.split("/")
         stk = collections.deque()
-        for each in names:
-            if each=="" or each==".":
+        for each in dirs:
+            if len(each)==0 or each=='.':
                 continue
             if each=="..":
-                if len(stk):
+                if len(stk)>0:
                     stk.pop()
             else:
                 stk.append(each)
