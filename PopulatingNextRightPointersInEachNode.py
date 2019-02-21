@@ -70,3 +70,16 @@ class Solution:
                 cur = cur.next
             cur = head
             head, pre = None, None
+
+
+class Solution2:
+    def connect(self, root: 'Node') -> 'Node':
+        if root is None:
+            return None
+        if root.left is not None:
+            root.left.next = root.right
+            if root.next is not None:
+                root.right.next = root.next.left
+            self.connect(root.left)
+            self.connect(root.right)
+        return root
