@@ -42,40 +42,24 @@ class HitCounter:
         Initialize your data structure here.
         """
         self.q = collections.deque()
-        self.total = 0
 
-    def hit(self, timestamp):
+    def hit(self, timestamp: 'int') -> 'None':
         """
         Record a hit.
         @param timestamp - The current timestamp (in seconds granularity).
-        :type timestamp: int
-        :rtype: void
         """
-        while len(self.q):
-            if self.q[0][0]+300<=timestamp:
-                self.total -= self.q.popleft()[1]
-                continue
-            break
-        if len(self.q) and self.q[-1][0]==timestamp:
-            self.q[-1][1] += 1
-        else:
-            self.q.append([timestamp, 1])
-        self.total += 1
+        while len(self.q)>0 and timestamp-self.q[0]>=300:
+            self.q.popleft()
+        self.q.append(timestamp)
 
-
-    def getHits(self, timestamp):
+    def getHits(self, timestamp: 'int') -> 'int':
         """
         Return the number of hits in the past 5 minutes.
         @param timestamp - The current timestamp (in seconds granularity).
-        :type timestamp: int
-        :rtype: int
         """
-        while len(self.q):
-            if self.q[0][0]+300<=timestamp:
-                self.total -= self.q.popleft()[1]
-                continue
-            break
-        return self.total
+        while len(self.q)>0 and timestamp-self.q[0]>=300:
+            self.q.popleft()
+        return len(self.q)
 
 
 # Your HitCounter object will be instantiated and called as such:
