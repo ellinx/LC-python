@@ -9,23 +9,19 @@
 5. An empty string is also valid.
 
 Example 1:
-
 Input: "()"
 Output: True
 
 Example 2:
-
 Input: "(*)"
 Output: True
 
 Example 3:
-
 Input: "(*))"
 Output: True
 
 Note:
-
-    The string size will be in the range [1, 100].
+1. The string size will be in the range [1, 100].
 
 """
 class Solution:
@@ -33,39 +29,32 @@ class Solution:
     Thoughts:
     1. two stacks, one store index of ( and one store index of *
     2. if we see a ), use one (, otherwise use one * (leftmost one)
-    3. if we have unpaired ( in the stack after go through s, we need to see if these * is on the rightside of the (. If yes, they are a pair.
+    3. if we have unpaired ( in the stack after go through s,
+        we need to see if these * is on the rightside of the (. If yes, they are a pair.
 
     Time: O(n) where n is length of s
     Space: O(n)
     """
-    def checkValidString(self, s):
-        """
-        :type s: str
-        :rtype: bool
-        """
-        stk = collections.deque()
-        stars = collections.deque()
-        for i in range(len(s)):
-            if s[i]=="*":
-                stars.append(i)
-            elif s[i]=="(":
-                stk.append(i)
+    def checkValidString(self, s: str) -> bool:
+        left, star = [],[]
+        for i,c in enumerate(s):
+            #print(i,c,left,star)
+            if c=="(":
+                left.append(i)
+            elif c==")":
+                if len(left)==0 and len(star)==0:
+                    return False
+                if len(left)>0:
+                    left.pop()
+                else:
+                    star.pop(0)
+            elif c=="*":
+                star.append(i)
+        i1, i2 = 0, 0
+        while i1<len(left) and i2<len(star):
+            if left[i1]<star[i2]:
+                i1 += 1
+                i2 += 1
             else:
-                if len(stk)==0:
-                    if len(stars)==0:
-                        return False
-                    else:
-                        stars.popleft()
-                    continue
-                stk.pop()
-        if len(stk)==0:
-            return True
-        #print(stk, stars)
-        if len(stk)>len(stars):
-            return False
-        index = -1
-        while index>=-len(stk):
-            if stk[index]>=stars[index]:
-                return False
-            index -= 1
-        return True
+                i2 += 1
+        return i1==len(left)
