@@ -11,33 +11,26 @@ there must be at least n intervals that CPU are doing different tasks or just be
 You need to return the least number of intervals the CPU will take to finish all the given tasks.
 
 Example 1:
-
 Input: tasks = ["A","A","A","B","B","B"], n = 2
 Output: 8
 Explanation: A -> B -> idle -> A -> B -> idle -> A -> B.
 
 Note:
-
-    The number of tasks is in the range [1, 10000].
-    The integer n is in the range [0, 100].
+1. The number of tasks is in the range [1, 10000].
+2. The integer n is in the range [0, 100].
 
 """
 class Solution:
-    def leastInterval(self, tasks, n):
-        """
-        :type tasks: List[str]
-        :type n: int
-        :rtype: int
-        """
+    def leastInterval(self, tasks: List[str], n: int) -> int:
         counter = collections.Counter(tasks)
-        task_list = counter.most_common()
-        #print(task_list)
-        most_repeat = 1
-        for i in range(1,len(task_list)):
-            if task_list[i-1][1] == task_list[i][1]:
-                most_repeat += 1
-                continue
-            break
-        #print(most_repeat)
-        # no idle vs has idle
-        return max(len(tasks),(task_list[0][1]-1)*(n+1)+most_repeat)
+        max_freq = 0
+        num_of_max_freq = 0
+        for k in counter:
+            if counter[k]==max_freq:
+                num_of_max_freq += 1
+            elif counter[k]>max_freq:
+                max_freq = counter[k]
+                num_of_max_freq = 1
+        if num_of_max_freq>=n+1:
+            return len(tasks)
+        return max((n+1)*(max_freq-1)+num_of_max_freq, len(tasks))
