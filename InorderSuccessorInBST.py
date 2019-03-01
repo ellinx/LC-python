@@ -26,21 +26,16 @@ Input: root = [5,3,6,2,4,null,null,1], p = 6
 Output: null
 """
 # Definition for a binary tree node.
-# class TreeNode(object):
+# class TreeNode:
 #     def __init__(self, x):
 #         self.val = x
 #         self.left = None
 #         self.right = None
 
-class Solution(object):
-    def inorderSuccessor(self, root, p):
-        """
-        :type root: TreeNode
-        :type p: TreeNode
-        :rtype: TreeNode
-        """
-        stk = collections.deque()
+class Solution:
+    def inorderSuccessor(self, root: 'TreeNode', p: 'TreeNode') -> 'TreeNode':
         pre = None
+        stk = collections.deque()
         while root is not None or len(stk)>0:
             if root is not None:
                 stk.append(root)
@@ -51,33 +46,4 @@ class Solution(object):
                     return root
                 pre = root
                 root = root.right
-        return None
-
-
-class Solution2(object):
-    def inorderSuccessor(self, root, p):
-        """
-        :type root: TreeNode
-        :type p: TreeNode
-        :rtype: TreeNode
-        """
-        if p.right is not None:
-            cur = p.right
-            while cur.left is not None:
-                cur = cur.left
-            return cur
-        stk = collections.deque()
-        while True:
-            if root==p:
-                break
-            if root.val<p.val:
-                stk.append(root)
-                root = root.right
-            else:
-                stk.append(root)
-                root = root.left
-        while len(stk)>0:
-            cur = stk.pop()
-            if cur.val>p.val:
-                return cur
         return None
