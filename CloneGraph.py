@@ -24,32 +24,24 @@ Visually, the graph looks like the following:
          \_/
 
 """
-# Definition for a undirected graph node
-# class UndirectedGraphNode:
-#     def __init__(self, x):
-#         self.label = x
-#         self.neighbors = []
-
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, neighbors):
+        self.val = val
+        self.neighbors = neighbors
+"""
 class Solution:
-    """
-    Thoughts:
-    1. use a hashmap to record copied node
-    2. DFS copy all nodes
-
-    Time: O(n) where n is total number of nodes in the graph
-    Space: O(n)
-    """
-    # @param node, a undirected graph node
-    # @return a undirected graph node
-    def cloneGraph(self, node):
-        def helper(node, mm):
-            if node.label in mm:
-                return mm[node.label]
-            mm[node.label] = UndirectedGraphNode(node.label)
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        def dfs(node, mm):
+            if node.val in mm:
+                return mm[node.val]
+            copy = Node(node.val,[])
+            mm[node.val] = copy
             for each in node.neighbors:
-                mm[node.label].neighbors.append(helper(each,mm))
-            return mm[node.label]
+                copy.neighbors.append(dfs(each, mm))
+            return copy
 
-        if not node:
+        if node is None:
             return None
-        return helper(node, dict())
+        return dfs(node, dict())
