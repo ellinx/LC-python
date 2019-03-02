@@ -14,19 +14,14 @@ Note:
 2. Your algorithm's time complexity must be better than O(n log n), where n is the array's size.
 """
 class Solution:
-    def topKFrequent(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: List[int]
-        """
-        counter = collections.defaultdict(int)
-        for num in nums:
-            counter[num] += 1
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        counter = collections.Counter(nums)
         pq = []
-        for key in counter:
-            heapq.heappush(pq, [-counter[key], key])
+        for num in counter:
+            heapq.heappush(pq, [counter[num], num])
+            if len(pq)>k:
+                heapq.heappop(pq)
         ret = []
-        while len(ret)<k and len(pq):
+        while len(pq):
             ret.append(heapq.heappop(pq)[1])
-        return ret
+        return ret[::-1]
