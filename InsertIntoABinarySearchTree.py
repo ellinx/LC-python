@@ -34,37 +34,23 @@ This tree is also valid:
 """
 import TreeNode
 
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
 class Solution:
-    def insertIntoBST(self, root, val):
-        """
-        :type root: TreeNode
-        :type val: int
-        :rtype: TreeNode
-        """
-        if root is None:
-            return TreeNode(val)
-        stk = collections.deque()
-        pre = None
-        cur = root
-        while cur is not None or len(stk):
-            if cur is not None:
-                stk.append(cur)
-                cur = cur.left
+    def insertIntoBST(self, root: TreeNode, val: int) -> TreeNode:
+        pre, cur = None, root
+        while cur is not None:
+            if cur.val<val:
+                pre, cur = cur, cur.right
             else:
-                cur = stk.pop()
-                if cur.val>val:
-                    break
-                pre = cur
-                cur = cur.right
-        if cur is None:
+                pre, cur = cur, cur.left
+        if val>pre.val:
             pre.right = TreeNode(val)
-            return root
-        #print(cur.val)
-        if cur.left is None:
-            cur.left = TreeNode(val)
-            return root
-        cur = cur.left
-        while cur.right is not None:
-            cur = cur.right
-        cur.right = TreeNode(val)
+        else:
+            pre.left = TreeNode(val)
         return root
