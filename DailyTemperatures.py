@@ -10,17 +10,13 @@ Note: The length of temperatures will be in the range [1, 30000].
 Each temperature will be an integer in the range [30, 100].
 """
 class Solution:
-    def dailyTemperatures(self, T):
-        """
-        :type T: List[int]
-        :rtype: List[int]
-        """
+    def dailyTemperatures(self, T: List[int]) -> List[int]:
         n = len(T)
         ret = [0]*n
-        dq = collections.deque()
+        stk = collections.deque()
         for i,t in enumerate(T):
-            while len(dq) and t>dq[-1][0]:
-                ret[dq[-1][1]] = i-dq[-1][1]
-                dq.pop()
-            dq.append([t,i])
+            while len(stk)>0 and stk[-1][1]<t:
+                idx, temp = stk.pop()
+                ret[idx] = i-idx
+            stk.append([i,t])
         return ret
