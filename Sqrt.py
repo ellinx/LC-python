@@ -7,32 +7,27 @@ Since the return type is an integer, the decimal digits are truncated and
 only the integer part of the result is returned.
 
 Example 1:
-
 Input: 4
 Output: 2
-Example 2:
 
+Example 2:
 Input: 8
 Output: 2
 Explanation: The square root of 8 is 2.82842..., and since
              the decimal part is truncated, 2 is returned.
 """
 class Solution:
-    def mySqrt(self, x):
-        """
-        :type x: int
-        :rtype: int
-        """
-        s, e = 0, x
-        while s<=e:
-            m = s+(e-s)//2
-            tmp = m**2
-            if tmp==x:
+    def mySqrt(self, x: int) -> int:
+        l, r = 0, x
+        while l<r:
+            m = l+(r-l)//2
+            if m**2==x:
                 return m
-            if tmp>x:
-                if (m-1)**2<=x:
-                    return m-1
-                e = m-1
+            if m**2<x:
+                if (m+1)**2<=x:
+                    l = m+1
+                else:
+                    return m
             else:
-                s = m+1
-        return -1
+                r = m-1
+        return l
