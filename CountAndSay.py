@@ -42,3 +42,27 @@ class Solution:
                 index = end
             ret = nxt
         return ret
+
+class Solution2:
+    def countAndSay(self, n: int) -> str:
+        def process(s):
+            ret = []
+            idx, cnt = 0, 0
+            while idx<len(s):
+                if idx==0:
+                    cnt = 1
+                    idx += 1
+                    continue
+                if s[idx-1]!=s[idx]:
+                    ret.append(str(cnt)+s[idx-1])
+                    cnt = 1
+                else:
+                    cnt += 1
+                idx += 1
+            ret.append(str(cnt)+s[idx-1])
+            return "".join(ret)
+
+        ret = "1"
+        for _ in range(n-1):
+            ret = process(ret)
+        return ret
