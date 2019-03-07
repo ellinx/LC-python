@@ -14,16 +14,11 @@ Note:
 2. The result can be in any order.
 """
 class Solution:
-    def intersection(self, nums1, nums2):
-        """
-        :type nums1: List[int]
-        :type nums2: List[int]
-        :rtype: List[int]
-        """
-        c1 = collections.Counter(nums1)
-        c2 = collections.Counter(nums2)
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        set1 = set(nums1)
         ret = []
-        for k in c1:
-            if k in c2:
-                ret.append(k)
+        for num in nums2:
+            if num in set1:
+                ret.append(num)
+                set1.remove(num)
         return ret
