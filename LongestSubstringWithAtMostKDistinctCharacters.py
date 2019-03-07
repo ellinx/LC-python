@@ -6,22 +6,20 @@ For example, Given s = “eceba” and k = 2,
 T is "ece" which its length is 3.
 """
 class Solution:
-    def lengthOfLongestSubstringKDistinct(self, s, k):
-        """
-        :type s: str
-        :type k: int
-        :rtype: int
-        """
-        ret = 0
-        counter = dict()
+    def lengthOfLongestSubstringKDistinct(self, s: str, k: int) -> int:
         l, r = 0, 0
+        counter = collections.defaultdict(int)
+        total = 0
+        ret = 0
         while r<len(s):
-            counter[s[r]] = counter.get(s[r], 0)+1
+            if counter[s[r]]==0:
+                total += 1
+            counter[s[r]] += 1
             r += 1
-            while len(counter)>k:
+            while total>k:
+                if counter[s[l]]==1:
+                    total -= 1
                 counter[s[l]] -= 1
-                if counter[s[l]]==0:
-                    counter.pop(s[l])
                 l += 1
             ret = max(ret, r-l)
         return ret
