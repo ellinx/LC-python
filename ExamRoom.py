@@ -28,57 +28,41 @@ seat() -> 5, the student​​​​​​​ sits at the last seat number 5.
 ​​​​​​​
 
 Note:
-
 1. 1 <= N <= 10^9
 2. ExamRoom.seat() and ExamRoom.leave() will be called at most 10^4 times across all test cases.
 3. Calls to ExamRoom.leave(p) are guaranteed to have a student currently sitting in seat number p.
 """
 class ExamRoom:
 
-    def __init__(self, N):
-        """
-        :type N: int
-        """
+    def __init__(self, N: int):
         self.N = N
         self.seats = []
 
-    def seat(self):
-        """
-        :rtype: int
-        """
+
+    def seat(self) -> int:
         if len(self.seats)==0:
             self.seats.append(0)
             return 0
-        # [pos, insertIndex, dist]
-        cur = [-1, -1, 0]
-        for i in range(1,len(self.seats)):
-            dist = (self.seats[i]-self.seats[i-1])//2
-            if dist>cur[2]:
-                cur = [self.seats[i-1]+dist, i, dist]
-        if self.seats[0]!=0 and self.seats[0]>=cur[2]:
-            cur = [0, 0, self.seats[0]]
-        if self.seats[-1]!=self.N-1 and self.N-1-self.seats[-1]>cur[2]:
-            cur = [self.N-1, len(self.seats), self.N-1-self.seats[-1]]
-        self.seats.insert(cur[1], cur[0])
-        #print("sit ", self.seats)
-        return cur[0]
+        cand = None
+        for i in range(len(self.seats)-1):
+            dist = self.seats[i+1]-self.seats[i]-1
+            dist = (dist+1)//2
+            if cand is None or dist>cand[0]:
+                cand = [dist, self.seats[i]+dist]
+        # check first
+        dist = self.seats[0]
+        if cand is None or dist>=cand[0]:
+            cand = [dist, 0]
+        # check last
+        dist = self.N-1-self.seats[-1]
+        if cand is None or dist>cand[0]:
+            cand = [dist, self.N-1]
+        idx = bisect.bisect_left(self.seats, cand[1])
+        self.seats.insert(idx,cand[1])
+        return cand[1]
 
-    def leave(self, p):
-        """
-        :type p: int
-        :rtype: void
-        """
-        l, r = 0, len(self.seats)-1
-        while l<=r:
-            m = l+(r-l)//2
-            if self.seats[m]==p:
-                self.seats.pop(m)
-                #print("leave ",self.seats)
-                return
-            if self.seats[m]<p:
-                l = m+1
-            else:
-                r = m-1
+    def leave(self, p: int) -> None:
+        self.seats.remove(p)
 
 
 # Your ExamRoom object will be instantiated and called as such:
