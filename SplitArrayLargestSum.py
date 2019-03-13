@@ -1,5 +1,6 @@
 """
-Given an array which consists of non-negative integers and an integer m, you can split the array into m non-empty continuous subarrays.
+Given an array which consists of non-negative integers and an integer m,
+you can split the array into m non-empty continuous subarrays.
 Write an algorithm to minimize the largest sum among these m subarrays.
 
 Note:
@@ -55,3 +56,29 @@ class Solution:
                 left = mid+1
             #print(left,right)
         return left
+
+
+class Solution2:
+    def splitArray(self, nums: List[int], m: int) -> int:
+        def dfs(nums, start, m, mm):
+            if len(nums)-start<m:
+                return -1
+            if len(nums)-start==m:
+                return max(nums[start:])
+            if m==1:
+                return sum(nums[start:])
+            key = (start,m)
+            if key in mm:
+                return mm[key]
+            total = 0
+            for i in range(start,len(nums)-m+1):
+                total += nums[i]
+                after = dfs(nums, i+1, m-1, mm)
+                if after==-1:
+                    continue
+                mm[key] = min(mm.get(key,float('inf')), max(total, after))
+            if key not in mm:
+                mm[key] = -1
+            return mm[key]
+
+        return dfs(nums, 0, m, dict())
