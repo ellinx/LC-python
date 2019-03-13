@@ -32,22 +32,16 @@ Explanation:
 Returns [4, 5, 3], [2], [1].
 """
 class Solution:
-    def findLeaves(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[List[int]]
-        """
-        def helper(root, mm):
+    def findLeaves(self, root: TreeNode) -> List[List[int]]:
+        def dfs(root, mm):
             if root is None:
-                return 0
-            if root in mm:
-                return mm[root]
-            mm[root] = max(helper(root.left, mm), helper(root.right, mm))+1
-            return mm[root]
+                return -1
+            left = dfs(root.left, mm)
+            right = dfs(root.right, mm)
+            dist = max(left,right)+1
+            mm[dist].append(root.val)
+            return dist
 
-        mm = dict()
-        height = helper(root, mm)
-        ret = [[] for _ in range(height)]
-        for k in mm:
-            ret[mm[k]-1].append(k.val)
-        return ret
+        mm = collections.defaultdict(list)
+        dfs(root, mm)
+        return [mm[k] for k in sorted(mm)]
