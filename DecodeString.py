@@ -15,32 +15,29 @@ s = "3[a]2[bc]", return "aaabcbc".
 s = "3[a2[c]]", return "accaccacc".
 s = "2[abc]3[cd]ef", return "abcabccdcdcdef".
 """
-class DecodeString:
-    def decodeString(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
-        ret = ''
-        start, end = 0, 0
-        while end<len(s):
-            if not s[end].isdigit():
-                ret += s[end]
-                end += 1
-                start = end
-                continue
-            while s[end].isdigit():
-                end += 1
-            repeatNum = int(s[start:end])
-            left = 1
-            for i in range(end+1,len(s)):
-                if s[i]=='[':
-                    left += 1
-                elif s[i]==']':
-                    left -= 1
-                if left==0:
-                    ret += repeatNum*self.decodeString(s[end+1:i])
-                    end = i+1
-                    start = end
-                    break
+class Solution:
+    def decodeString(self, s: str) -> str:
+        ret = ""
+        stk = collections.deque()
+        repeat = 1
+        l, r = 0, 0
+        while l<len(s):
+            if s[l]=='[':
+                stk.append(ret)
+                stk.append(repeat)
+                ret, repeat = "", 1
+                l += 1
+            elif s[l]==']':
+                repeat = stk.pop()
+                ret = stk.pop()+ret*repeat
+                l += 1
+            elif s[l].isdigit():
+                r = l+1
+                while s[r].isdigit():
+                    r += 1
+                repeat = int(s[l:r])
+                l = r
+            else:
+                ret += s[l]
+                l += 1
         return ret
