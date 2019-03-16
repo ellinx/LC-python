@@ -16,6 +16,8 @@ A solution set is:
   [-1, -1, 2]
 ]
 """
+from typing import List
+
 class Solution:
     """
     Thoughts:
@@ -51,3 +53,11 @@ class Solution:
                 else:
                     j += 1
         return ret
+
+
+# test
+if __name__=="__main__":
+    sol = Solution()
+    nums = [-1, 0, 1, 2, -1, -4]
+    result = sol.threeSum(nums)
+    print(result)
