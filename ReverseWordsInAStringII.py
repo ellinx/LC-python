@@ -13,31 +13,21 @@ The words are always separated by a single space.
 Follow up: Could you do it in-place without allocating extra space?
 """
 class Solution:
-    def reverseWords(self, str):
+    def reverseWords(self, str: List[str]) -> None:
         """
-        :type str: List[str]
-        :rtype: void Do not return anything, modify str in-place instead.
+        Do not return anything, modify str in-place instead.
         """
-        def reverseHelper(s, start, end):
-            while start<end:
-                str[start],str[end] = str[end],str[start]
-                start += 1
-                end -= 1
+        def reverseRange(s, l, r):
+            while l<r:
+                s[l], s[r] = s[r], s[l]
+                l += 1
+                r -= 1
 
-        # reverse whole list then reverse each word
-        if not len(str):
-            return
-        reverseHelper(str, 0, len(str)-1)
-        start = 0
-        while str[start]==' ':
-            start += 1
-        end = start
-        while end<len(str):
-            while end<len(str) and str[end]!=' ':
-                end += 1
-            reverseHelper(str, start,end-1)
-            if end==len(str):
-                break
-            while end<len(str) and str[end]==' ':
-                end += 1
-            start = end
+        reverseRange(str, 0, len(str)-1)
+        l, r = 0, 0
+        while l<len(str):
+            while r<len(str) and str[r]!=' ':
+                r += 1
+            reverseRange(str, l, r-1)
+            r += 1
+            l = r
