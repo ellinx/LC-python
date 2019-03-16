@@ -26,34 +26,28 @@ class Solution:
     Time: O(n^2) where n is length of nums
     Space: O(n)
     """
-    def threeSum(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[List[int]]
-        """
-        nums.sort()
-        N = len(nums)
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
         ret = []
-        for i in range(N-2):
+        nums.sort()
+        for i in range(len(nums)-2):
             if nums[i]+nums[i+1]+nums[i+2]>0:
                 break
-            if i and nums[i-1]==nums[i]:
+            if nums[i]+nums[-2]+nums[-1]<0:
                 continue
-            if nums[i]+nums[N-2]+nums[N-1]<0:
-                continue
-            j, k = i+1, N-1
+            if i>0 and nums[i-1]==nums[i]:
+                continue;
+            j, k = i+1, len(nums)-1
             while j<k:
                 if nums[i]+nums[j]+nums[k]==0:
-                    ret.append([nums[i], nums[j], nums[k]])
+                    ret.append([nums[i],nums[j],nums[k]])
                     j += 1
-                    k -= 1
                     while j<k and nums[j-1]==nums[j]:
                         j += 1
-                    while j<k and nums[k]==nums[k+1]:
-                        k -= 1
-                    continue
-                if nums[i]+nums[j]+nums[k]<0:
-                    j += 1
-                else:
                     k -= 1
+                    while k>j and nums[k]==nums[k+1]:
+                        k -= 1
+                elif nums[i]+nums[j]+nums[k]>0:
+                    k -= 1
+                else:
+                    j += 1
         return ret
