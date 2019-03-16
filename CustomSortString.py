@@ -39,3 +39,12 @@ class Solution:
         for k in counter:
             ret += k*counter[k]
         return ret
+
+class Solution2:
+    def customSortString(self, S: str, T: str) -> str:
+        rank = collections.defaultdict(int)
+        for i,c in enumerate(S):
+            rank[c] = i+1
+        li = list(T)
+        li.sort(key=lambda x:rank[x])
+        return "".join(li)
