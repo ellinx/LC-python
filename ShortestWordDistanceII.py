@@ -36,24 +36,15 @@ class WordDistance:
         l2 = self.word_index[word2]
         #print(l1)
         #print(l2)
-        i1, i2 = 0, 0
-        pre = None
         ret = float('inf')
+        i1, i2 = 0, 0
         while i1<len(l1) and i2<len(l2):
-            if l1[i1]<l2[i2]:
-                if pre and pre[0]==2:
-                    ret = min(ret, l1[i1]-pre[1])
-                pre = (1, l1[i1])
+            if l1[i1]<=l2[i2]:
+                ret = min(ret, l2[i2]-l1[i1])
                 i1 += 1
             else:
-                if pre and pre[0]==1:
-                    ret = min(ret, l2[i2]-pre[1])
-                pre = (2, l2[i2])
+                ret = min(ret, l1[i1]-l2[i2])
                 i2 += 1
-        if i1<len(l1):
-            ret = min(ret, l1[i1]-pre[1])
-        if i2<len(l2):
-            ret = min(ret, l2[i2]-pre[1])
         return ret
 
 
