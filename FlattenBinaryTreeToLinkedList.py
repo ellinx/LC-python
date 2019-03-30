@@ -30,24 +30,30 @@ The flattened tree should look like:
 #         self.right = None
 
 class Solution:
-    def flatten(self, root):
+    def flatten(self, root: TreeNode) -> None:
         """
-        :type root: TreeNode
-        :rtype: void Do not return anything, modify root in-place instead.
+        Do not return anything, modify root in-place instead.
         """
-        def flatTree(root):
-            if root is None:
-                return [None, None]
-            lhead, ltail = flatTree(root.left)
-            rhead, rtail = flatTree(root.right)
-            root.left = None
-            ret = [root, root]
-            if lhead is not None:
-                ret[1].right = lhead
-                ret[1] = ltail
-            if rhead is not None:
-                ret[1].right = rhead
-                ret[1] = rtail
-            return ret
+        def flat(root):
+            head, tail = root, None
+            cur = root
+            while True:
+                nxt = cur.right
+                #print(cur.val,nxt)
+                if cur.left is not None:
+                    l, r = flat(cur.left)
+                    #print(l.val,r.val)
+                    cur.right = l
+                    cur.left = None
+                    r.right = nxt
+                    cur = r
+                if nxt is not None:
+                    cur = nxt
+                else:
+                    tail = cur
+                    break
+            return [head,tail]
 
-        flatTree(root)
+        if root is None:
+            return
+        flat(root)
