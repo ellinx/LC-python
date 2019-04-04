@@ -23,3 +23,16 @@ class Solution:
         :rtype: bool
         """
         return sorted(s)==sorted(t)
+
+class Solution2:
+    def isAnagram(self, s: str, t: str) -> bool:
+        if len(s)!=len(t):
+            return False
+        counter = collections.Counter(s)
+        for c in t:
+            if c not in counter:
+                return False
+            counter[c] -= 1
+            if counter[c]<0:
+                return False
+        return True
