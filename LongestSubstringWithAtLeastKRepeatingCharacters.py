@@ -3,7 +3,6 @@ Find the length of the longest substring T of a given string (consists of lowerc
 such that every character in T appears no less than k times.
 
 Example 1:
-
 Input:
 s = "aaabb", k = 3
 Output:
@@ -11,7 +10,6 @@ Output:
 The longest substring is "aaa", as 'a' is repeated 3 times.
 
 Example 2:
-
 Input:
 s = "ababbc", k = 2
 Output:
@@ -19,20 +17,14 @@ Output:
 The longest substring is "ababb", as 'a' is repeated 2 times and 'b' is repeated 3 times.
 """
 class Solution:
-    def longestSubstring(self, s, k):
-        """
-        :type s: str
-        :type k: int
-        :rtype: int
-        """
-        ret = 0
-        if len(s)==0:
+    def longestSubstring(self, s: str, k: int) -> int:
+        if len(s)<k:
             return 0
         counter = collections.Counter(s)
-        last = counter.most_common()[-1]
-        if last[1]>=k:
+        least = counter.most_common()[-1]
+        if least[1]>=k:
             return len(s)
-        nxt = s.split(last[0])
-        for each in nxt:
-            ret = max(ret, self.longestSubstring(each, k))
+        ret = 0
+        for each in s.split(least[0]):
+            ret = max(ret, self.longestSubstring(each,k))
         return ret
