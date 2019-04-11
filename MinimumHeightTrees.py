@@ -43,30 +43,22 @@ Note:
 2. The height of a rooted tree is the number of edges on the longest downward path between the root and a leaf.
 """
 class Solution:
-    def findMinHeightTrees(self, n, edges):
-        """
-        :type n: int
-        :type edges: List[List[int]]
-        :rtype: List[int]
-        """
-        if n==1:
-            return [0]
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        if n<=2:
+            return [i for i in range(n)]
         g = collections.defaultdict(set)
         for u,v in edges:
             g[u].add(v)
             g[v].add(u)
-        cur = []
-        for k in g:
-            if len(g[k])==1:
-                cur.append(k)
-        #print(cur)
+        cur = [k for k in g if len(g[k])==1]
         while True:
             nxt = []
             for each in cur:
-                for node in g[each]:
-                    g[node].remove(each)
-                    if len(g[node])==1:
-                        nxt.append(node)
+                if len(g[each]):
+                    neighbor = g[each].pop()
+                    g[neighbor].remove(each)
+                    if len(g[neighbor])==1:
+                        nxt.append(neighbor)
             if len(nxt)==0:
                 break
             cur = nxt
