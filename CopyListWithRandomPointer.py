@@ -1,5 +1,6 @@
 """
-A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
+A linked list is given such that each node contains an additional random pointer
+which could point to any node in the list or null.
 
 Return a deep copy of the list.
 """
@@ -10,32 +11,23 @@ class RandomListNode(object):
         self.next = None
         self.random = None
 
-class Solution(object):
+class Solution:
     #1 first loop: copy list without random pointer, memorize copied node
     #2 second loop: assign correct random pointer for each copied node
-    def copyRandomList(self, head):
-        """
-        :type head: RandomListNode
-        :rtype: RandomListNode
-        """
-        copy = {}
-        dummy1, dummy2 = RandomListNode(0), RandomListNode(0)
-        dummy1.next = head
-        cur = head
-        copyPre = dummy2
-        #copy next
-        while cur:
-            copy[cur.label] = RandomListNode(cur.label)
-            copyPre.next = copy[cur.label]
-            copyPre, cur = copyPre.next, cur.next
-        cur = head
-        copyCur = dummy2.next
-        #copy random
-        while cur:
-            if cur.random:
-                copyCur.random = copy[cur.random.label]
-            copyCur, cur = copyCur.next, cur.next
-        return dummy2.next
+    def copyRandomList(self, head: 'Node') -> 'Node':
+        mm = dict()
+        dummy = Node(0,None,None)
+        cur, cur1 = head, dummy
+        while cur is not None:
+            mm[cur] = Node(cur.val, None, None)
+            cur1.next = mm[cur]
+            cur, cur1 = cur.next, cur1.next
+        cur, cur1 = head, dummy.next
+        while cur is not None:
+            if cur.random is not None:
+                cur1.random = mm[cur.random]
+            cur, cur1 = cur.next, cur1.next
+        return dummy.next
 
 class Solution2(object):
     # without map
