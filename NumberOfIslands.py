@@ -62,37 +62,31 @@ class Solution2:
     """
     Thoughts: Union&Find
     """
-    def numIslands(self, grid):
-        """
-        :type grid: List[List[str]]
-        :rtype: int
-        """
+    def numIslands(self, grid: List[List[str]]) -> int:
         def findRoot(roots, node):
-            if node not in roots:
-                roots[node] = node
             while roots[node]!=node:
                 node = roots[node]
             return node
 
+        roots = dict()
+        ret = 0
         m = len(grid)
         if m==0:
             return 0
         n = len(grid[0])
-        dirs = [[-1,0],[0,-1]]
-        roots = dict()
-        ret = 0
         for i in range(m):
             for j in range(n):
-                if grid[i][j]=='1':
-                    root0 = findRoot(roots, (i,j))
+                if grid[i][j]=="1":
                     ret += 1
-                    for each in dirs:
-                        ni = i+each[0]
-                        nj = j+each[1]
-                        if ni>=0 and ni<m and nj>=0 and nj<n and grid[ni][nj]=='1':
-                            root1 = findRoot(roots, (ni,nj))
-                            roots[(ni,nj)] = root1
-                            if root0!=root1:
-                                ret -= 1
-                                roots[root1] = root0
+                    roots[(i,j)] = (i,j)
+                    if i-1>=0 and grid[i-1][j]=="1":
+                        rootU = findRoot(roots, (i-1,j))
+                        if rootU!=(i,j):
+                            ret -= 1
+                            roots[rootU] = (i,j)
+                    if j-1>=0 and grid[i][j-1]=="1":
+                        rootL = findRoot(roots, (i,j-1))
+                        if rootL!=(i,j):
+                            ret -= 1
+                            roots[rootL] = (i,j)
         return ret
