@@ -14,7 +14,7 @@ Note:
 """
 class Solution:
     def reverseWords(self, s: str) -> str:
-        ret = []
+        words = []
         l, r = 0, 0
         while l<len(s):
             while l<len(s) and s[l]==" ":
@@ -24,6 +24,6 @@ class Solution:
             r = l
             while r<len(s) and s[r]!=" ":
                 r += 1
-            ret.append(s[l:r])
+            words.append(s[l:r])
             l = r+1
-        return " ".join(ret[::-1])
+        return " ".join(words[::-1])
