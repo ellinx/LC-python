@@ -45,3 +45,55 @@ class Solution:
                 numSet.add(root.val)
                 root = root.right
         return False
+
+
+class Solution2:
+    def findTarget(self, root: TreeNode, k: int) -> bool:
+        def getNextGreater(stk):
+            ret, cur = None, None
+            while cur is not None or len(stk)>0:
+                if cur is not None:
+                    stk.append(cur)
+                    cur = cur.left
+                else:
+                    if ret is not None:
+                        break
+                    cur = stk.pop()
+                    ret = cur.val
+                    cur = cur.right
+            return [ret, stk]
+
+        def getNextSmaller(stk):
+            ret, cur = None, None
+            while cur is not None or len(stk)>0:
+                if cur is not None:
+                    stk.append(cur)
+                    cur = cur.right
+                else:
+                    if ret is not None:
+                        break
+                    cur = stk.pop()
+                    ret = cur.val
+                    cur = cur.left
+            return [ret, stk]
+
+        stk1 = collections.deque()
+        cur = root
+        while cur is not None:
+            stk1.append(cur)
+            cur = cur.left
+        stk2 = collections.deque()
+        cur = root
+        while cur is not None:
+            stk2.append(cur)
+            cur = cur.right
+        l, stk1 = getNextGreater(stk1)
+        r, stk2 = getNextSmaller(stk2)
+        while l<r:
+            if l+r==k:
+                return True
+            if l+r<k:
+                l, stk1 = getNextGreater(stk1)
+            else:
+                r, stk2 = getNextSmaller(stk2)
+        return False
