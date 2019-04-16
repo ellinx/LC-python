@@ -35,23 +35,15 @@ Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of 
 #         self.right = None
 
 class Solution:
-    def lowestCommonAncestor(self, root, p, q):
-        """
-        :type root: TreeNode
-        :type p: TreeNode
-        :type q: TreeNode
-        :rtype: TreeNode
-        """
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         if root is None:
-            return None
+            return root
         if root==p or root==q:
             return root
-        l = self.lowestCommonAncestor(root.left,p,q)
-        r = self.lowestCommonAncestor(root.right,p,q)
-        if l is not None and r is not None:
-            return root
-        if l is not None:
-            return l
-        if r is not None:
-            return r
-        return None
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+        if left is None:
+            return right
+        if right is None:
+            return left
+        return root
