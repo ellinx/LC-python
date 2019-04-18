@@ -1,7 +1,11 @@
 """
- Given two binary trees and imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the others are not.
+ Given two binary trees and imagine that when you put one of them to cover the other,
+ some nodes of the two trees are overlapped while the others are not.
 
-You need to merge them into a new binary tree. The merge rule is that if two nodes overlap, then sum node values up as the new value of the merged node. Otherwise, the NOT null node will be used as the node of new tree.
+You need to merge them into a new binary tree. The merge rule is that if two nodes overlap,
+then sum node values up as the new value of the merged node.
+
+Otherwise, the NOT null node will be used as the node of new tree.
 
 Example 1:
 
@@ -12,6 +16,7 @@ Input:
         3   2                     1   3
        /                           \   \
       5                             4   7
+
 Output:
 Merged tree:
 	     3
@@ -24,20 +29,14 @@ Note: The merging process must start from the root nodes of both trees.
 
 """
 class Solution:
-    def mergeTrees(self, t1, t2):
-        """
-        :type t1: TreeNode
-        :type t2: TreeNode
-        :rtype: TreeNode
-        """
-        ret = None
-        if t1 and t2:
-            ret = TreeNode(t1.val+t2.val)
-            ret.left = self.mergeTrees(t1.left, t2.left)
-            ret.right = self.mergeTrees(t1.right, t2.right)
-            return ret
-        if t1:
-            return t1
-        if t2:
+    def mergeTrees(self, t1: TreeNode, t2: TreeNode) -> TreeNode:
+        if t1 is None and t2 is None:
+            return None
+        if t1 is None:
             return t2
+        if t2 is None:
+            return t1
+        ret = TreeNode(t1.val+t2.val)
+        ret.left = self.mergeTrees(t1.left, t2.left)
+        ret.right = self.mergeTrees(t1.right, t2.right)
         return ret
