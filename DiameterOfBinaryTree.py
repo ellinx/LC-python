@@ -16,26 +16,30 @@ Return 3, which is the length of the path [4,2,1,3] or [5,2,1,3].
 
 Note: The length of path between two nodes is represented by the number of edges between them.
 """
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
 class Solution:
     # use a recursive helper function that takes a TreeNode root as input
     # update longest path with a new candidate which is longest path ends at left child, root and longest path ends at right child
     # return longest path ends at root
-    def diameterOfBinaryTree(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        def helper(root):
+    def diameterOfBinaryTree(self, root: TreeNode) -> int:
+        def depth(root):
             if root is None:
-                return [0, 0]
-            l = helper(root.left)
-            r = helper(root.right)
-            ret = [0,0]
-            ret[0] = max(l[0],r[0])+1
-            ret[1] = max(l[1], r[1], l[0]+r[0]+1)
-            return ret
+                return 0
+            l = depth(root.left)
+            r = depth(root.right)
+            nonlocal longest
+            longest = max(longest, l+1+r)
+            return max(l+1, r+1)
 
-        ret = helper(root)[1]
-        if ret==0:
+        longest = 0
+        depth(root)
+        if longest==0:
             return 0
-        return ret-1
+        return longest-1
