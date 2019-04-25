@@ -27,60 +27,50 @@ cache.get(4);       // returns 4
 
 """
 class DLNode:
-    def __init__(self, k, v):
-        self.data = [k,v]
+    def __init__(self):
+        self.data = None
         self.prev = None
         self.next = None
 
 class LRUCache:
 
-    def __init__(self, capacity):
-        """
-        :type capacity: int
-        """
-        self.map = dict()
+    def __init__(self, capacity: int):
+        self.map = {}
+        self.head = DLNode()
+        self.tail = DLNode()
+        self.head.next, self.tail.prev = self.tail, self.head
         self.size = 0
         self.capacity = capacity
-        self.head = DLNode(0,0)
-        self.tail = DLNode(0,0)
-        self.head.next, self.tail.prev = self.tail, self.head
 
     def deleteNode(self, node):
         pre, nxt = node.prev, node.next
         pre.next, nxt.prev = nxt, pre
 
-    def addToTail(self, node):
+    def appendNode(self, node):
         pre = self.tail.prev
-        pre.next, node.next = node, self.tail
-        node.prev, self.tail.prev = pre, node
+        pre.next, node.prev = node, pre
+        node.next, self.tail.prev = self.tail, node
 
-    def get(self, key):
-        """
-        :type key: int
-        :rtype: int
-        """
+    def get(self, key: int) -> int:
+        if key not in self.map:
+            return -1
+        node = self.map[key]
+        ret = node.data[1]
+        self.deleteNode(node)
+        self.appendNode(node)
+        return ret
+
+    def put(self, key: int, value: int) -> None:
         if key in self.map:
             node = self.map[key]
-            self.deleteNode(node)
-            self.addToTail(node)
-            return node.data[1]
-        return -1
-
-    def put(self, key, value):
-        """
-        :type key: int
-        :type value: int
-        :rtype: void
-        """
-        if key in self.map:
-            node = self.map[key]
-            self.deleteNode(node)
-            self.addToTail(node)
             node.data[1] = value
+            self.deleteNode(node)
+            self.appendNode(node)
             return
-        node = DLNode(key,value)
+        node = DLNode()
+        node.data = [key,value]
         self.map[key] = node
-        self.addToTail(node)
+        self.appendNode(node)
         self.size += 1
         if self.size>self.capacity:
             node = self.head.next
