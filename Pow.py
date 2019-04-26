@@ -45,34 +45,27 @@ class Solution:
 
 
 class Solution2:
-    def myPow(self, x, n):
-        """
-        :type x: float
-        :type n: int
-        :rtype: float
-        """
-        def helper(mm, n):
+    def myPow(self, x: float, n: int) -> float:
+        def biSearch(mm,n):
             l, r = 0, len(mm)-1
             while l<=r:
-                m = l+(r-l)//2
-                if 2**m==n:
-                    return m
-                if 2**m<n:
-                    l = m+1
+                mid = l+(r-l)//2
+                if 2**mid<=n:
+                    if mid+1>r or 2**(mid+1)>n:
+                        return mid
+                    l = mid+1
                 else:
-                    r = m-1
-            return l-1
+                    r = mid-1
+            return l
 
-        if n==0:
-            return 1
         if n<0:
             return 1/self.myPow(x,-n)
         mm = [x]
         ret = 1
         while n>0:
-            while 2**(len(mm)-1)<n:
+            while n>2**(len(mm)-1):
                 mm.append(mm[-1]*mm[-1])
-            idx = helper(mm, n)
+            idx = biSearch(mm,n)
             ret *= mm[idx]
             n -= 2**idx
         return ret
