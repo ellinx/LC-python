@@ -16,21 +16,22 @@ Explanation: t is "aabbb" which its length is 5.
 
 """
 class Solution:
-    def lengthOfLongestSubstringTwoDistinct(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-        counter = dict()
+    def lengthOfLongestSubstringTwoDistinct(self, s: str) -> int:
+        counter = {}
+        l, r = 0, 0
         ret = 0
-        start, end = 0, 0
-        while end<len(s):
-            counter[s[end]] = counter.get(s[end], 0)+1
+        while r<len(s):
+            if s[r] in counter:
+                counter[s[r]] += 1
+                r += 1
+                ret = max(ret, r-l)
+                continue
+            counter[s[r]] = 1
+            r += 1
             while len(counter)>2:
-                counter[s[start]] -= 1
-                if counter[s[start]]==0:
-                    counter.pop(s[start])
-                start += 1
-            ret = max(ret, end-start+1)
-            end += 1
+                counter[s[l]] -= 1
+                if counter[s[l]]==0:
+                    counter.pop(s[l])
+                l += 1
+            ret = max(ret, r-l)
         return ret
