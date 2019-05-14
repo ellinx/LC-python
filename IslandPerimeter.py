@@ -31,31 +31,24 @@ class Solution:
     Time: O(m*n) where m, n is row and col number of the matrix
     Space: O(1)
     """
-    def islandPerimeter(self, grid):
-        """
-        :type grid: List[List[int]]
-        :rtype: int
-        """
+    def islandPerimeter(self, grid: List[List[int]]) -> int:
+        def perimeter(grid, i, j):
+            ret = 4
+            m, n = len(grid), len(grid[0])
+            dirs = [[-1,0],[1,0],[0,-1],[0,1]]
+            for each in dirs:
+                ni, nj = i+each[0], j+each[1]
+                if ni>=0 and ni<m and nj>=0 and nj<n and grid[ni][nj]==1:
+                    ret -= 1
+            return ret
+
         ret = 0
         m = len(grid)
         if m==0:
-            return 0
+            return ret
         n = len(grid[0])
         for i in range(m):
             for j in range(n):
                 if grid[i][j]==1:
-                    neighbors = 0
-                    #up
-                    if i-1>=0 and grid[i-1][j]==1:
-                        neighbors += 1
-                    #down
-                    if i+1<m and grid[i+1][j]==1:
-                        neighbors += 1
-                    #left
-                    if j-1>=0 and grid[i][j-1]==1:
-                        neighbors += 1
-                    #right
-                    if j+1<n and grid[i][j+1]==1:
-                        neighbors += 1
-                    ret += 4-neighbors
+                    ret += perimeter(grid,i,j)
         return ret
