@@ -15,20 +15,14 @@ Output:
 ]
 """
 class Solution:
-    def permute(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[List[int]]
-        """
+    def permute(self, nums: List[int]) -> List[List[int]]:
         def dfs(nums, cur, ret):
-            if len(nums)==1:
-                ret.append(cur+[nums[0]])
+            if len(nums)==0:
+                ret.append(cur)
                 return
-            for i in range(len(nums)):
-                dfs(nums[:i]+nums[i+1:], cur+[nums[i]], ret)
+            for i,each in enumerate(nums):
+                dfs(nums[:i]+nums[i+1:], cur+[each], ret)
 
         ret = []
-        if len(nums)==0:
-            return ret
         dfs(nums, [], ret)
         return ret
