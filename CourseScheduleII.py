@@ -38,24 +38,22 @@ Topological Sort.
 Topological sort could also be done via BFS. https://en.wikipedia.org/wiki/Topological_sorting#Algorithms
 """
 class Solution:
-    def findOrder(self, numCourses: 'int', prerequisites: 'List[List[int]]') -> 'List[int]':
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
         indegree = [0]*numCourses
         g = collections.defaultdict(set)
-        for cur, pre in prerequisites:
-            g[pre].add(cur)
-            indegree[cur] += 1
-        q = collections.deque()
-        for i in range(numCourses):
-            if indegree[i]==0:
-                q.append(i)
-        order = []
+        for cur,pre in prerequisites:
+            if cur not in g[pre]:
+                g[pre].add(cur)
+                indegree[cur] += 1
+        q = collections.deque([i for i in range(numCourses) if indegree[i]==0])
+        ret = []
         while len(q)>0:
             cur = q.popleft()
-            order.append(cur)
-            for nxt in g[cur]:
-                indegree[nxt] -= 1
-                if indegree[nxt]==0:
-                    q.append(nxt)
-        if len(order)<numCourses:
+            ret.append(cur)
+            for neighbor in g[cur]:
+                indegree[neighbor] -= 1
+                if indegree[neighbor]==0:
+                    q.append(neighbor)
+        if len(ret)<numCourses:
             return []
-        return order
+        return ret
