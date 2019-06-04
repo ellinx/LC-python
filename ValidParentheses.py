@@ -32,11 +32,7 @@ Output: true
 
 """
 class Solution:
-    def isValid(self, s):
-        """
-        :type s: str
-        :rtype: bool
-        """
+    def isValid(self, s: str) -> bool:
         stk = collections.deque()
         for c in s:
             if c in "({[":
