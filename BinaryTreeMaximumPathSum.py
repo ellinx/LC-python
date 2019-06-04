@@ -33,20 +33,15 @@ Output: 42
 #         self.right = None
 
 class Solution:
-    def maxPathSum(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        def maxSumFromRoot(root):
+    def maxPathSum(self, root: TreeNode) -> int:
+        def maxSum(root):
             if root is None:
                 return float('-inf')
-            left = maxSumFromRoot(root.left)
-            right = maxSumFromRoot(root.right)
+            l, r = maxSum(root.left), maxSum(root.right)
             nonlocal ret
-            ret = max(ret, left+root.val, right+root.val, left+right+root.val, root.val)
-            return max(left+root.val, right+root.val, root.val)
+            ret = max(ret, l+root.val, r+root.val, root.val, l+root.val+r)
+            return max(l+root.val, r+root.val, root.val)
 
         ret = float('-inf')
-        maxSumFromRoot(root)
+        maxSum(root)
         return ret
