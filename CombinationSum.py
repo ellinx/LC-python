@@ -27,21 +27,16 @@ A solution set is:
 ]
 """
 class Solution:
-    def combinationSum(self, candidates, target):
-        """
-        :type candidates: List[int]
-        :type target: int
-        :rtype: List[List[int]]
-        """
-        def dfs(candidates, start, cur, total, target, ret):
-            if total>target:
-                return
-            if total==target:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        def dfs(candidates, start, cur, target, ret):
+            if target == 0:
                 ret.append(cur)
                 return
             for i in range(start, len(candidates)):
-                dfs(candidates, i, cur+[candidates[i]], total+candidates[i], target, ret)
+                if target - candidates[i] < 0:
+                    break
+                dfs(candidates, i, cur+[candidates[i]], target-candidates[i], ret)
 
         ret = []
-        dfs(candidates, 0, [], 0, target, ret)
+        dfs(sorted(candidates), 0, [], target, ret)
         return ret
