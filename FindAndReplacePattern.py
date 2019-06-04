@@ -27,26 +27,21 @@ Note:
 2. 1 <= pattern.length = words[i].length <= 20
 """
 class Solution:
-    def findAndReplacePattern(self, words, pattern):
-        """
-        :type words: List[str]
-        :type pattern: str
-        :rtype: List[str]
-        """
-        ret = []
-        for word in words:
-            mp = dict()
-            match = True
+    def findAndReplacePattern(self, words: List[str], pattern: str) -> List[str]:
+        def isMatched(word):
+            nonlocal pat
+            if len(word)!=len(pat):
+                return False
+            mp = {}
             for i in range(len(word)):
-                if word[i] in mp:
-                    if mp[word[i]]==pattern[i]:
-                        continue
-                    match = False
-                    break
-                if pattern[i] in mp.values():
-                    match = False
-                    break
-                mp[word[i]] = pattern[i]
-            if match:
-                ret.append(word)
-        return ret
+                if word[i] not in mp:
+                    if pat[i] in mp.values():
+                        return False
+                    mp[word[i]] = pat[i]
+                    continue
+                if mp[word[i]] != pat[i]:
+                    return False
+            return True
+
+        pat = pattern
+        return list(filter(isMatched,  words))
