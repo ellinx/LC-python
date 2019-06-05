@@ -29,23 +29,15 @@ Could you solve it in linear time?
 
 """
 class Solution:
-    def maxSlidingWindow(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: List[int]
-        """
-        ret = []
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
         dq = collections.deque()
-        start, end = 0, 0
-        while end<len(nums):
-            while len(dq) and nums[dq[-1]]<nums[end]:
+        ret = []
+        for i in range(len(nums)):
+            while len(dq)>0 and nums[dq[-1]]<nums[i]:
                 dq.pop()
-            dq.append(end)
-            end += 1
-            if end-start==k:
+            dq.append(i)
+            while dq[-1]-dq[0]>k-1:
+                dq.popleft()
+            if i>=k-1:
                 ret.append(nums[dq[0]])
-                if dq[0]==start:
-                    dq.popleft()
-                start += 1
         return ret
