@@ -27,22 +27,18 @@ Explanation: The input is: [5,1,4,null,null,3,6]. The root node's value
 is 5 but its right child's value is 4.
 """
 class Solution:
-    def isValidBST(self, root):
-        """
-        :type root: TreeNode
-        :rtype: bool
-        """
-        pre = float('-inf')
+    def isValidBST(self, root: TreeNode) -> bool:
         stk = collections.deque()
-        while root is not None or len(stk):
+        pre = None
+        while root is not None or len(stk)>0:
             if root is not None:
                 stk.append(root)
                 root = root.left
             else:
                 root = stk.pop()
-                if pre>=root.val:
+                if pre is not None and pre.val>=root.val:
                     return False
-                pre = root.val
+                pre = root
                 root = root.right
         return True
 
