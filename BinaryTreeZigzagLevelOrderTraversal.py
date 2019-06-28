@@ -21,30 +21,25 @@ return its zigzag level order traversal as:
 
 """
 class Solution:
-    def zigzagLevelOrder(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[List[int]]
-        """
+    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
         if root is None:
             return []
-        cur = [root]
-        lToR = True
+        flag = 0
         ret = []
-        while len(cur):
+        cur = [root]
+        while len(cur)>0:
             vals = []
             nxt = []
             for each in cur:
                 vals.append(each.val)
-                if each.left:
+                if each.left is not None:
                     nxt.append(each.left)
-                if each.right:
+                if each.right is not None:
                     nxt.append(each.right)
-            if lToR:
-                lToR = False
+            if flag==0:
                 ret.append(vals)
             else:
-                lToR = True
                 ret.append(vals[::-1])
+            flag = 1-flag
             cur = nxt
         return ret
