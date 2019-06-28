@@ -23,15 +23,10 @@ Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (m
 
 """
 class Solution:
-    def rob(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
+    def rob(self, nums: List[int]) -> int:
         if len(nums)==0:
             return 0
-        rob = nums[0]
-        notRob = 0
-        for i in range(1,len(nums)):
-            rob, notRob = notRob+nums[i], max(notRob, rob)
-        return max(rob, notRob)
+        rob0, rob1 = 0, nums[0]
+        for i in range(1, len(nums)):
+            rob0, rob1 = max(rob0,rob1), rob0+nums[i]
+        return max(rob0, rob1)
