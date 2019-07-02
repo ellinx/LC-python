@@ -4,30 +4,37 @@ which could point to any node in the list or null.
 
 Return a deep copy of the list.
 """
-# Definition for singly-linked list with a random pointer.
-class RandomListNode(object):
-    def __init__(self, x):
-        self.label = x
-        self.next = None
-        self.random = None
+class Node:
+    def __init__(self, val, next, random):
+        self.val = val
+        self.next = next
+        self.random = random
 
 class Solution:
     #1 first loop: copy list without random pointer, memorize copied node
     #2 second loop: assign correct random pointer for each copied node
     def copyRandomList(self, head: 'Node') -> 'Node':
+        dummy = Node(0, None, None)
         mm = dict()
-        dummy = Node(0,None,None)
-        cur, cur1 = head, dummy
-        while cur is not None:
-            mm[cur] = Node(cur.val, None, None)
-            cur1.next = mm[cur]
-            cur, cur1 = cur.next, cur1.next
-        cur, cur1 = head, dummy.next
-        while cur is not None:
-            if cur.random is not None:
-                cur1.random = mm[cur.random]
-            cur, cur1 = cur.next, cur1.next
+        n1, n2 = head, dummy
+        while n1 is not None:
+            tmp = Node(n1.val, None, None)
+            mm[n1] = tmp
+            n2.next = tmp
+            n1, n2 = n1.next, n2.next
+        n1, n2 = head, dummy.next
+        while n1 is not None:
+            if n1.random is not None:
+                n2.random = mm[n1.random]
+            n1, n2 = n1.next, n2.next
         return dummy.next
+
+
+class RandomListNode(object):
+    def __init__(self, x):
+        self.label = x
+        self.next = None
+        self.random = None
 
 class Solution2(object):
     # without map
