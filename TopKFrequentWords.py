@@ -24,11 +24,17 @@ Follow up:
 Try to solve it in O(n log k) time and O(n) extra space.
 """
 class Solution:
-    def topKFrequent(self, words: 'List[str]', k: 'int') -> 'List[str]':
+    def topKFrequent(self, words: List[str], k: int) -> List[str]:
         counter = collections.Counter(words)
-        pq = [[-counter[k],k] for k in counter]
-        heapq.heapify(pq)
-        ret = []
-        for _ in range(k):
-            ret.append(heapq.heappop(pq)[1])
-        return ret
+        pq = []
+        for word in counter:
+            heapq.heappush(pq, [counter[word], word])
+            if len(pq)>k:
+                items = [heapq.heappop(pq)]
+                while len(pq)>0 and pq[0][0]==items[-1][0]:
+                    items.append(heapq.heappop(pq))
+                items.pop()
+                for each in items:
+                    heapq.heappush(pq, each)
+        pq.sort(key=lambda x:[-x[0],x[1]])
+        return [each[1] for each in pq]
