@@ -37,6 +37,26 @@ class FindAllDuplicatesInArray:
         return res
 
 
+class Solution2:
+    def findDuplicates(self, nums: List[int]) -> List[int]:
+        ret = []
+        for k,v in collections.Counter(nums).most_common():
+            if v==1:
+                break
+            ret.append(k)
+        return ret
+
+class Solution3:
+    def findDuplicates(self, nums: List[int]) -> List[int]:
+        ret = []
+        for num in nums:
+            idx = abs(num)-1
+            if nums[idx]<0:
+                ret.append(abs(num))
+            else:
+                nums[idx] *= -1
+        return ret
+
 # test
 if __name__=="__main__":
     tmp = FindAllDuplicatesInArray()
