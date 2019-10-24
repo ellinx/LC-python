@@ -34,30 +34,21 @@ Return 3. The paths that sum to 8 are:
 #         self.right = None
 
 class Solution:
-    def pathSum(self, root, sum):
-        """
-        :type root: TreeNode
-        :type sum: int
-        :rtype: int
-        """
-        def dfs(root, sum):
-            counter = dict()
+    def pathSum(self, root: TreeNode, sum: int) -> int:
+        # mm store presum
+        def dfs(root, cur, target, mm):
             if root is None:
-                return counter
-            left = dfs(root.left, sum)
-            right = dfs(root.right, sum)
-            nonlocal total
-            total += left.get(sum, 0)
-            total += right.get(sum, 0)
-            for k in left:
-                counter[k+root.val] = counter.get(k+root.val, 0)+left[k]
-            for k in right:
-                counter[k+root.val] = counter.get(k+root.val, 0)+right[k]
-            counter[root.val] = counter.get(root.val, 0)+1
-            #print(root.val, counter)
-            return counter
-
-        total = 0
-        count = dfs(root, sum)
-        total += count.get(sum, 0)
-        return total
+                return
+            cur += root.val
+            nonlocal ret
+            ret += mm.get(cur-target, 0)
+            mm[cur] = mm.get(cur,0)+1
+            dfs(root.left, cur, target, mm)
+            dfs(root.right, cur, target, mm)
+            mm[cur] -= 1
+        
+        ret = 0
+        mm = {}
+        mm[0] = 1
+        dfs(root, 0, sum, mm)
+        return ret
