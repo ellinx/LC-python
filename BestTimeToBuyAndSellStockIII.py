@@ -23,27 +23,24 @@ Input: [7,6,4,3,1]
 Output: 0
 Explanation: In this case, no transaction is done, i.e. max profit = 0.
 """
-class Solution:
-    def maxProfit(self, prices):
-        """
-        :type prices: List[int]
-        :rtype: int
-        """
-        n = len(prices)
-        if n==0:
+from typing import List
+
+class BestTimeToBuyAndSellStockIII:
+    def maxProfit(self, prices: List[int]) -> int:
+        #       buy/sell
+        #  0  <==========>  1
+        if len(prices) == 0:
             return 0
-        hold = [float('-inf'),-prices[0],-prices[0]]
-        notHold = [0]*3
-        for i in range(1,n):
-            new_hold, new_notHold = [0]*3,[0]*3
+        dp = [[0]*3 for _ in range(2)]
+        dp[1][1] = -prices[0]
+        dp[1][0] = -prices[0]
+        for i in range(1, len(prices)):
+            dp[0][0], dp[0][1], dp[1][0], dp[1][1] = max(dp[0][0], dp[1][0]+prices[i]), max(dp[0][1], dp[1][1]+prices[i]), max(dp[1][0],dp[0][1]-prices[i]), max(dp[1][1], dp[0][2]-prices[i])
+        return max(dp[0])
 
-            new_notHold[2] = notHold[2]
-            new_notHold[1] = max(notHold[1], prices[i]+hold[2])
-            new_notHold[0] = max(notHold[0], prices[i]+hold[1])
-
-            new_hold[2] = max(hold[2], notHold[2]-prices[i])
-            new_hold[1] = max(hold[1], notHold[1]-prices[i])
-
-            hold, notHold = new_hold, new_notHold
-            #print(hold, notHold)
-        return max(max(hold),max(notHold))
+# test
+if __name__=="__main__":
+    tmp = BestTimeToBuyAndSellStockIII()
+    prices = [3,3,5,0,0,3,1,4]
+    result = tmp.maxProfit(prices)
+    print(result)
