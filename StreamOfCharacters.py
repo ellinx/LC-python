@@ -60,20 +60,15 @@ class StreamChecker:
             
 
     def query(self, letter: str) -> bool:
-        def dfs(s: str, node: Trie):
-            #print(s)
-            for c in s:
-                if c not in node.children:
-                    return False
-                node = node.children[c]
-                if node.isWord:
-                    return True
-            return node.isWord
-
-        #print(self.maxLen)
         self.s = letter + self.s
-        return dfs(self.s[:self.maxLen], self.root)
-
+        node = self.root
+        for c in self.s[:self.maxLen]:
+            if c not in node.children:
+                return False
+            node = node.children[c]
+            if node.isWord:
+                return True
+        return node.isWord
     
 
         
