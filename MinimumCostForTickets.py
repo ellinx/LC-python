@@ -64,17 +64,15 @@ class MinimumCostForTickets:
                 continue
             mn[-cur[1]] = cur[0]
             for i in range(3):
+                nxtCost = cur[0] + costs[i]
                 if i == 0:
-                    nxtCost = cur[0] + costs[i]
                     nxtIdx = -cur[1] + 1
                 elif i == 1:
-                    nxtCost = cur[0] + costs[i]
                     lastDay = days[-cur[1]] + 6
                     nxtIdx = -cur[1] + 1
                     while nxtIdx < len(days) and days[nxtIdx] <= lastDay:
                         nxtIdx += 1
                 else:
-                    nxtCost = cur[0] + costs[i]
                     lastDay = days[-cur[1]] + 29
                     nxtIdx = -cur[1] + 1
                     while nxtIdx < len(days) and days[nxtIdx] <= lastDay:
