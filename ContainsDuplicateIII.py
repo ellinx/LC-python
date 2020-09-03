@@ -18,8 +18,12 @@ Output: false
 
 
 """
+
+from typing import List
+import bisect
+
 class Solution:
-    def containsNearbyAlmostDuplicate(self, nums, k, t):
+    def containsNearbyAlmostDuplicate(self, nums: List[int], k: int, t: int) -> bool:
         """
         :type nums: List[int]
         :type k: int
@@ -53,7 +57,7 @@ class Solution:
         return False
 
 class Solution2:
-    def containsNearbyAlmostDuplicate(self, nums, k, t):
+    def containsNearbyAlmostDuplicate(self, nums: List[int], k: int, t: int) -> bool:
         """
         :type nums: List[int]
         :type k: int
@@ -74,7 +78,8 @@ class Solution2:
 
         li = []
         for i in range(len(nums)):
-            idx = insertIndex(li, nums[i])
+            #idx = insertIndex(li, nums[i])
+            idx = bisect.bisect_left(li, nums[i])
             diff = float('inf')
             if idx-1>=0:
                 diff = min(diff, nums[i]-li[idx-1])
@@ -86,3 +91,10 @@ class Solution2:
             if i>=k:
                 li.remove(nums[i-k])
         return False
+
+
+if __name__ == "__main__":
+    test = Solution2()
+    nums = [1,2,3,1]
+    k, t = 3, 0
+    print(test.containsNearbyAlmostDuplicate(nums, k, t))
