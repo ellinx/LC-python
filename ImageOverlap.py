@@ -25,16 +25,15 @@ Notes:
 1. 1 <= A.length = A[0].length = B.length = B[0].length <= 30
 2. 0 <= A[i][j], B[i][j] <= 1
 """
+
+from typing import List
+import collections
+
 class Solution:
-    def largestOverlap(self, A, B):
-        """
-        :type A: List[List[int]]
-        :type B: List[List[int]]
-        :rtype: int
-        """
-        m, n = len(A), len(A[0])
+    def largestOverlap(self, A: List[List[int]], B: List[List[int]]) -> int:
+        n = len(A)
         pA, pB = [], []
-        for i in range(m):
+        for i in range(n):
             for j in range(n):
                 if A[i][j]==1:
                     pA.append((i,j))
@@ -48,3 +47,10 @@ class Solution:
                 mm[key] += 1
                 ret = max(ret, mm[key])
         return ret
+
+
+if __name__ == "__main__":
+    A = [[1,1,0],[0,1,0],[0,1,0]]
+    B = [[0,0,0],[0,1,1],[0,0,1]]
+    test = Solution()
+    print(test.largestOverlap(A, B))
