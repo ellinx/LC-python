@@ -30,12 +30,7 @@ class Solution:
     Time: O(n) where n is length of pattern
     Space: O(n)
     """
-    def wordPattern(self, pattern, str):
-        """
-        :type pattern: str
-        :type str: str
-        :rtype: bool
-        """
+    def wordPattern(self, pattern: str, str: str) -> bool:
         mm = dict()
         ss = str.split(' ')
         if len(ss)!=len(pattern):
@@ -49,3 +44,10 @@ class Solution:
                 return False
             mm[pattern[i]] = ss[i]
         return True
+
+
+if __name__ == "__main__":
+    pattern = "abba"
+    s = "dog cat cat dog"
+    test = Solution()
+    print(test.wordPattern(pattern, s))
