@@ -12,41 +12,43 @@ Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
 Output: [[1,2],[3,10],[12,16]]
 Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].
 """
+
+from typing import List
+
+
 class Solution:
-    def insert(self, intervals, newInterval):
-        """
-        :type intervals: List[Interval]
-        :type newInterval: Interval
-        :rtype: List[Interval]
-        """
-        if len(intervals)==0:
-            return [newInterval]
-        l, r = 0, len(intervals)-1
-        while l<=r:
-            m = l+(r-l)//2
-            if intervals[m].start==newInterval.start:
-                l = m
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        l, r = 0, len(intervals) - 1
+        while l <= r:
+            mid = l + (r - l) // 2
+            if intervals[mid][0] == newInterval[0]:
+                l = mid
                 break
-            if intervals[m].start<newInterval.start:
-                l = m+1
+            if intervals[mid][0] < newInterval[0]:
+                l = mid + 1
             else:
-                r = m-1
-        if l==0:
+                r = mid - 1
+        if l == 0:
             ret = []
             cur = newInterval
         else:
-            ret = list(intervals[:l-1])
-            cur = intervals[l-1]
-            if newInterval.start>cur.end:
-                ret.append(cur)
+            if intervals[l-1][1] < newInterval[0]:
+                ret = intervals[:l]
                 cur = newInterval
             else:
-                cur.end = max(cur.end, newInterval.end)
-        for i in range(l,len(intervals)):
-            if intervals[i].start>cur.end:
+                ret = intervals[:l-1]
+                cur = [min(intervals[l-1][0], newInterval[0]), max(intervals[l-1][1], newInterval[1])]
+        for i in range(l, len(intervals)):
+            if cur[1] < intervals[i][0]:
                 ret.append(cur)
-                cur = intervals[i]
-            else:
-                cur.end = max(cur.end, intervals[i].end)
+                return ret + intervals[i:]
+            cur[1] = max(cur[1], intervals[i][1])
         ret.append(cur)
         return ret
+
+
+if __name__ == "__main__":
+    intervals = [[1,3], [6,9]]
+    newInterval = [2,5]
+    test = Solution()
+    print(test.insert(intervals, newInterval))
