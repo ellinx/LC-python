@@ -25,37 +25,21 @@ You may assume the length of given time series array won't exceed 10000.
 You may assume the numbers in the Teemo's attacking time series and his poisoning time duration per attacking are non-negative integers, which won't exceed 10,000,000.
 """
 
+from typing import List
 
-class TeemoAttacking(object):
-    def findPoisonedDuration(self, timeSeries, duration):
-        """
-        :type timeSeries: List[int]
-        :type duration: int
-        :rtype: int
-        """
-        total = 0
-        if len(timeSeries)==0:
-            return total
-
-        start = timeSeries[0]
-        end = start+duration
-
-        for time in timeSeries:
-            if time>end:
-                total += duration
-            else:
-                total += time-start
-
-            start = time
-            end = time+duration
-
-        total += duration
-        return total
-
+class Solution:
+    def findPoisonedDuration(self, timeSeries: List[int], duration: int) -> int:
+        ret = 0
+        if len(timeSeries) == 0:
+            return ret
+        timeSeries.sort()
+        for i in range(len(timeSeries)-1):
+            ret += min(duration, timeSeries[i+1] - timeSeries[i])
+        return ret + duration
 
 # test
 if __name__=="__main__":
-    tmp = TeemoAttacking()
+    tmp = Solution()
     timeSeries = [1,2]
     result = tmp.findPoisonedDuration(timeSeries, 2)
     print(result)
